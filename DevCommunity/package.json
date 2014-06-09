@@ -1,0 +1,15 @@
+{
+  "name": "DeveloperCommunity",
+  "version": "0.0.1",
+  "description": "DeveloperCommunity",
+  "main": "app.js",
+  "author": {
+    "name": "Brent",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*",
+    "stylus": "*"
+  }
+}

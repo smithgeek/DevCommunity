@@ -1,0 +1,36 @@
+﻿.readmore-link{
+    text-align: center;
+    color: GrayText;
+}
+
+.vote{
+    text-align: center;
+    border: 1px solid lightgray;
+    margin: 5px 0px 5px 0px;
+    padding: 0px 10px 0px 10px;
+}
+
+.vote-button{
+    width: 100%;
+}
+
+.vote-count{
+    font-size: 50px;
+    line-height: 1;
+    padding: 0px 10px 0px 10px;
+}
+
+.vote-description{
+    color: gray;
+    font-size: 20px;
+}
+
+.glyphicon-ok-sign{
+    color: green;
+    font-size: 20px;
+}
+
+.panel{
+    min-height: 124px;
+}
+

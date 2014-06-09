@@ -1,0 +1,74 @@
+﻿doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='shortcut icon', href='#{pathToAssets}/assets/ico/favicon.png')
+    title #{config.name}
+    // Bootstrap core CSS
+    link(href='#{pathToAssets}/dist/css/bootstrap.min.css', rel='stylesheet')
+    // Bootstrap theme
+    //link(href='#{pathToAssets}/dist/css/bootstrap-theme.min.css', rel='stylesheet')
+    // Custom styles for this template
+    //link(href='#{pathToSelectedTemplateWithinBootstrap}/theme.css', rel='stylesheet')
+    link(href='#{pathToAssets}/assets/css/theme.css', rel='stylesheet')
+    // HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
+    //if lt IE 9
+      script(src='#{pathToAssets}/assets/js/html5shiv.js')
+      script(src='#{pathToAssets}/assets/js/respond.min.js')
+  body(ng-app='devCommunity')
+    // Fixed navbar
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') 
+            span(class="glyphicon #{config.glyph}")
+            span  #{config.name}
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.active(id='NavHome')
+              a(href='#') Home
+            li(id='NavAbout')
+              a(href='#about') About
+            li(id='NavContact')
+              a(href='#contact') Contact
+            //li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Dropdown
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='#') Action
+                li
+                  a(href='#') Another action
+                li
+                  a(href='#') Something else here
+                li.divider
+                li.dropdown-header Nav header
+                li
+                  a(href='#') Separated link
+                li
+                  a(href='#') One more separated link
+        // /.nav-collapse
+    .container.theme-showcase
+      ng-view
+
+    // /container
+    //
+       Bootstrap core JavaScript
+    //================================================== 
+    // Placed at the end of the document so the pages load faster
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src='#{pathToAssets}/assets/js/holder.js')
+    script(src='#{pathToAssets}/dist/js/readmore.min.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js')
+    script(src='#{pathToAssets}/dist/js/angular-local-storage.min.js')
+    script(src='#{pathToAssets}/assets/js/app.js')

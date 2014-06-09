@@ -1,0 +1,57 @@
+﻿.jumbotron
+  .row
+    h1 Last Meeting
+  .row
+    if preview
+      .col-sm-4(style="min-width: 300px")
+        div
+          #{preview}
+      .col-md-8
+        h3 
+          a(href='#') #{lastMeetingTitle}
+        p
+          | #{description}
+    else
+      p
+        | #{description}
+.page-header
+  h1 Possible Future Topics
+.media
+  .pull-left
+    button.btn.btn-success.vote-button(type='button')
+      span.glyphicon.glyphicon-arrow-up
+      span  Vote
+    .vote
+      div.vote-count 88
+      span.vote-description votes
+
+  .media-body
+    .panel.panel-primary
+      .panel-heading
+        h3.panel-title Is TDD Dead? (2.5 hours)
+      .panel-body
+        p A series of conversations between Kent Beck, David Heinemeier Hansson, and Martin Fowler on the topic of Test-Driven Development (TDD) and its impact upon software design.
+
+        h5 Where This Came From
+        p This conversation began as a consequence to David’s RailsConf keynote where he expressed his unhappiness with TDD and Unit Testing in the Rails community. He shortly followed this with some blog posts, the first of which declared that “TDD is dead”.
+        p A couple of days after this, I sent him a typo correction to a follow-on post, and he said he’d welcome my thoughts on his talk and blog post. We then had an enjoyable and thoughtful discussion for an hour on Skype. David had a similar discussion with Kent, and Kent suggested that we continue the discussion with all three of us, and make the conversation public. David tweeted the idea and got a lot of positive reactions.
+        p We don’t have much of a plan for this series, other than a rough notion of half a dozen 30 minute conversations. We’re mostly doing this because we want to learn about each others’ experiences and points of view - we’re just narcissistic enough to think lots of other people would also like to watch. We aren’t (as yet) taking questions, but we do listen to the discussion as unfolds on other places on the net: twitter, blogs and the like.
+        p There’s been many calls to add other people to the conversation. So far we’d prefer to continue with just the three of us, since that’s quite enough of a group if we really want to understand our various viewpoints. The chemistry of a talk like this is a delicate thing, and we are still getting used to each other, let alone anyone else. The wider conversation involves lots of other contributions through blogs and the like. We also expect future video conversations with a wider range of people.
+        p We’d like to thank ThoughtWorks, in particular Wesley Clock, for helping by doing much of the logistics of organizing the video setup and arranging the hangout times.
+
+.media
+  .pull-left
+    button.btn.btn-danger.vote-button(type='button')
+      span.glyphicon.glyphicon-remove-sign
+      span  Remove
+    .vote
+      div.vote-count 88
+      span.glyphicon.glyphicon-ok-sign
+      span.vote-description  voted
+
+  .media-body
+    .panel.panel-primary
+      .panel-heading
+        h3.panel-title Clean Code: Functions
+      .panel-body
+        p Uncle Bob goes through some techniques for writing clean code.
