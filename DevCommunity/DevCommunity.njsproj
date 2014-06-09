@@ -38,7 +38,6 @@
     <Compile Include="routes\index.js" />
     <Compile Include="routes\user.js" />
     <Content Include="views\partials\home.jade" />
-    <None Include="Dev.pubxml" />
     <Content Include="package.json" />
     <Content Include="public\assets\css\theme.css" />
     <Content Include="public\dist\css\bootstrap-theme.min.css" />
