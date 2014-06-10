@@ -34,3 +34,19 @@
     min-height: 124px;
 }
 
+.add-button{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.highlight {
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    background-color: #EEE;
+    border: 1px solid #E1E1E8;
+    border-radius: 4px;
+}
+
+.modal-dialog {
+  padding-top: 15%;
+}

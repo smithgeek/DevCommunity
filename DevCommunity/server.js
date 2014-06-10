@@ -35,6 +35,8 @@ app.get('/users', user.list);
 app.get('/partials/home', partials.home);
 app.get('/partials/about', partials.about);
 app.get('/partials/contact', partials.contact);
+app.get('/partials/brainstorming', partials.brainstorming);
+app.get('/partials/pastMeetings', partials.pastMeetings);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

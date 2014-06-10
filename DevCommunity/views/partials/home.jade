@@ -1,4 +1,19 @@
-﻿.jumbotron
+﻿.modal.fade(id='AddTopicModal' aria-hidden='true' role='dialog')
+  .modal-dialog.modal-lg
+    .modal-content.highlight
+      h1 Add Idea
+      form(role='form')
+        .form-group
+          input.form-control(type='email' placeholder='Email address' required)
+        .form-group
+          input.form-control(type='text' placeholder='Short Description' required)
+        .form-group
+          textarea.form-control(type='text' placeholder='Details' required)
+        button.btn.btn-lg.btn-success(type='submit') Submit
+        span  
+        button.btn.btn-lg.btn-danger(type='button' data-dismiss='modal') Cancel
+
+.jumbotron
   .row
     h1 Last Meeting
   .row
@@ -15,7 +30,11 @@
       p
         | #{description}
 .page-header
-  h1 Possible Future Topics
+  h1 Meeting Ideas  
+    button.btn.btn-info.add-button(type='button' data-toggle='modal' data-target='#AddTopicModal')
+      span.glyphicon.glyphicon-plus
+      span   Add
+
 .media
   .pull-left
     button.btn.btn-success.vote-button(type='button')

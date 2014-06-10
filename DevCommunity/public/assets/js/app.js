@@ -1,4 +1,10 @@
-﻿(function () {
+﻿$('.nav a').on('click', function(){
+    if($(".navbar-toggle").css('display') != 'none'){
+        $(".navbar-toggle").trigger( "click" );
+    }
+});
+
+(function () {
     var app = angular.module('devCommunity', ['LocalStorageModule', 'ngRoute']);
 
     app.controller('HomeController', function($scope){
@@ -12,6 +18,16 @@
         $('.navbar-nav li.active').removeClass('active');
         $('#NavHome').addClass('active');
 
+    });
+
+    app.controller('PastMeetingsController', function($scope){
+        $('.navbar-nav li.active').removeClass('active');
+        $('#NavPastMeetings').addClass('active');
+    });
+
+    app.controller('BrainstormingController', function($scope){
+        $('.navbar-nav li.active').removeClass('active');
+        $('#NavBrainstorming').addClass('active');
     });
 
     app.controller('AboutController', function($scope){
@@ -38,6 +54,14 @@
             when("/contact", {
                 templateUrl: 'partials/contact',
                 controller: 'ContactController'
+                }).
+            when("/pastMeetings", {
+                templateUrl: 'partials/pastMeetings',
+                controller: 'PastMeetingsController'
+                }).
+            when("/brainstorming", {
+                templateUrl: 'partials/brainstorming',
+                controller: 'BrainstormingController'
                 }).
             otherwise({
                 redirectTo: '/'

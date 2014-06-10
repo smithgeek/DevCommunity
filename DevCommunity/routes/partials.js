@@ -16,3 +16,11 @@ exports.about = function(req, res){
 exports.contact = function(req, res){
   res.render('partials/contact', { contact: config.contact });
 };
+
+exports.brainstorming = function(req, res){
+    res.render('partials/brainstorming');
+};
+
+exports.pastMeetings = function(req, res){
+    res.render('partials/pastMeetings');
+};
