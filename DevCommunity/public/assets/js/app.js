@@ -13,13 +13,46 @@
 
         var controller = this;
         controller.loggedIn = false;
-        controller.meetings = [];
-        controller.user = "";
+        $scope.meetings = [];
+        $scope.user = "";
 
         $http.get('/api/GetSuggestions').success( function (data) {
             for( var i = 0; i < data.length; ++i ){
-                var userVoted = -1 != $.inArray(controller.user, data[i].votes);
-                controller.meetings.push({ data: data[i], user_voted: userVoted });
+                var meeting = data[i];
+                meeting.HasUserVoted = function () {
+                    return -1 != $.inArray($scope.user, this.votes);
+                };
+                meeting.Vote = function () {
+                    $('.vote-btn-' + meeting._id).prop('disabled', true);
+                    var copiedMeeting = angular.copy(this);
+                    copiedMeeting.votes.push($scope.user);
+                    copiedMeeting.vote_count++;
+                    var mtg = this;
+                    $http.post('/api/Vote', copiedMeeting).success(function (data) {
+                        mtg.votes = copiedMeeting.votes;
+                        mtg.vote_count = copiedMeeting.vote_count;
+                        $('.vote-btn-' + meeting._id).prop('disabled', false);
+                    }).error(function (data) {
+                        alert('error ' + data);
+                        $('.vote-btn-' + meeting._id).prop('disabled', false);
+                    });
+                }
+                meeting.RemoveVote = function () {
+                    $('.vote-btn-' + meeting._id).prop('disabled', true);
+                    var copiedMeeting = angular.copy(this);
+                    copiedMeeting.votes.splice($.inArray($scope.user, copiedMeeting.votes), 1);
+                    copiedMeeting.vote_count--;
+                    var mtg = this;
+                    $http.post('/api/Vote', copiedMeeting).success(function (data) {
+                        mtg.votes = copiedMeeting.votes;
+                        mtg.vote_count = copiedMeeting.vote_count;
+                        $('.vote-btn-' + meeting._id).prop('disabled', false);
+                    }).error(function (data) {
+                        alert('error ' + data);
+                        $('.vote-btn-' + meeting._id).prop('disabled', false);
+                    });
+                }
+                $scope.meetings.push(meeting);
             }
 
             setTimeout(function () {
@@ -32,23 +65,6 @@
 	        }, 1);
         });
 
-        this.Vote = function(meeting) {
-            $('#vote-up-' + meeting._id).prop('disabled', true);
-            $('#vote-remove-' + meeting._id).prop('disabled', true);
-            var copiedMeeting = meeting;
-            copiedMeeting.votes.push(controller.user);
-            copiedMeeting.vote_count++;
-            $http.post('/api/Vote', copiedMeeting).success(function(data) {
-                meeting = copiedMeeting;
-                meeting.user_voted = true;
-                $('#vote-up-' + meeting._id).prop('disabled', false);
-                $('#vote-remove-' + meeting._id).prop('disabled', false);
-            }).error(function(data) {
-                alert('error ' + data);
-                $('#vote-up-' + meeting._id).prop('disabled', false);
-                $('#vote-remove-' + meeting._id).prop('disabled', false);
-            });
-        };
     });
 
     app.controller('AddMeetingController', function($scope, $http){
@@ -56,17 +72,15 @@
         controller.meeting = { email: '', description: '', details: '' };
 
         this.AddMeeting = function() {
-            controller.meeting.data.votes = [];
-            controller.meeting.data.vote_count = 0;
-            $http.post('/api/AddMeeting', controller.meeting.data).success(function(data) {
+            controller.meeting.votes = [];
+            controller.meeting.vote_count = 0;
+            $http.post('/api/AddMeeting', controller.meeting).success(function(data) {
                 $('#AddTopicModal').modal('hide');
             }).error(function(data) {
                 alert('error ' + data);
             });
         };
     });
-
-
 
     app.controller('PastMeetingsController', function($scope){
         $('.navbar-nav li.active').removeClass('active');
@@ -88,7 +102,7 @@
         $('#NavContact').addClass('active');
     });
 
-    app.config(['$routeProvider', 'localStorageServiceProvider', '$locationProvider', 
+    app.config(['$routeProvider', 'localStorageServiceProvider', '$locationProvider',
         function ($routeProvider, localStorageServiceProvider, $locationProvider) {
             localStorageServiceProvider.setPrefix('PndDevCommunity');
             $routeProvider.when("/about", {
@@ -117,5 +131,5 @@
             //$locationProvider.html5Mode(true);
         }
     ]);
-    
+
 })();

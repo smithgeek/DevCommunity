@@ -1,7 +1,7 @@
 ﻿.modal.fade(id='AddTopicModal' aria-hidden='true' role='dialog' ng-controller='AddMeetingController as controller')
   .modal-dialog.modal-lg
     .modal-content.highlight
-      button.close(type="button" data-dismiss="modal" aria-hidden="true")&times;
+      button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
       h1 Add Idea
       form(role='form')
         .form-group
@@ -77,23 +77,23 @@ div(ng-controller='HomeController as controller')
         .panel-body
           p Uncle Bob goes through some techniques for writing clean code.
 
-  div(ng-repeat='meeting in controller.meetings')
+  div(ng-repeat='meeting in meetings')
     .media
       .pull-left
-        button.btn.btn-success.vote-button(id='vote-up-{{meeting.data._id}}' type='button' ng-click='controller.Vote(meeting.data)' ng-hide="meeting.user_voted")
+        button.btn.btn-success.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.Vote()' ng-hide="meeting.HasUserVoted()")
           span.glyphicon.glyphicon-arrow-up
           span  Vote
-        button.btn.btn-danger.vote-button(id='vote-remove-{{meeting.data._id}}' type='button' ng-show="meeting.user_voted")
+        button.btn.btn-danger.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.RemoveVote()' ng-show="meeting.HasUserVoted()")
           span.glyphicon.glyphicon-remove-sign
           span  Remove
         .vote
-          div.vote-count {{meeting.data.vote_count}}
+          div.vote-count {{meeting.vote_count}}
           //span.glyphicon.glyphicon-ok-sign
           span.vote-description  votes
 
       .media-body
         .panel.panel-primary
           .panel-heading
-            h3.panel-title {{meeting.data.description}}
+            h3.panel-title {{meeting.description}}
           .panel-body
-            p {{meeting.data.details}}
+            p {{meeting.details}}
