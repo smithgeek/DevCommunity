@@ -44,7 +44,6 @@
     <Content Include="public\dist\css\bootstrap.min.css">
       <Publish>True</Publish>
     </Content>
-    <Content Include="README.md" />
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
   </ItemGroup>
