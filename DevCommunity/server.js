@@ -10,6 +10,8 @@ var partials = require('./routes/partials');
 var http = require('http');
 var path = require('path');
 var nedb = require('nedb');
+var expressJwt = require('express-jwt');
+var jwt = require('jsonwebtoken');
 
 var app = express();
 
@@ -17,6 +19,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use('/api/restricted', expressJwt({secret: 'mySuperSecret'}));
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -43,7 +46,14 @@ app.get('/partials/pastMeetings', partials.pastMeetings);
 var db = new nedb({ filename: 'devcommunity.db.json', autoload: true });
 db.persistence.setAutocompactionInterval(86400000);
 
-app.post('/api/AddMeeting', function(req, res) {
+app.post('/authenticate', function(req, res) {
+    var profile = { email: req.body.email };
+
+    var token = jwt.sign(profile, 'mySuperSecret');
+    res.json({ token: token });
+});
+
+app.post('/api/restricted/AddMeeting', function(req, res) {
     db.insert( req.body, function(err, newDoc) {
         if(err != null)
             res.send( 404, "Failure" );
@@ -61,7 +71,8 @@ app.get('/api/GetSuggestions', function(req, res) {
     });
 });
 
-app.post('/api/Vote', function(req, res) {
+app.post('/api/restricted/Vote', function(req, res) {
+    console.log('user ' + req.user.email + ' is calling /api/restricted/Vote');
     db.update( { _id: req.body._id }, req.body, {}, function(err, newDoc) {
         if(err != null)
             res.send( 404, "Failure" );

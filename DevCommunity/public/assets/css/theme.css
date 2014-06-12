@@ -51,3 +51,30 @@
 .modal-dialog {
   padding-top: 15%;
 }
+
+.editable {
+    margin-left: 20px;
+    background: transparent;
+    border: none;
+}
+
+#footer {
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.container .text-muted {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.text-muted a{
+    color: #999;
+}
+
+#footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}

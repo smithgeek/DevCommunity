@@ -5,14 +5,14 @@
       h1 Add Idea
       form(role='form')
         .form-group
-          input.form-control(type='email' placeholder='Email address' required ng-model='controller.meeting.email')
+          input.form-control(type='email' placeholder='Email address' ng-model='meeting.email')
         .form-group
-          input.form-control(type='text' placeholder='Short Description' required ng-model='controller.meeting.description')
+          input.form-control(type='text' placeholder='Short Description' ng-model='meeting.description')
         .form-group
-          textarea.form-control(type='text' placeholder='Details' required ng-model='controller.meeting.details')
-        button.btn.btn-lg.btn-success(type='button' ng-click='controller.AddMeeting()') Submit
+          textarea.form-control(type='text' placeholder='Details' ng-model='meeting.details')
+        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='AddMeeting()') Submit
         span  
-        button.btn.btn-lg.btn-danger(type='button' data-dismiss='modal') Cancel
+        button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
 
 .jumbotron
   .row
@@ -94,6 +94,11 @@ div(ng-controller='HomeController as controller')
       .media-body
         .panel.panel-primary
           .panel-heading
+            //.pull-right
+              button.editable
+                span.glyphicon.glyphicon-edit
+              button.editable
+                span.glyphicon.glyphicon-trash
             h3.panel-title {{meeting.description}}
           .panel-body
-            p {{meeting.details}}
+            div(ng-bind-html="meeting.details")
