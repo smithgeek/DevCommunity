@@ -26,3 +26,5 @@ node_modules
 
 *.db.json
 */obj/*
+
+config.js

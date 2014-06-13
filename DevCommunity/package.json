@@ -13,6 +13,7 @@
     "stylus": "*",
 	"nedb": "*",
 	"express-jwt": "*",
-	"jsonwebtoken": "*"
+	"jsonwebtoken": "*",
+	"nodemailer": "*"
   }
 }

@@ -3,7 +3,7 @@
  * GET home page.
  */
 
-var config = require('./config.js');
+var config = require('../config.js');
 
 exports.home = function(req, res){
   res.render('partials/home', 

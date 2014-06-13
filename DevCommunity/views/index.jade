@@ -22,12 +22,21 @@ html(lang='en')
     .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
       .modal-dialog.modal-lg
         .modal-content.highlight
-          button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
-          h1 Identification
-          form(ng-submit='submit()')
+          button.close(type="button" ng-click="close()" aria-hidden="true") &times;
+          form(ng-submit='submitEmail()' ng-show="step==='Email'")
+            h1 Login
             .form-group
               input.form-control(type='email' placeholder='Email address' ng-model='user.email')
             button.btn.btn-lg.btn-success.add-modal-button(type='submit') Login
+            span(style="margin-left: 20px; color: red") {{message}}
+
+          form(ng-submit='submitVerification()' ng-show="step==='Verification'")
+            h1 Verify
+            p Enter the verification code that was sent to the email address entered.  Valid for 10 minutes.
+            .form-group
+              input.form-control(type='text' placeholder='Verification Code' ng-model='user.verificationCode')
+            button.btn.btn-lg.btn-success.add-modal-button(type='submit') Verify
+            span(style="margin-left: 20px; color: red") {{message}}
 
     // Fixed navbar
     .navbar.navbar-default.navbar-fixed-top(ng-controller='NavBarController as controller')
@@ -55,7 +64,8 @@ html(lang='en')
           .pull-right.nav.navbar-nav
             ul.nav.navbar-nav
               li
-                a(href="javascript:;" ng-click='logOut()' style='color: white') Logout
+                a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()" ng-cloak) Logout
+                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()" ng-cloak) Login
     .container.theme-showcase
       ng-view
 
@@ -65,9 +75,11 @@ div(id="footer")
       p Built using 
         a(href="https://angularjs.org/") angular
         | , 
-        a(href="http://jquery.com/") jquery 
-        | and 
+        a(href="http://jquery.com/") jquery
+        | , 
         a(href="http://getbootstrap.com/") bootstrap
+        | , and 
+        a(href="http://glyphicons.com/") glyphicons
         | .
 
     // /container

@@ -42,9 +42,20 @@
         this.getUser = function() {
             var email = localStorageService.get('userEmail');
             if(!email)
-                email = '';
-            return email;
+                return '';
+            return email.email;
         }
+
+        this.isLoggedIn = function() {
+            if(localStorageService.get('userEmail'))
+                return true;
+            else
+                return false;
+        }
+
+        this.logOut = function() {
+            localStorageService.clearAll();
+        };
     });
 
     app.service('meetingSvc', ['userSvc', '$http', '$rootScope', function(userSvc, $http, $rootScope) {
@@ -67,7 +78,7 @@
                     mtg.vote_count = copiedMeeting.vote_count;
                     $('.vote-btn-' + meeting._id).prop('disabled', false);
                 }).error(function (data) {
-                    //alert(data.error.name);
+                    $('#LoginModal').modal('show');
                     $('.vote-btn-' + meeting._id).prop('disabled', false);
                 });
             }
@@ -82,7 +93,7 @@
                     mtg.vote_count = copiedMeeting.vote_count;
                     $('.vote-btn-' + meeting._id).prop('disabled', false);
                 }).error(function (data) {
-                    alert(data.error.name);
+                    $('#LoginModal').modal('show');
                     $('.vote-btn-' + meeting._id).prop('disabled', false);
                 });
             }
@@ -121,15 +132,23 @@
             });
         });
 
+        $scope.AddTopic = function() {
+            if(userSvc.isLoggedIn())
+                $('#AddTopicModal').modal('show');
+            else
+                $('#LoginModal').modal('show');
+        };
+
     }]);
 
-    app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', function($scope, $http, meetingSvc){
+    app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', function($scope, $http, meetingSvc, userSvc){
         $scope.meeting = { email: '', description: '', details: '' };
 
         $scope.AddMeeting = function() {
             $('.add-modal-button').prop('disabled', true);
             $scope.meeting.votes = [];
             $scope.meeting.vote_count = 0;
+            $scope.meeting.email = userSvc.getUser();
             $http.post('/api/restricted/AddMeeting', $scope.meeting).success(function(data) {
                 $('#AddTopicModal').modal('hide');
                 $('.add-modal-button').prop('disabled', false);
@@ -162,26 +181,53 @@
         $('#NavContact').addClass('active');
     });
 
-    app.controller('NavBarController', function($scope, localStorageService){
+    app.controller('NavBarController', function($scope, userSvc){
         $scope.logOut = function() {
-            localStorageService.clearAll();
+            userSvc.logOut();
+        };
+
+        $scope.isLoggedIn = function() {
+            return userSvc.isLoggedIn();
         };
     });
 
     app.controller('LoginController', function($scope, $http, localStorageService) {
-        $scope.user = { email: '' };
-        $scope.submit = function() {
-            $http.post('/authenticate', $scope.user)
+        $scope.user = { email: '', verificationCode: '' };
+        $scope.message = '';
+        $scope.step = 'Email';
+
+        $scope.submitEmail = function() {
+            $scope.user.email = $scope.user.email.toLowerCase();
+            $http.post('/identify', $scope.user)
             .success(function (data, status, headers, config) {
-                localStorageService.set('userToken', data.token);
-                localStorageService.set('userEmail', $scope.user);
-                $('#LoginModal').modal('hide');
+                $scope.step = 'Verification';
             })
             .error(function(data, status, headers, config) {
                 localStorageService.remove('userToken');
                 localStorageService.remove('userEmail');
-                alert('Problem logging in.');
+                $scope.message = "Error communicating with server.";
             });
+        };
+
+        $scope.submitVerification = function() {
+            $http.post('/verify', $scope.user)
+            .success(function(data, status, headers, config) {
+                localStorageService.set('userToken', data.token);
+                localStorageService.set('userEmail', $scope.user);
+                $scope.close();
+            })
+            .error(function(data, status, headers, config) {
+                localStorageService.remove('userToken');
+                localStorageService.remove('userEmail');
+                $scope.message = "Invalid verification code.";
+            });
+        };
+
+        $scope.close = function() {
+            $('#LoginModal').modal('hide');
+            $scope.user = { email: '', verificationCode: '' };
+            $scope.message = '';
+            $scope.step = 'Email';
         };
     });
     
@@ -201,7 +247,6 @@
           return response || $q.when(response);
         },
         responseError: function(rejection) {
-            $('#LoginModal').modal('show');
             return $q.reject(rejection);
         }
       };
