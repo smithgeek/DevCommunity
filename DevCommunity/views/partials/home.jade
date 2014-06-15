@@ -8,7 +8,7 @@
           input.form-control(type='text' placeholder='Short Description' ng-model='meeting.description')
         .form-group
           textarea.form-control(type='text' placeholder='Details' ng-model='meeting.details')
-        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='AddMeeting()') Submit
+        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()') Submit
         span  
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
 
@@ -31,7 +31,7 @@
 div(ng-controller='HomeController as controller')
   .page-header
     h1 Meeting Ideas  
-      button.btn.btn-info.add-button(type='button' ng-click='AddTopic()')
+      button.btn.btn-info.add-button(type='button' ng-click='controller.AddTopic()')
         span.glyphicon.glyphicon-plus
         span   Add
 

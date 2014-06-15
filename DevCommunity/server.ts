@@ -1,17 +1,19 @@
 ﻿/// <reference path="typings/express/express.d.ts" />
 /// <reference path="typings/nodemailer/nodemailer.d.ts" />
+
 /**
-* Module dependencies.
-*/
-var express = require('express');
-var routes = require('./routes/index');
-var partials = require('./routes/partials');
-var http = require('http');
-var path = require('path');
+ * Module dependencies.
+ */
+
+import express = require('express');
+import routes = require('./routes/index');
+import partials = require('./routes/partials');
+import http = require('http');
+import path = require('path');
 var nedb = require('nedb');
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
-var nodemailer = require('nodemailer');
+var nodemailer:Nodemailer = require ('nodemailer'); // https://github.com/andris9/nodemailer
 var config = require('./config.js');
 
 var app = express();
@@ -50,14 +52,15 @@ meetingIdeasDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 var userVerificationDb = new nedb({ filename: 'user_verification.db.json', autoload: true });
 userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
+
 function generateVerificationCode() {
     return Math.floor(Math.random() * 900000) + 100000;
 }
 
 function sendVerificationEmail(verificationCode, emailAddress) {
-    var smtpTransport = nodemailer.createTransport("SMTP", config.mail.smtp);
+    var smtpTransport:Transport = nodemailer.createTransport("SMTP", config.mail.smtp);
 
-    var message = {
+    var message:MailComposer = {
         from: config.mail.from,
         to: emailAddress,
         subject: "Developer Community Verification Code",
@@ -75,8 +78,7 @@ function sendVerificationEmail(verificationCode, emailAddress) {
 }
 
 function clearVerificationCodes(email) {
-    userVerificationDb.remove({ email: email }, { multi: true }, function (err, numRemoved) {
-    });
+    userVerificationDb.remove({ email: email }, { multi: true }, function (err, numRemoved) { });
 }
 
 app.post('/verify', function (req, res) {
@@ -100,9 +102,7 @@ app.post('/identify', function (req, res) {
     clearVerificationCodes(req.body.email);
 
     var verificationCode = generateVerificationCode();
-    userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) {
-    });
-
+    userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
     //sendVerificationEmail(verificationCode, req.body.email);
     console.log("Verification code: " + verificationCode);
     res.send(200, "Success");
@@ -139,4 +139,3 @@ app.post('/api/restricted/Vote', function (req, res) {
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
-//# sourceMappingURL=server.js.map

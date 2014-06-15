@@ -19,68 +19,68 @@ html(lang='en')
       script(src='#{pathToAssets}/assets/js/html5shiv.js')
       script(src='#{pathToAssets}/assets/js/respond.min.js')
   body(ng-app='devCommunity')
-    .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
-      .modal-dialog.modal-lg
-        .modal-content.highlight
-          button.close(type="button" ng-click="close()" aria-hidden="true") &times;
-          form(ng-submit='submitEmail()' ng-show="step==='Email'")
-            h1 Login
-            .form-group
-              input.form-control(type='email' placeholder='Email address' ng-model='user.email')
-            button.btn.btn-lg.btn-success.add-modal-button(type='submit') Login
-            span(style="margin-left: 20px; color: red") {{message}}
+    div(id='wrap')
+      .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
+        .modal-dialog.modal-lg
+          .modal-content.highlight
+            button.close(type="button" ng-click="close()" aria-hidden="true") &times;
+            form(ng-submit='controller.submitEmail()' ng-show="step==='Email'")
+              h1 Login
+              .form-group
+                input.form-control(type='email' placeholder='Email address' ng-model='user.email')
+              button.btn.btn-lg.btn-success.add-modal-button(type='submit') Login
+              span(style="margin-left: 20px; color: red") {{message}}
 
-          form(ng-submit='submitVerification()' ng-show="step==='Verification'")
-            h1 Verify
-            p Enter the verification code that was sent to the email address entered.  Valid for 10 minutes.
-            .form-group
-              input.form-control(type='text' placeholder='Verification Code' ng-model='user.verificationCode')
-            button.btn.btn-lg.btn-success.add-modal-button(type='submit') Verify
-            span(style="margin-left: 20px; color: red") {{message}}
+            form(ng-submit='controller.submitVerification()' ng-show="step==='Verification'")
+              h1 Verify
+              p Enter the verification code that was sent to the email address entered.  Valid for 10 minutes.
+              .form-group
+                input.form-control(type='text' placeholder='Verification Code' ng-model='user.verificationCode')
+              button.btn.btn-lg.btn-success.add-modal-button(type='submit') Verify
+              span(style="margin-left: 20px; color: red") {{message}}
 
-    // Fixed navbar
-    .navbar.navbar-default.navbar-fixed-top(ng-controller='NavBarController as controller')
-      .container
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='#') 
-            span(class="glyphicon #{config.glyph}")
-            span  #{config.name}
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav
-            li.active(id='NavHome')
-              a(href='#') Home
-            //li(id='NavPastMeetings')
-              a(href='#pastMeetings') Past Meetings
-            //li(id='NavBrainstorming')
-              a(href='#brainstorming') Brainstorming
-            li(id='NavAbout')
-              a(href='#about') About
-            li(id='NavContact')
-              a(href='#contact') Contact
-          .pull-right.nav.navbar-nav
+      // Fixed navbar
+      .navbar.navbar-default.navbar-fixed-top(ng-controller='NavBarController as controller')
+        .container
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='#') 
+              span(class="glyphicon #{config.glyph}")
+              span  #{config.name}
+          .navbar-collapse.collapse
             ul.nav.navbar-nav
+              li.active(id='NavHome')
+                a(href='#') Home
+              //li(id='NavPastMeetings')
+                a(href='#pastMeetings') Past Meetings
+              //li(id='NavBrainstorming')
+                a(href='#brainstorming') Brainstorming
+              li(id='NavAbout')
+                a(href='#about') About
+              li(id='NavContact')
+                a(href='#contact') Contact
+            ul.nav.navbar-nav.navbar-right.login-nav
               li
-                a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()" ng-cloak) Logout
-                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()" ng-cloak) Login
-    .container.theme-showcase
-      ng-view
+                a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()") Logout
+                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()") Login
+      .container.theme-showcase
+        ng-view
 
-div(id="footer")
-  div.container
-    .text-muted 
-      p Built using 
-        a(href="https://angularjs.org/") angular
-        | , 
-        a(href="http://jquery.com/") jquery
-        | , 
-        a(href="http://getbootstrap.com/") bootstrap
-        | , and 
-        a(href="http://glyphicons.com/") glyphicons
-        | .
+  div(id="footer")
+    div.container
+      .text-muted 
+        p Built using 
+          a(href="https://angularjs.org/") angular
+          | , 
+          a(href="http://jquery.com/") jquery
+          | , 
+          a(href="http://getbootstrap.com/") bootstrap
+          | , and 
+          a(href="http://glyphicons.com/") glyphicons
+          | .
 
     // /container
     //
@@ -89,10 +89,11 @@ div(id="footer")
     // Placed at the end of the document so the pages load faster
     script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
-    //script(src='#{pathToAssets}/assets/js/holder.js')
     script(src='#{pathToAssets}/dist/js/readmore.min.js')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js')
     script(src='#{pathToAssets}/dist/js/angular-local-storage.min.js')
+    script(src='#{pathToAssets}/assets/js/Services.js')
+    script(src='#{pathToAssets}/assets/js/HomeController.js')
     script(src='#{pathToAssets}/assets/js/app.js')
