@@ -61,7 +61,7 @@ function sendVerificationEmail(verificationCode, emailAddress) {
         from: config.mail.from,
         to: emailAddress,
         subject: "Developer Community Verification Code",
-        text: "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\n Verification Code: " + verificationCode
+        text: "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode
     };
 
     smtpTransport.sendMail(message, function (error) {
@@ -103,7 +103,7 @@ app.post('/identify', function (req, res) {
     userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) {
     });
 
-    //sendVerificationEmail(verificationCode, req.body.email);
+    sendVerificationEmail(verificationCode, req.body.email);
     console.log("Verification code: " + verificationCode);
     res.send(200, "Success");
 });
