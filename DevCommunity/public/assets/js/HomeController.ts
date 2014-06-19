@@ -29,6 +29,9 @@ class HomeController {
                     lessLink: '<a href="#" class="readmore-link">Close</a>',
                     speed: 500
                 });
+                $(document).ready(function () {
+                    $('#info-carousel').carousel({ interval: 10000 });
+                });
             }, 1);
 
             $scope.$on('meetingAdded', function (event, meeting) {

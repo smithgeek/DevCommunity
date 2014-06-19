@@ -13,21 +13,43 @@
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
 
 .jumbotron
-  .row
-    h1 Last Meeting
-  .row
-    if preview
-      .col-sm-4(style="min-width: 300px")
-        div
-          #{preview}
-      .col-md-8
-        h3 
-          a(href='#') #{lastMeetingTitle}
-        p
-          | #{description}
-    else
-      p
-        | #{description}
+  .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
+    //ol.carousel-indicators
+      li(data-target="#info-carousel" data-slide-to="0" class="active")
+      li(data-target="#info-carousel" data-slide-to="1")
+
+    .carousel-inner
+      .item.meeting
+        .row
+          .col-sm-4.visible-lg
+            div
+              iframe(src="//www.youtube-nocookie.com/embed/p0O1VVqRSK0" frameborder="0" allowfullscreen)
+          .col-md-8
+            h3 
+              a(href='https://www.youtube.com/watch?v=p0O1VVqRSK0') Demanding Professionalism in Software Development
+            p
+              | Robert C. Martin explains in his own unique style why professionalism is so important for software development teams and their managers.
+        .carousel-caption
+          p June 5th
+
+      .item.meeting.active
+        .row
+          .col-sm-4.visible-lg
+            div
+              iframe(src="//player.vimeo.com/video/12643301" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen)
+          .col-md-8
+            h3 
+              a(href='http://http://vimeo.com/12643301') Clean Code: Functions
+            p
+              | Get ready for a challenge as Robert Martin dives deep into the topic of clean Java code by examining what makes a good function. In this talk you will look at a lot of code; some good and some bad.
+        .carousel-caption
+          p June 17th
+
+
+    a.left.carousel-control(href="javascript: void();" data-target="#info-carousel" data-slide="prev")
+      span.glyphicon.glyphicon-chevron-left
+    a.right.carousel-control(href="javascript: void();" data-target="#info-carousel" data-slide="next")
+      span.glyphicon.glyphicon-chevron-right
 div(ng-controller='HomeController as controller')
   .page-header
     h1 Meeting Ideas  
@@ -46,7 +68,6 @@ div(ng-controller='HomeController as controller')
           span  Remove
         .vote
           div.vote-count {{meeting.vote_count}}
-          //span.glyphicon.glyphicon-ok-sign
           span.vote-description  votes
 
       .media-body
@@ -55,7 +76,7 @@ div(ng-controller='HomeController as controller')
             //.pull-right
               button.editable
                 span.glyphicon.glyphicon-edit
-              button.editable
+              //button.editable
                 span.glyphicon.glyphicon-trash
             h3.panel-title {{meeting.description}}
           .panel-body

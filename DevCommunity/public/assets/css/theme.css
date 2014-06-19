@@ -92,3 +92,42 @@ html, body {
     margin: 0 auto -60px;
     padding: 0 0 60px;
 }
+
+.container .jumbotron{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.jumbotron {
+    padding: 0px;
+    padding-top: 50px;
+}
+
+#info-carousel .meeting{
+    padding-left: 125px; 
+    padding-right: 125px;
+    margin-bottom: 30px;
+}
+
+#info-carousel iframe{
+    width: 280px;
+    height: 158px;
+    margin-top: 25px;
+}
+
+.carousel-caption {
+    padding-bottom: 0px;
+    bottom: 0px;
+}
+
+#info-carousel .carousel-caption {
+    color: black;
+    bottom: -40px;
+}
+
+@media (max-width: 767px){
+    #info-carousel .meeting{
+        padding-left: 20%; 
+        padding-right: 20%;
+    }
+}

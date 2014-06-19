@@ -42,6 +42,7 @@
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\partials.ts" />
     <TypeScriptCompile Include="public\assets\js\app.ts" />
+    <TypeScriptCompile Include="UnitTests\ServiceTests.ts" />
     <Content Include="views\partials\home.jade" />
     <Content Include="package.json" />
     <Content Include="public\assets\css\theme.css" />
@@ -62,6 +63,7 @@
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="routes\" />
+    <Folder Include="UnitTests\" />
     <Folder Include="views\" />
     <Folder Include="views\partials\" />
   </ItemGroup>
