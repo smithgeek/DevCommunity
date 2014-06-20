@@ -19,5 +19,6 @@ exports.mail = {
             pass: "password"
         }
     },
-    from: "from_email_address"
+    from: "from_email_address",
+    sendVerificationEmail: false
 };

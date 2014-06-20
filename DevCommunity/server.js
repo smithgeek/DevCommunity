@@ -102,24 +102,38 @@ app.post('/identify', function (req, res) {
     var verificationCode = generateVerificationCode();
     userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) {
     });
-
-    sendVerificationEmail(verificationCode, req.body.email);
+    if (config.mail.sendVerificationEmail) {
+        sendVerificationEmail(verificationCode, req.body.email);
+    }
     console.log("Verification code: " + verificationCode);
     res.send(200, "Success");
 });
 
 app.post('/api/restricted/AddMeeting', function (req, res) {
-    meetingIdeasDb.insert(req.body, function (err, newDoc) {
-        if (err != null)
-            res.send(404, "Failure");
-        else
-            res.send(200, "Success");
-    });
+    var meeting = req.body;
+    if (meeting._id == "") {
+        meetingIdeasDb.insert(meeting, function (err, newDoc) {
+            if (err != null)
+                res.send(404, "Failure");
+            else
+                res.send(200, { action: "Added", meeting: newDoc });
+        });
+    } else {
+        var token = jwt.decode(req.headers.authorization.substr(7));
+        meetingIdeasDb.update({ _id: meeting._id, email: token.email }, { $set: { description: meeting.description, details: meeting.details } }, {}, function (err, numReplaced) {
+            if (err != null)
+                res.send(404, "Could not update");
+            else if (numReplaced > 0)
+                res.send(200, { action: "Updated", meeting: meeting });
+            else
+                res.send(404, "Could not update");
+        });
+    }
 });
 
 app.get('/api/GetSuggestions', function (req, res) {
     meetingIdeasDb.find({}).sort({ vote_count: -1 }).exec(function (err, suggestions) {
-        if (err == null && suggestions.length > 0)
+        if (err == null)
             res.send(200, suggestions);
         else
             res.send(404, err);

@@ -2,15 +2,18 @@
   .modal-dialog.modal-lg
     .modal-content.highlight
       button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
-      h1 Add Idea
+      h1 Meeting Idea
       form(role='form')
         .form-group
-          input.form-control(type='text' placeholder='Short Description' ng-model='meeting.description')
+          label Title
+          input.form-control(type='text' ng-model='meeting.description')
         .form-group
-          textarea.form-control(type='text' placeholder='Details' ng-model='meeting.details')
+          label Details
+          textarea.form-control.ckeditor(id="newIdeaDetails" type='text' ng-model='meeting.details')
         button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()') Submit
         span  
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
+        span(style="margin-left: 20px; color: red") {{errorMessage}}
 
 .jumbotron
   .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
@@ -73,8 +76,8 @@ div(ng-controller='HomeController as controller')
       .media-body
         .panel.panel-primary
           .panel-heading
-            //.pull-right
-              button.editable
+            .pull-right
+              button.editable(ng-click='controller.EditMeeting(meeting)' ng-show="meeting.isUserAuthor()")
                 span.glyphicon.glyphicon-edit
               //button.editable
                 span.glyphicon.glyphicon-trash

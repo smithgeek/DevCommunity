@@ -14,23 +14,40 @@ $('.nav a').on('click', function () {
 
 interface IMeetingControllerScope extends ng.IScope {
     meeting: Meeting;
+    errorMessage: string;
 }
 
 class AddMeetingController {
     constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: MeetingSvc, private userSvc: UserSvc) {
         $scope.meeting = meetingSvc.createMeeting();
+        $scope.$on('editMeeting', function (event, meeting: Meeting) {
+            $scope.meeting = meeting;
+            CKEDITOR.instances.newIdeaDetails.setData(meeting.details);
+            $('#AddTopicModal').modal('show');
+            $scope.errorMessage = "";
+        });
+        $scope.$on('addMeeting', function (event) {
+            $scope.meeting = meetingSvc.createMeeting();
+            $('#AddTopicModal').modal('show');
+            $scope.errorMessage = "";
+        });
     }
 
     public AddMeeting(): void {
         $('.add-modal-button').prop('disabled', true);
         this.$scope.meeting.SetUser(this.userSvc.getUser());
+        this.$scope.meeting.details = CKEDITOR.instances.newIdeaDetails.getData();
         var mtgData: MeetingData = this.$scope.meeting.GetData();
-        this.$http.post('/api/restricted/AddMeeting', mtgData).success( (data) => {
+        this.$http.post('/api/restricted/AddMeeting', mtgData).success( (data: any) => {
             $('#AddTopicModal').modal('hide');
             $('.add-modal-button').prop('disabled', false);
-            this.meetingSvc.notifyMeetingAdded(this.$scope.meeting);
+            if (data.action == "Added") {
+                this.meetingSvc.notifyMeetingAdded(data.meeting);
+            }
+            this.$scope.meeting = this.meetingSvc.createMeeting();
         }).error( (data) => {
             $('.add-modal-button').prop('disabled', false);
+            this.$scope.errorMessage = data.toString();
         });
     }
 }

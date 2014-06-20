@@ -18,18 +18,34 @@ var AddMeetingController = (function () {
         this.meetingSvc = meetingSvc;
         this.userSvc = userSvc;
         $scope.meeting = meetingSvc.createMeeting();
+        $scope.$on('editMeeting', function (event, meeting) {
+            $scope.meeting = meeting;
+            CKEDITOR.instances.newIdeaDetails.setData(meeting.details);
+            $('#AddTopicModal').modal('show');
+            $scope.errorMessage = "";
+        });
+        $scope.$on('addMeeting', function (event) {
+            $scope.meeting = meetingSvc.createMeeting();
+            $('#AddTopicModal').modal('show');
+            $scope.errorMessage = "";
+        });
     }
     AddMeetingController.prototype.AddMeeting = function () {
         var _this = this;
         $('.add-modal-button').prop('disabled', true);
         this.$scope.meeting.SetUser(this.userSvc.getUser());
+        this.$scope.meeting.details = CKEDITOR.instances.newIdeaDetails.getData();
         var mtgData = this.$scope.meeting.GetData();
         this.$http.post('/api/restricted/AddMeeting', mtgData).success(function (data) {
             $('#AddTopicModal').modal('hide');
             $('.add-modal-button').prop('disabled', false);
-            _this.meetingSvc.notifyMeetingAdded(_this.$scope.meeting);
+            if (data.action == "Added") {
+                _this.meetingSvc.notifyMeetingAdded(data.meeting);
+            }
+            _this.$scope.meeting = _this.meetingSvc.createMeeting();
         }).error(function (data) {
             $('.add-modal-button').prop('disabled', false);
+            _this.$scope.errorMessage = data.toString();
         });
     };
     return AddMeetingController;

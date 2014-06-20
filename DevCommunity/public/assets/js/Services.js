@@ -58,6 +58,10 @@ var Meeting = (function (_super) {
         return -1 != $.inArray(this.userSvc.getUser(), this.votes);
     };
 
+    Meeting.prototype.isUserAuthor = function () {
+        return this.userSvc.getUser() == this.email;
+    };
+
     Meeting.prototype.Vote = function () {
         var _this = this;
         $('.vote-btn-' + this._id).prop('disabled', true);
@@ -108,6 +112,14 @@ var MeetingSvc = (function () {
 
     MeetingSvc.prototype.createMeeting = function (data) {
         return new Meeting(this.userSvc, this.$http, data && data || new MeetingData());
+    };
+
+    MeetingSvc.prototype.notifyEditMeeting = function (meeting) {
+        this.$rootScope.$broadcast('editMeeting', meeting);
+    };
+
+    MeetingSvc.prototype.notifyAddMeeting = function () {
+        this.$rootScope.$broadcast('addMeeting');
     };
     return MeetingSvc;
 })();

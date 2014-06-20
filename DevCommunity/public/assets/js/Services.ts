@@ -56,6 +56,10 @@ class Meeting extends MeetingData {
         return -1 != $.inArray(this.userSvc.getUser(), this.votes);
     }
 
+    public isUserAuthor(): boolean {
+        return this.userSvc.getUser() == this.email;
+    }
+
     public Vote(): void {
         $('.vote-btn-' + this._id).prop('disabled', true);
         var copiedMeeting: Meeting = angular.copy(this);
@@ -101,5 +105,13 @@ class MeetingSvc {
 
     public createMeeting(data?: MeetingData): Meeting {
         return new Meeting(this.userSvc, this.$http, data && data || new MeetingData());
+    }
+
+    public notifyEditMeeting(meeting: Meeting): void {
+        this.$rootScope.$broadcast('editMeeting', meeting);
+    }
+
+    public notifyAddMeeting(): void {
+        this.$rootScope.$broadcast('addMeeting');
     }
 }
