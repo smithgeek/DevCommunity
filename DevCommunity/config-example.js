@@ -20,5 +20,5 @@ exports.mail = {
         }
     },
     from: "from_email_address",
-    sendVerificationEmail: false
+    sendEmails: false   // if false emails won't actually be sent and information will be printed to the console instead
 };

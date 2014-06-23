@@ -3,17 +3,17 @@
     .modal-content.highlight
       button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
       h1 Story Submission
-      form(role='form')
+      form(role='form' name='storySubmitForm' ng-submit="controller.Submit()" novalidate)
         .form-group
           label Title
-          input.form-control(type='text' ng-model='story.title')
+          input.form-control(type='text' name='title' ng-model='story.title' required)
         .form-group
           label URL
-          input.form-control(type='text' ng-model='story.url')
+          input.form-control(type='text' ng-model='story.url' required)
         .form-group
           label Details
           textarea.form-control.ckeditor(id="storyDetails" type='text' ng-model='story.details')
-        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.Submit()') Submit
+        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.Submit()' ng-disabled="storySubmitForm.$invalid") Submit
         span  
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
         span(style="margin-left: 20px; color: red") {{errorMessage}}
@@ -39,5 +39,5 @@ div(ng-controller='StoryController as controller')
       .panel-body
         div(ng-bind-html="story.description")
         .story-details
-          a(href="{{story.url}}"){{story.url}}
+          a(href="{{story.url}}") {{story.url}}
           div Last Modified: {{controller.getHumanTime(story)}}

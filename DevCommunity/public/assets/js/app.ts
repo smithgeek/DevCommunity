@@ -69,6 +69,7 @@ class StorySubmitController {
         });
         $scope.$on('addStory', function (event) {
             $scope.story = new Story();
+            CKEDITOR.instances.storyDetails.setData("");
             $('#AddStoryModal').modal('show');
             $scope.errorMessage = "";
         });
@@ -92,6 +93,34 @@ class StorySubmitController {
                 $('.add-modal-button').prop('disabled', false);
                 this.$scope.errorMessage = data.toString();
             });
+    }
+}
+
+class UserSettingsController {
+    constructor(private $scope, private $http: ng.IHttpService) {
+        $('.navbar-nav li.active').removeClass('active');
+        $('#NavUserSettings').addClass('active');
+
+        this.$scope.settings = new UserSettings();
+        this.$scope.errorMessage = "";
+        this.$scope.successMessage = "";
+
+        this.$http.get('/api/restricted/GetUserSettings').success((data) => {
+            if(data != "" && data != null)
+                this.$scope.settings = data;
+        });
+
+    }
+
+    public Submit(): void {
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/SetUserSettings', this.$scope.settings).success((data: any) => {
+            $('.settings-btn').prop('disabled', false);
+            this.$scope.successMessage = "Settings saved.";
+        }).error((data) => {
+            $('.settings-btn').prop('disabled', false);
+            this.$scope.errorMessage = data.toString();
+        });
     }
 }
 
@@ -176,6 +205,10 @@ class RouteConfig {
                 templateUrl: 'partials/stories',
                 controller: 'StoryController'
             }).
+            when("/UserSettings", {
+                templateUrl: 'partials/UserSettings',
+                controller: 'UserSettingsController'
+            }).
             otherwise({
                 redirectTo: '/'
             });
@@ -200,6 +233,8 @@ class RouteConfig {
     app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', AddMeetingController]);
 
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
+
+    app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

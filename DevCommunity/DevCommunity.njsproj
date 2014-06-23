@@ -36,12 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="config.js" />
+    <Content Include="views\partials\UserSettings.jade" />
     <TypeScriptCompile Include="public\assets\js\StoryController.ts" />
     <Content Include="views\partials\Stories.jade" />
     <Content Include="views\partials\PastMeetings.jade" />
     <TypeScriptCompile Include="public\assets\js\HomeController.ts" />
     <TypeScriptCompile Include="public\assets\js\Services.ts" />
     <TypeScriptCompile Include="public\assets\js\Story.ts" />
+    <TypeScriptCompile Include="public\assets\js\UserSettings.ts" />
     <TypeScriptCompile Include="server.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\partials.ts" />

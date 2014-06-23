@@ -67,6 +67,7 @@ var StorySubmitController = (function () {
         });
         $scope.$on('addStory', function (event) {
             $scope.story = new Story();
+            CKEDITOR.instances.storyDetails.setData("");
             $('#AddStoryModal').modal('show');
             $scope.errorMessage = "";
         });
@@ -92,6 +93,37 @@ var StorySubmitController = (function () {
         });
     };
     return StorySubmitController;
+})();
+
+var UserSettingsController = (function () {
+    function UserSettingsController($scope, $http) {
+        var _this = this;
+        this.$scope = $scope;
+        this.$http = $http;
+        $('.navbar-nav li.active').removeClass('active');
+        $('#NavUserSettings').addClass('active');
+
+        this.$scope.settings = new UserSettings();
+        this.$scope.errorMessage = "";
+        this.$scope.successMessage = "";
+
+        this.$http.get('/api/restricted/GetUserSettings').success(function (data) {
+            if (data != "" && data != null)
+                _this.$scope.settings = data;
+        });
+    }
+    UserSettingsController.prototype.Submit = function () {
+        var _this = this;
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/SetUserSettings', this.$scope.settings).success(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.successMessage = "Settings saved.";
+        }).error(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.errorMessage = data.toString();
+        });
+    };
+    return UserSettingsController;
 })();
 
 var LoginController = (function () {
@@ -159,6 +191,9 @@ var RouteConfig = (function () {
         }).when("/stories", {
             templateUrl: 'partials/stories',
             controller: 'StoryController'
+        }).when("/UserSettings", {
+            templateUrl: 'partials/UserSettings',
+            controller: 'UserSettingsController'
         }).otherwise({
             redirectTo: '/'
         });
@@ -184,6 +219,8 @@ var RouteConfig = (function () {
     app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', AddMeetingController]);
 
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
+
+    app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

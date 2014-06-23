@@ -1,6 +1,7 @@
 ﻿/// <reference path="typings/express/express.d.ts" />
 /// <reference path="typings/nodemailer/nodemailer.d.ts" />
 /// <reference path="public/assets/js/Story.ts" />
+/// <reference path="public/assets/js/UserSettings.ts" />
 
 /**
  * Module dependencies.
@@ -45,6 +46,7 @@ app.get('/partials/contact', partials.contact);
 app.get('/partials/brainstorming', partials.brainstorming);
 app.get('/partials/pastMeetings', partials.pastMeetings);
 app.get('/partials/stories', partials.stories);
+app.get('/partials/UserSettings', partials.UserSettings);
 
 var oneDayInMilliseconds = 86400000;
 
@@ -57,28 +59,42 @@ userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 var storyDb = new nedb({ filename: 'stories.db.json', autoload: true });
 storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
+var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: true });
+userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+
 function generateVerificationCode() {
     return Math.floor(Math.random() * 900000) + 100000;
 }
 
+function sendEmail(toEmailAddress, subject, body) {
+    if (config.mail.sendEmails) {
+        var smtpTransport: Transport = nodemailer.createTransport("SMTP", config.mail.smtp);
+
+        var message: MailComposer = {
+            from: config.mail.from,
+            to: toEmailAddress,
+            subject: subject,
+            html: body
+        };
+
+        smtpTransport.sendMail(message, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log("Sent email to " + toEmailAddress + ": " + subject);
+            }
+            smtpTransport.close();
+        });
+    }
+    else {
+        console.log("Emailing " + subject + " to " + toEmailAddress);
+        console.log(body);
+    }
+}
+
 function sendVerificationEmail(verificationCode, emailAddress) {
-    var smtpTransport:Transport = nodemailer.createTransport("SMTP", config.mail.smtp);
-
-    var message:MailComposer = {
-        from: config.mail.from,
-        to: emailAddress,
-        subject: "Developer Community Verification Code",
-        text: "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode
-    };
-
-    smtpTransport.sendMail(message, function (error) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Message sent: to " + emailAddress);
-        }
-        smtpTransport.close();
-    });
+    sendEmail(emailAddress, "Developer Community Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode);
 }
 
 function clearVerificationCodes(email) {
@@ -87,6 +103,42 @@ function clearVerificationCodes(email) {
 
 function getUserEmail(req): string {
     return jwt.decode(req.headers.authorization.substr(7)).email;
+}
+
+function sendNewMeetingTopicEmails(meeting: Meeting) {
+    userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
+        if (err == null) {
+            var subject = "Develoepr Community: New Meeting Idea";
+            var body = "<h3>" + meeting.description + "</h3>" + meeting.description;
+            for (var i = 0; i < settings.length; i++) {
+                var user = settings[i].email;
+                if (user != meeting.email) {
+                    sendEmail(user, subject, body);
+                }
+            }
+        }
+        else {
+            console.log(err);
+        }
+    });
+}
+
+function sendNewStoryEmails(story: Story) {
+    userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
+        if (err == null) {
+            var subject = "Develoepr Community: New Story Posted";
+            var body = "<h3>" + story.title + "</h3><a href='" + story.url + "'>" + story.url + "</a><br/>" + story.description;
+            for (var i = 0; i < settings.length; i++) {
+                var user = settings[i].email;
+                if (user != story.submittor) {
+                    sendEmail(user, subject, body);
+                }
+            }
+        }
+        else {
+            console.log(err);
+        }
+    });
 }
 
 app.post('/verify', function (req, res) {
@@ -111,9 +163,7 @@ app.post('/identify', (req, res) => {
 
     var verificationCode = generateVerificationCode();
     userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
-    if (config.mail.sendVerificationEmail) {
-        sendVerificationEmail(verificationCode, req.body.email);
-    }
+    sendVerificationEmail(verificationCode, req.body.email);
     console.log("Verification code: " + verificationCode);
     res.send(200, "Success");
 });
@@ -125,8 +175,10 @@ app.post('/api/restricted/AddMeeting', function (req:any, res) {
         meetingIdeasDb.insert(meeting, function (err, newDoc) {
             if (err != null)
                 res.send(404, "Failure");
-            else
+            else {
                 res.send(200, { action: "Added", meeting: newDoc });
+                sendNewMeetingTopicEmails(newDoc);
+            }
         });
     }
     else {
@@ -179,8 +231,10 @@ app.post('/api/restricted/AddStory', function (req:any, res) {
         storyDb.insert(story, function (err, newDoc) {
             if (err != null)
                 res.send(404, "Failure");
-            else
+            else {
                 res.send(200, { action: "Added", story: newDoc });
+                sendNewStoryEmails(newDoc);
+            }
         });
     }
     else {
@@ -191,6 +245,27 @@ app.post('/api/restricted/AddStory', function (req:any, res) {
                 res.send(200, { action: "Updated", story: story });
         });
     }
+});
+
+app.get('/api/restricted/GetUserSettings', function (req, res) {
+    userSettingsDb.find({ email: getUserEmail(req) }).exec(function (err, settings) {
+        if (err == null)
+            res.send(200, settings[0]);
+        else
+            res.send(404, err);
+    });
+});
+
+app.post('/api/restricted/SetUserSettings', function (req: any, res) {
+    var settings: UserSettings = req.body;
+    settings.email = getUserEmail(req);
+    userSettingsDb.update({ email: settings.email }, { $set: { NewMeetingEmailNotification: settings.NewMeetingEmailNotification, NewStoryEmailNotification: settings.NewStoryEmailNotification } },
+        { upsert: true }, (err, numReplaced) => {
+            if (err != null || numReplaced < 1)
+                res.send(404, "Could not update");
+            else
+                res.send(200, { action: "Updated", settings: settings });
+    });
 });
 
 http.createServer(app).listen(app.get('port'), function () {

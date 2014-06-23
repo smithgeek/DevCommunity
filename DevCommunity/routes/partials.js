@@ -35,4 +35,10 @@ function stories(req, res) {
 }
 exports.stories = stories;
 ;
+
+function UserSettings(req, res) {
+    res.render('partials/UserSettings');
+}
+exports.UserSettings = UserSettings;
+;
 //# sourceMappingURL=partials.js.map

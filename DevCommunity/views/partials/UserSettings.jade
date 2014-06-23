@@ -1,0 +1,15 @@
+﻿br
+br
+br
+.page-header
+    h1 Settings
+form(ng-controller="UserSettingsController as controller")
+  .form-group
+    input(type='checkbox' ng-model='settings.NewMeetingEmailNotification' required) 
+    span  Receive email notification when new meeting idea is submitted.
+  .form-group
+    input(type='checkbox' ng-model='settings.NewStoryEmailNotification') 
+    span  Receive email notification when new story is submitted.
+  button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
+  span(style="margin-left: 20px; color: red") {{errorMessage}}
+  span(style="margin-left: 20px; color: green") {{successMessage}}

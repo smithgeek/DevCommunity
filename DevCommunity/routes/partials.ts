@@ -28,3 +28,7 @@ export function pastMeetings(req: express.Request, res: express.Response) {
 export function stories(req: express.Request, res: express.Response) {
     res.render('partials/stories');
 };
+
+export function UserSettings(req: express.Request, res: express.Response) {
+    res.render('partials/UserSettings');
+};
