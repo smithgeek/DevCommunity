@@ -57,7 +57,7 @@ var HomeController = (function () {
                 items.each(function () {
                     heights.push($(this).height());
                 });
-                tallest = Math.max.apply(null, heights); //cache largest value
+                tallest = Math.max.apply(null, heights) + 5; //cache largest value
                 items.each(function () {
                     $(this).css('min-height', tallest + 'px');
                 });

@@ -21,12 +21,31 @@ var config = require('./config.js');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use('/api/restricted', expressJwt({ secret: 'mySuperSecret' }));
 app.use(express.favicon());
-app.use(express.logger('dev'));
+app.use(express.logger(function (tokens, req, res) {
+    var status = res.statusCode
+        , len = parseInt(res.getHeader('Content-Length'), 10)
+        , color = 32;
+
+    if (status >= 500) color = 31
+    else if (status >= 400) color = 33
+    else if (status >= 300) color = 36;
+
+    var lenStr = isNaN(len) ? '' : ' - ' + len;
+
+    var now = Date.now();
+    return '\x1b[90m' + req.connection.remoteAddress + " - " + req.method
+        + ' ' + req.originalUrl + ' '
+        + '\x1b[' + color + 'm' + res.statusCode
+        + ' \x1b[90m'
+        + (now - req._startTime)
+        + 'ms' + lenStr
+        + '\x1b[0m';
+}));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
@@ -67,7 +86,7 @@ function generateVerificationCode() {
 }
 
 function sendEmail(toEmailAddress, subject, body) {
-    if (config.mail.sendEmails) {
+    if (config.server.sendEmails) {
         var smtpTransport: Transport = nodemailer.createTransport("SMTP", config.mail.smtp);
 
         var message: MailComposer = {
