@@ -1,0 +1,43 @@
+﻿.modal.fade(id='AddStoryModal' aria-hidden='true' role='dialog' ng-controller='StorySubmitController as controller')
+  .modal-dialog.modal-lg
+    .modal-content.highlight
+      button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
+      h1 Story Submission
+      form(role='form')
+        .form-group
+          label Title
+          input.form-control(type='text' ng-model='story.title')
+        .form-group
+          label URL
+          input.form-control(type='text' ng-model='story.url')
+        .form-group
+          label Details
+          textarea.form-control.ckeditor(id="storyDetails" type='text' ng-model='story.details')
+        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.Submit()') Submit
+        span  
+        button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
+        span(style="margin-left: 20px; color: red") {{errorMessage}}
+
+.jumbotron
+div(ng-controller='StoryController as controller')
+  .page-header
+      //h1 Stories  
+      button.btn.btn-info.add-button(type='button' ng-click='controller.SubmitStory()')
+        span.glyphicon.glyphicon-plus
+        span   Submit Story
+
+  div(ng-repeat='story in stories')
+    .panel.panel-primary
+      .panel-heading
+        .pull-right
+          button.editable(ng-click='controller.EditStory(story)' ng-show="controller.isUserSubmittor(story)")
+            span.glyphicon.glyphicon-edit
+          //button.editable
+            span.glyphicon.glyphicon-trash
+        .panel-title 
+          a(href="{{story.url}}") {{story.title}}
+      .panel-body
+        div(ng-bind-html="story.description")
+        .story-details
+          a(href="{{story.url}}"){{story.url}}
+          div Last Modified: {{controller.getHumanTime(story)}}

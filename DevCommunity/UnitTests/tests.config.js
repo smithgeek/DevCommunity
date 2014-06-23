@@ -5,27 +5,29 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '..',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['qunit'],
+    frameworks: ['mocha'],
 
 
     // list of files / patterns to load in the browser
     files: [
       'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
 	  'http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
-	  '../public/dist/js/readmore.min.js',
+	  'public/dist/js/readmore.min.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js',
-	  '../public/dist/js/angular-local-storage.min.js',
+	  'public/dist/js/angular-local-storage.min.js',
+      'public/dist/ckeditor/ckeditor.js',
+      'node_modules/expect.js/index.js',
 	  
-      '../public/**/*.js',
+      'public/**/*.js',
       //'../routes/**/*.js',
-      '*.js',
+      'UnitTests/*.js',
       //'../server.js'
     ],
 
@@ -39,16 +41,21 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-    
+        'public/assets/**/*.js': ['coverage']
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'html'],
+    reporters: ['progress', 'coverage'],
 
 	htmlReporter: {
-		outputFile: '../obj/TestResults.html'
+		outputFile: 'obj/TestResults.html'
+	},
+
+	coverageReporter: {
+	    type: 'html',
+        dir: 'obj/coverage/'
 	},
 
     // web server port

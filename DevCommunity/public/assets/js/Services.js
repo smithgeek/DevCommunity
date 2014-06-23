@@ -123,4 +123,22 @@ var MeetingSvc = (function () {
     };
     return MeetingSvc;
 })();
+
+var StorySvc = (function () {
+    function StorySvc($rootScope) {
+        this.$rootScope = $rootScope;
+    }
+    StorySvc.prototype.notifyStoryAdded = function (story) {
+        this.$rootScope.$broadcast('storyAdded', story);
+    };
+
+    StorySvc.prototype.notifyAddStory = function () {
+        this.$rootScope.$broadcast('addStory');
+    };
+
+    StorySvc.prototype.notifyEditStory = function (story) {
+        this.$rootScope.$broadcast('editStory', story);
+    };
+    return StorySvc;
+})();
 //# sourceMappingURL=Services.js.map

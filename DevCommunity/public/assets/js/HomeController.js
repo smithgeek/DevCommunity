@@ -36,9 +36,6 @@ var HomeController = (function () {
                     $('#newIdeaDetails').ckeditor();
                 });
             }, 1);
-
-            $scope.$on('meetingAdded', function (event, meeting) {
-            });
         });
     }
     HomeController.prototype.AddTopic = function () {

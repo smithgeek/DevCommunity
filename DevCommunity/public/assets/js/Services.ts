@@ -115,3 +115,20 @@ class MeetingSvc {
         this.$rootScope.$broadcast('addMeeting');
     }
 }
+
+class StorySvc {
+    constructor(private $rootScope) {
+    }
+
+    public notifyStoryAdded(story: Story): void {
+        this.$rootScope.$broadcast('storyAdded', story);
+    }
+
+    public notifyAddStory(): void {
+        this.$rootScope.$broadcast('addStory');
+    }
+
+    public notifyEditStory(story: Story): void {
+        this.$rootScope.$broadcast('editStory', story);
+    }
+}

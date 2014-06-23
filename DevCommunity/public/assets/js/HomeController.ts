@@ -36,10 +36,6 @@ class HomeController {
                     $('#newIdeaDetails').ckeditor();
                 });
             }, 1);
-
-            $scope.$on('meetingAdded', function (event, meeting) {
-
-            });
         });
     }
 

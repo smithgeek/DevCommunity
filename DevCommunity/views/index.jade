@@ -5,6 +5,7 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='')
     meta(name='author', content='')
+    meta(name="mobile-web-app-capable" content="yes")
     link(rel='shortcut icon', href='#{pathToAssets}/assets/ico/favicon.png')
     title #{config.name}
     // Bootstrap core CSS
@@ -54,6 +55,8 @@ html(lang='en')
             ul.nav.navbar-nav
               li.active(id='NavHome')
                 a(href='#') Home
+              li(id='NavStories')
+                a(href='#stories') Stories
               //li(id='NavPastMeetings')
                 a(href='#pastMeetings') Past Meetings
               //li(id='NavBrainstorming')
@@ -96,6 +99,8 @@ html(lang='en')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js')
     script(src='#{pathToAssets}/dist/js/angular-local-storage.min.js')
+    script(src='#{pathToAssets}/assets/js/Story.js')
     script(src='#{pathToAssets}/assets/js/Services.js')
     script(src='#{pathToAssets}/assets/js/HomeController.js')
+    script(src='#{pathToAssets}/assets/js/StoryController.js')
     script(src='#{pathToAssets}/assets/js/app.js')

@@ -5,6 +5,7 @@
 /// <reference path="../../../typings/readmore/readmore.d.ts" />
 /// <reference path="Services.ts" />
 /// <reference path="HomeController.ts" />
+/// <reference path="StoryController.ts" />
 
 $('.nav a').on('click', function () {
     if ($(".navbar-toggle").css('display') != 'none') {
@@ -49,6 +50,48 @@ class AddMeetingController {
             $('.add-modal-button').prop('disabled', false);
             this.$scope.errorMessage = data.toString();
         });
+    }
+}
+
+interface IStorySubmitControllerScope extends ng.IScope {
+    story: Story;
+    errorMessage: string;
+}
+
+class StorySubmitController {
+    constructor(private $scope: IStorySubmitControllerScope, private storySvc: StorySvc, private $http: ng.IHttpService, private userSvc: UserSvc) {
+        $scope.story = new Story();
+        $scope.$on('editStory', function (event, story: Story) {
+            $scope.story = story;
+            CKEDITOR.instances.storyDetails.setData(story.description);
+            $('#AddStoryModal').modal('show');
+            $scope.errorMessage = "";
+        });
+        $scope.$on('addStory', function (event) {
+            $scope.story = new Story();
+            $('#AddStoryModal').modal('show');
+            $scope.errorMessage = "";
+        });
+        $(document).ready(() => {
+            $('#storyDetails').ckeditor();
+        });
+    }
+
+    public Submit(): void {
+        $('.add-modal-button').prop('disabled', true);
+        this.$scope.story.submittor = this.userSvc.getUser();
+        this.$scope.story.description = CKEDITOR.instances.storyDetails.getData();
+        this.$http.post('/api/restricted/AddStory', this.$scope.story).success((data: any) => {
+            $('#AddStoryModal').modal('hide');
+            $('.add-modal-button').prop('disabled', false);
+            if (data.action == "Added") {
+                this.storySvc.notifyStoryAdded(data.story);
+            }
+            this.$scope.story = new Story();
+        }).error((data) => {
+                $('.add-modal-button').prop('disabled', false);
+                this.$scope.errorMessage = data.toString();
+            });
     }
 }
 
@@ -129,6 +172,10 @@ class RouteConfig {
                 templateUrl: 'partials/brainstorming',
                 controller: 'BrainstormingController'
             }).
+            when("/stories", {
+                templateUrl: 'partials/stories',
+                controller: 'StoryController'
+            }).
             otherwise({
                 redirectTo: '/'
             });
@@ -144,9 +191,15 @@ class RouteConfig {
 
     app.service('meetingSvc', ['userSvc', '$http', '$rootScope', MeetingSvc]);
 
+    app.service('storySvc', ['$rootScope', StorySvc]);
+
     app.controller('HomeController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', HomeController]);
 
+    app.controller('StoryController', ['$scope', '$http', 'userSvc', 'storySvc', StoryController]);
+
     app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', AddMeetingController]);
+
+    app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

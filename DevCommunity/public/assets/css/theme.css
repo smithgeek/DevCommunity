@@ -125,6 +125,10 @@ html, body {
     bottom: -40px;
 }
 
+.story-details, .story-details a{
+    color: #999;
+}
+
 @media (max-width: 767px){
     #info-carousel .meeting{
         padding-left: 20%; 

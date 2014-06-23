@@ -29,4 +29,10 @@ function pastMeetings(req, res) {
 }
 exports.pastMeetings = pastMeetings;
 ;
+
+function stories(req, res) {
+    res.render('partials/stories');
+}
+exports.stories = stories;
+;
 //# sourceMappingURL=partials.js.map
