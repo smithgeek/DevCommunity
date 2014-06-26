@@ -4,7 +4,11 @@
  */
 import express = require('express');
 var config = require('../config.js');
+var jwt = require('jsonwebtoken');
 
+function getUserEmail(req): string {
+    return jwt.decode(req.headers.authorization.substr(7)).email;
+}
 export function home(req: express.Request, res: express.Response) {
     res.render('partials/home');
 };
@@ -35,4 +39,8 @@ export function UserSettings(req: express.Request, res: express.Response) {
 
 export function meeting(req: express.Request, res: express.Response) {
     res.render('partials/meeting');
+};
+
+export function admin(req: express.Request, res: express.Response) {
+    res.render('partials/admin', { admin: config.server.admin == getUserEmail(req) });
 };

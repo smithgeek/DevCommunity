@@ -96,6 +96,30 @@ var StorySubmitController = (function () {
     return StorySubmitController;
 })();
 
+var AdminController = (function () {
+    function AdminController($scope, $http) {
+        this.$scope = $scope;
+        this.$http = $http;
+        this.$scope.emailAddress = "";
+        this.$scope.errorMessage = "";
+        this.$scope.successMessage = "";
+    }
+    AdminController.prototype.Submit = function () {
+        var _this = this;
+        this.$scope.successMessage = "";
+        this.$scope.errorMessage = "";
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/AddUser', { user: this.$scope.emailAddress }).success(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.successMessage = data.toString();
+        }).error(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.errorMessage = data.toString();
+        });
+    };
+    return AdminController;
+})();
+
 var UserSettingsController = (function () {
     function UserSettingsController($scope, $http, userSvc) {
         var _this = this;
@@ -203,6 +227,9 @@ var RouteConfig = (function () {
         }).when("/meeting/:id", {
             templateUrl: 'partials/meeting',
             controller: 'MeetingController'
+        }).when("/admin", {
+            templateUrl: 'partials/admin',
+            controller: 'AdminController'
         }).otherwise({
             redirectTo: '/'
         });
@@ -232,6 +259,8 @@ var RouteConfig = (function () {
     app.controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
 
     app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
+
+    app.controller('AdminController', ['$scope', '$http', AdminController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

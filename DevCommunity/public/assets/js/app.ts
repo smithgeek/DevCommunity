@@ -97,6 +97,27 @@ class StorySubmitController {
     }
 }
 
+class AdminController {
+    constructor(private $scope, private $http: ng.IHttpService) {
+        this.$scope.emailAddress = "";
+        this.$scope.errorMessage = "";
+        this.$scope.successMessage = "";
+    }
+
+    public Submit(): void {
+        this.$scope.successMessage = "";
+        this.$scope.errorMessage = "";
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/AddUser', { user: this.$scope.emailAddress }).success((data: any) => {
+            $('.settings-btn').prop('disabled', false);
+            this.$scope.successMessage = data.toString();
+        }).error((data) => {
+                $('.settings-btn').prop('disabled', false);
+                this.$scope.errorMessage = data.toString();
+        });
+    }
+}
+
 class UserSettingsController {
     constructor(private $scope, private $http: ng.IHttpService, private userSvc: UserSvc ) {
         $('.navbar-nav li.active').removeClass('active');
@@ -218,6 +239,10 @@ class RouteConfig {
                 templateUrl: 'partials/meeting',
                 controller: 'MeetingController'
             }).
+            when("/admin", {
+                templateUrl: 'partials/admin',
+                controller: 'AdminController'
+            }).
             otherwise({
                 redirectTo: '/'
             });
@@ -246,6 +271,8 @@ class RouteConfig {
     app.controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
 
     app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
+
+    app.controller('AdminController', ['$scope', '$http', AdminController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

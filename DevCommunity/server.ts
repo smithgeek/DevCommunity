@@ -67,6 +67,7 @@ app.get('/partials/pastMeetings', partials.pastMeetings);
 app.get('/partials/stories', partials.stories);
 app.get('/partials/UserSettings', partials.UserSettings);
 app.get('/partials/meeting', partials.meeting);
+app.get('/partials/admin', partials.admin);
 
 var oneDayInMilliseconds = 86400000;
 
@@ -81,6 +82,11 @@ storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
 var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: true });
 userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+userSettingsDb.ensureIndex({ fieldName: 'email', unique: true }, function (err) {
+    if (err != null) {
+        console.log('User settings index error: ' + err.toString());
+    }
+});
 
 function generateVerificationCode() {
     return Math.floor(Math.random() * 900000) + 100000;
@@ -114,7 +120,7 @@ function sendEmail(toEmailAddress, subject, body) {
 }
 
 function sendVerificationEmail(verificationCode, emailAddress) {
-    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode);
+    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. <br/>Verification Code: " + verificationCode);
 }
 
 function clearVerificationCodes(email) {
@@ -130,6 +136,7 @@ function sendNewMeetingTopicEmails(meeting: Meeting) {
         if (err == null) {
             var subject = "Developer Community: New Meeting Idea";
             var body = "<a href='" + config.server.domain + "/#/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
+            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (user != meeting.email) {
@@ -148,6 +155,7 @@ function sendNewStoryEmails(story: Story) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
             var body = "<h3>" + story.title + "</h3><a href='" + story.url + "'>" + story.url + "</a><br/>" + story.description;
+            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (user != story.submittor) {
@@ -295,6 +303,22 @@ app.post('/api/restricted/SetUserSettings', function (req: any, res) {
             else
                 res.send(200, { action: "Updated", settings: settings });
     });
+});
+
+app.post('/api/restricted/AddUser', function (req: any, res) {
+    if (getUserEmail(req) == config.server.admin) {
+        var email: string = req.body.user;
+        var settings = { email: email, NewMeetingEmailNotification: true, NewStoryEmailNotification: true};
+        userSettingsDb.insert(settings, (err, newDoc) => {
+            if (err != null)
+                res.send(404, "Could not add user " + email);
+            else
+                res.send(200, "Added user " + email);
+        });
+    }
+    else {
+        res.send(404, "Who do you think you are?  You have to be an administrator to add a user.");
+    }
 });
 
 http.createServer(app).listen(app.get('port'), function () {

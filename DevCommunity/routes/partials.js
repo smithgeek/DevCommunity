@@ -1,5 +1,9 @@
 ﻿var config = require('../config.js');
+var jwt = require('jsonwebtoken');
 
+function getUserEmail(req) {
+    return jwt.decode(req.headers.authorization.substr(7)).email;
+}
 function home(req, res) {
     res.render('partials/home');
 }
@@ -46,5 +50,11 @@ function meeting(req, res) {
     res.render('partials/meeting');
 }
 exports.meeting = meeting;
+;
+
+function admin(req, res) {
+    res.render('partials/admin', { admin: config.server.admin == getUserEmail(req) });
+}
+exports.admin = admin;
 ;
 //# sourceMappingURL=partials.js.map

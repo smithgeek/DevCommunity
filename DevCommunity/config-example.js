@@ -25,5 +25,6 @@ exports.mail = {
 exports.server = {
     port: 3000,
     sendEmails: false,  // if false emails won't actually be sent and information will be printed to the console instead
-    domain: 'http://mydomain.com'
+    domain: 'http://mydomain.com',
+    admin: 'admin@emailaddress.com'
 };

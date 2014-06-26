@@ -1,0 +1,16 @@
+﻿br
+br
+br
+.page-header
+    h1 Admin
+if admin
+  div(ng-controller="AdminController as controller")
+    h3 Add User
+    form
+      .form-group
+        input(type='text' ng-model='emailAddress') 
+      button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
+      span(style="margin-left: 20px; color: red") {{errorMessage}}
+      span(style="margin-left: 20px; color: green") {{successMessage}}
+else
+  p You must log in with an administrator account to access this page.
