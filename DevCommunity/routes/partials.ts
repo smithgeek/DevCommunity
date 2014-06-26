@@ -32,3 +32,7 @@ export function stories(req: express.Request, res: express.Response) {
 export function UserSettings(req: express.Request, res: express.Response) {
     res.render('partials/UserSettings');
 };
+
+export function meeting(req: express.Request, res: express.Response) {
+    res.render('partials/meeting');
+};

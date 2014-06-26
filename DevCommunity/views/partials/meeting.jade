@@ -1,0 +1,22 @@
+﻿br
+br
+br
+div.hidden(ng-controller='MeetingController as controller')
+  .page-header
+    h1 {{meeting.description}}
+
+  div
+    .media
+      .pull-left
+        button.btn.btn-success.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.Vote()' ng-hide="meeting.HasUserVoted()")
+          span.glyphicon.glyphicon-arrow-up
+          span  Vote
+        button.btn.btn-danger.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.RemoveVote()' ng-show="meeting.HasUserVoted()")
+          span.glyphicon.glyphicon-remove-sign
+          span  Remove
+        .vote
+          div.vote-count {{meeting.vote_count}}
+          span.vote-description  votes
+
+      .media-body
+          div(ng-bind-html="meeting.details")

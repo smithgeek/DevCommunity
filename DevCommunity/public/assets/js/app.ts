@@ -4,6 +4,7 @@
 /// <reference path="../../../typings/bootstrap/bootstrap.d.ts" />
 /// <reference path="../../../typings/readmore/readmore.d.ts" />
 /// <reference path="Services.ts" />
+/// <reference path="MeetingController.ts" />
 /// <reference path="HomeController.ts" />
 /// <reference path="StoryController.ts" />
 
@@ -209,6 +210,10 @@ class RouteConfig {
                 templateUrl: 'partials/UserSettings',
                 controller: 'UserSettingsController'
             }).
+            when("/meeting/:id", {
+                templateUrl: 'partials/meeting',
+                controller: 'MeetingController'
+            }).
             otherwise({
                 redirectTo: '/'
             });
@@ -235,6 +240,8 @@ class RouteConfig {
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
 
     app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
+
+    app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

@@ -41,4 +41,10 @@ function UserSettings(req, res) {
 }
 exports.UserSettings = UserSettings;
 ;
+
+function meeting(req, res) {
+    res.render('partials/meeting');
+}
+exports.meeting = meeting;
+;
 //# sourceMappingURL=partials.js.map

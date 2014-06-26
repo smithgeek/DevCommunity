@@ -81,6 +81,7 @@ div(ng-controller='HomeController as controller')
                 span.glyphicon.glyphicon-edit
               //button.editable
                 span.glyphicon.glyphicon-trash
-            h3.panel-title {{meeting.description}}
+            a(href='#meeting/{{meeting._id}}')
+              h3.panel-title {{meeting.description}}
           .panel-body
             div(ng-bind-html="meeting.details")

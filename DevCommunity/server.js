@@ -59,6 +59,7 @@ app.get('/partials/brainstorming', partials.brainstorming);
 app.get('/partials/pastMeetings', partials.pastMeetings);
 app.get('/partials/stories', partials.stories);
 app.get('/partials/UserSettings', partials.UserSettings);
+app.get('/partials/meeting', partials.meeting);
 
 var oneDayInMilliseconds = 86400000;
 
@@ -120,7 +121,7 @@ function sendNewMeetingTopicEmails(meeting) {
     userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings) {
         if (err == null) {
             var subject = "Developer Community: New Meeting Idea";
-            var body = "<h3>" + meeting.description + "</h3>" + meeting.details;
+            var body = "<a href='" + config.server.domain + "/#/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (user != meeting.email) {
@@ -206,6 +207,15 @@ app.get('/api/GetSuggestions', function (req, res) {
     meetingIdeasDb.find({}).sort({ vote_count: -1 }).exec(function (err, suggestions) {
         if (err == null)
             res.send(200, suggestions);
+        else
+            res.send(404, err);
+    });
+});
+
+app.get('/api/GetMeetingById/:id', function (req, res) {
+    meetingIdeasDb.find({ _id: req.params.id }).exec(function (err, meeting) {
+        if (err == null)
+            res.send(200, meeting[0]);
         else
             res.send(404, err);
     });

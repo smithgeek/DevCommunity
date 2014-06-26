@@ -4,6 +4,7 @@
 /// <reference path="../../../typings/bootstrap/bootstrap.d.ts" />
 /// <reference path="../../../typings/readmore/readmore.d.ts" />
 /// <reference path="Services.ts" />
+/// <reference path="MeetingController.ts" />
 /// <reference path="HomeController.ts" />
 /// <reference path="StoryController.ts" />
 $('.nav a').on('click', function () {
@@ -194,6 +195,9 @@ var RouteConfig = (function () {
         }).when("/UserSettings", {
             templateUrl: 'partials/UserSettings',
             controller: 'UserSettingsController'
+        }).when("/meeting/:id", {
+            templateUrl: 'partials/meeting',
+            controller: 'MeetingController'
         }).otherwise({
             redirectTo: '/'
         });
@@ -221,6 +225,8 @@ var RouteConfig = (function () {
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
 
     app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
+
+    app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
 
     app.controller('PastMeetingsController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');
