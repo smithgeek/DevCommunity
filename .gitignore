@@ -28,3 +28,4 @@ node_modules
 */obj/*
 
 config.js
+*.js.map
