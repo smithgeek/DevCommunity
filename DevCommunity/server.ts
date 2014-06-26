@@ -113,7 +113,7 @@ function sendEmail(toEmailAddress, subject, body) {
 }
 
 function sendVerificationEmail(verificationCode, emailAddress) {
-    sendEmail(emailAddress, "Developer Community Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode);
+    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. \n\nVerification Code: " + verificationCode);
 }
 
 function clearVerificationCodes(email) {
@@ -127,8 +127,8 @@ function getUserEmail(req): string {
 function sendNewMeetingTopicEmails(meeting: Meeting) {
     userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
         if (err == null) {
-            var subject = "Develoepr Community: New Meeting Idea";
-            var body = "<h3>" + meeting.description + "</h3>" + meeting.description;
+            var subject = "Developer Community: New Meeting Idea";
+            var body = "<h3>" + meeting.description + "</h3>" + meeting.details;
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (user != meeting.email) {
@@ -145,7 +145,7 @@ function sendNewMeetingTopicEmails(meeting: Meeting) {
 function sendNewStoryEmails(story: Story) {
     userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
         if (err == null) {
-            var subject = "Develoepr Community: New Story Posted";
+            var subject = "Developer Community: New Story Posted";
             var body = "<h3>" + story.title + "</h3><a href='" + story.url + "'>" + story.url + "</a><br/>" + story.description;
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
