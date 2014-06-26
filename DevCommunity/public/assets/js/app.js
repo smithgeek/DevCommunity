@@ -97,10 +97,11 @@ var StorySubmitController = (function () {
 })();
 
 var UserSettingsController = (function () {
-    function UserSettingsController($scope, $http) {
+    function UserSettingsController($scope, $http, userSvc) {
         var _this = this;
         this.$scope = $scope;
         this.$http = $http;
+        this.userSvc = userSvc;
         $('.navbar-nav li.active').removeClass('active');
         $('#NavUserSettings').addClass('active');
 
@@ -113,6 +114,10 @@ var UserSettingsController = (function () {
                 _this.$scope.settings = data;
         });
     }
+    UserSettingsController.prototype.isLoggedIn = function () {
+        return this.userSvc.isLoggedIn();
+    };
+
     UserSettingsController.prototype.Submit = function () {
         var _this = this;
         $('.settings-btn').prop('disabled', true);
@@ -224,7 +229,7 @@ var RouteConfig = (function () {
 
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
 
-    app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
+    app.controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
 
     app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
 

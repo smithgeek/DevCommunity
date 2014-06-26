@@ -98,7 +98,7 @@ class StorySubmitController {
 }
 
 class UserSettingsController {
-    constructor(private $scope, private $http: ng.IHttpService) {
+    constructor(private $scope, private $http: ng.IHttpService, private userSvc: UserSvc ) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavUserSettings').addClass('active');
 
@@ -111,6 +111,10 @@ class UserSettingsController {
                 this.$scope.settings = data;
         });
 
+    }
+
+    public isLoggedIn(): boolean {
+        return this.userSvc.isLoggedIn();
     }
 
     public Submit(): void {
@@ -239,7 +243,7 @@ class RouteConfig {
 
     app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
 
-    app.controller('UserSettingsController', ['$scope', '$http', UserSettingsController]);
+    app.controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
 
     app.controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
 
