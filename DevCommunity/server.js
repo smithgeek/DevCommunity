@@ -37,7 +37,9 @@ app.use(express.logger(function (tokens, req, res) {
     var lenStr = isNaN(len) ? '' : ' - ' + len;
 
     var now = Date.now();
-    return '\x1b[90m' + req.connection.remoteAddress + " - " + req.method + ' ' + req.originalUrl + ' ' + '\x1b[' + color + 'm' + res.statusCode + ' \x1b[90m' + (now - req._startTime) + 'ms' + lenStr + '\x1b[0m';
+    var d = new Date();
+    var userEmail = req.headers.authorization ? ' (' + jwt.decode(req.headers.authorization.substr(7)).email + ')' : '';
+    return '\x1b[90m' + d.toLocaleTimeString() + ": " + req.connection.remoteAddress + userEmail + " - " + req.method + ' ' + req.originalUrl + ' ' + '\x1b[' + color + 'm' + res.statusCode + ' \x1b[90m' + (now - req._startTime) + 'ms' + lenStr + '\x1b[0m';
 }));
 app.use(express.json());
 app.use(express.urlencoded());
