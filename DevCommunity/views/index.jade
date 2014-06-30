@@ -24,7 +24,7 @@ html(lang='en')
       .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
         .modal-dialog.modal-lg
           .modal-content.highlight
-            button.close(type="button" ng-click="close()" aria-hidden="true") &times;
+            button.close(type="button" ng-click="controller.close()" aria-hidden="true") &times;
             form(ng-submit='controller.submitEmail()' ng-show="step==='Email'")
               h1 Login
               .form-group
@@ -66,6 +66,9 @@ html(lang='en')
               li(id='NavContact')
                 a(href='#contact') Contact
             ul.nav.navbar-nav.navbar-right.login-nav
+              //if admin
+                li(id='NavAdmin')
+                  a(href='#Admin' ng-show="isLoggedIn()") Admin
               li(id='NavUserSettings')
                 a(href='#UserSettings' ng-show="isLoggedIn()") Settings
               li

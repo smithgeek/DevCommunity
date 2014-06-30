@@ -1,9 +1,18 @@
 ﻿var config = require('../config.js');
 var jwt = require('jsonwebtoken');
 
-function getUserEmail(req) {
-    return jwt.decode(req.headers.authorization.substr(7)).email;
+function isAdmin(req) {
+    if (req.headers.authorization)
+        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
+    else
+        return false;
 }
+
+function index(req, res) {
+    res.render('index', { pathToAssets: 'public', config: config.nav, admin: isAdmin(req) });
+}
+exports.index = index;
+;
 function home(req, res) {
     res.render('partials/home');
 }
@@ -53,7 +62,7 @@ exports.meeting = meeting;
 ;
 
 function admin(req, res) {
-    res.render('partials/admin', { admin: config.server.admin == getUserEmail(req) });
+    res.render('partials/admin', { admin: isAdmin(req) });
 }
 exports.admin = admin;
 ;

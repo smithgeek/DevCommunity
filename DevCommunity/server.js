@@ -6,8 +6,7 @@
 * Module dependencies.
 */
 var express = require('express');
-var routes = require('./routes/index');
-var partials = require('./routes/partials');
+var routes = require('./routes/partials');
 var http = require('http');
 var path = require('path');
 var nedb = require('nedb');
@@ -22,7 +21,7 @@ var app = express();
 app.set('port', process.env.PORT || config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use('/api/restricted', expressJwt({ secret: 'mySuperSecret' }));
+app.use('/api/restricted', expressJwt({ secret: config.server.jwtSecret }));
 app.use(express.favicon());
 app.use(express.logger(function (tokens, req, res) {
     var status = res.statusCode, len = parseInt(res.getHeader('Content-Length'), 10), color = 32;
@@ -52,15 +51,15 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/partials/home', partials.home);
-app.get('/partials/about', partials.about);
-app.get('/partials/contact', partials.contact);
-app.get('/partials/brainstorming', partials.brainstorming);
-app.get('/partials/pastMeetings', partials.pastMeetings);
-app.get('/partials/stories', partials.stories);
-app.get('/partials/UserSettings', partials.UserSettings);
-app.get('/partials/meeting', partials.meeting);
-app.get('/partials/admin', partials.admin);
+app.get('/partials/home', routes.home);
+app.get('/partials/about', routes.about);
+app.get('/partials/contact', routes.contact);
+app.get('/partials/brainstorming', routes.brainstorming);
+app.get('/partials/pastMeetings', routes.pastMeetings);
+app.get('/partials/stories', routes.stories);
+app.get('/partials/UserSettings', routes.UserSettings);
+app.get('/partials/meeting', routes.meeting);
+app.get('/partials/admin', routes.admin);
 
 var oneDayInMilliseconds = 86400000;
 
@@ -166,7 +165,7 @@ app.post('/verify', function (req, res) {
             var timeout = storedCode.timestamp + 10 * 60 * 1000;
             if (req.body.verificationCode == storedCode.verificationCode && Date.now() <= timeout) {
                 var profile = { email: req.body.email };
-                var token = jwt.sign(profile, 'mySuperSecret');
+                var token = jwt.sign(profile, config.server.jwtSecret);
                 res.json({ token: token });
                 clearVerificationCodes(req.body.email);
                 return;

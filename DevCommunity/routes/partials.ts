@@ -6,9 +6,16 @@ import express = require('express');
 var config = require('../config.js');
 var jwt = require('jsonwebtoken');
 
-function getUserEmail(req): string {
-    return jwt.decode(req.headers.authorization.substr(7)).email;
+function isAdmin(req): boolean {
+    if (req.headers.authorization)
+        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
+    else
+        return false;
 }
+
+export function index(req: express.Request, res: express.Response) {
+    res.render('index', { pathToAssets: 'public', config: config.nav, admin: isAdmin(req) });
+};
 export function home(req: express.Request, res: express.Response) {
     res.render('partials/home');
 };
@@ -42,5 +49,5 @@ export function meeting(req: express.Request, res: express.Response) {
 };
 
 export function admin(req: express.Request, res: express.Response) {
-    res.render('partials/admin', { admin: config.server.admin == getUserEmail(req) });
+    res.render('partials/admin', { admin: isAdmin(req) });
 };

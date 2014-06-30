@@ -70,9 +70,10 @@ class Meeting extends MeetingData {
             this.vote_count = copiedMeeting.vote_count;
             $('.vote-btn-' + this._id).prop('disabled', false);
         }).error((data) => {
-                $('#LoginModal').modal('show');
-                $('.vote-btn-' + this._id).prop('disabled', false);
-            });
+            this.userSvc.logOut();
+            $('#LoginModal').modal('show');
+            $('.vote-btn-' + this._id).prop('disabled', false);
+        });
     }
 
     public RemoveVote(): void {
