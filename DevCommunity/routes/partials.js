@@ -2,8 +2,8 @@
 var jwt = require('jsonwebtoken');
 
 function isAdmin(req) {
-    if (req.headers.authorization)
-        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
+    if (req.user)
+        return req.user.admin;
     else
         return false;
 }

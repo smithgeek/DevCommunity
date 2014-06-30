@@ -24,6 +24,7 @@ app.set('port', process.env.PORT || config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use('/api/restricted', expressJwt({ secret: config.server.jwtSecret }));
+app.use('/partials/admin', expressJwt({ secret: config.server.jwtSecret }));
 app.use(express.favicon());
 app.use(express.logger(function (tokens, req, res) {
     var status = res.statusCode
@@ -126,8 +127,15 @@ function clearVerificationCodes(email) {
     userVerificationDb.remove({ email: email }, { multi: true }, function (err, numRemoved) { });
 }
 
+function isAdmin(email: string): boolean {
+    return config.server.admin == email;
+}
+
 function getUserEmail(req): string {
-    return jwt.decode(req.headers.authorization.substr(7)).email;
+    if (req.user && req.user.email)
+        return req.user.email;
+    else
+        return "";
 }
 
 function sendNewMeetingTopicEmails(meeting: Meeting) {
@@ -174,7 +182,7 @@ app.post('/verify', function (req, res) {
             var storedCode = docs[0];
             var timeout = storedCode.timestamp + 10 * 60 * 1000;
             if (req.body.verificationCode == storedCode.verificationCode && Date.now() <= timeout) {
-                var profile = { email: req.body.email };
+                var profile = { email: req.body.email, admin: isAdmin(req.body.email) };
                 var token = jwt.sign(profile, config.server.jwtSecret);
                 res.json({ token: token });
                 clearVerificationCodes(req.body.email);
@@ -284,6 +292,7 @@ app.post('/api/restricted/AddStory', function (req:any, res) {
 });
 
 app.get('/api/restricted/GetUserSettings', function (req, res) {
+    console.log(getUserEmail(req));
     userSettingsDb.find({ email: getUserEmail(req) }).exec(function (err, settings) {
         if (err == null)
             res.send(200, settings[0]);
@@ -305,7 +314,7 @@ app.post('/api/restricted/SetUserSettings', function (req: any, res) {
 });
 
 app.post('/api/restricted/AddUser', function (req: any, res) {
-    if (getUserEmail(req) == config.server.admin) {
+    if (isAdmin(getUserEmail(req))) {
         var email: string = req.body.user;
         var settings = { email: email, NewMeetingEmailNotification: true, NewStoryEmailNotification: true};
         userSettingsDb.insert(settings, (err, newDoc) => {

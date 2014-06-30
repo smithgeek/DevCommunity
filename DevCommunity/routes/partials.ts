@@ -7,8 +7,8 @@ var config = require('../config.js');
 var jwt = require('jsonwebtoken');
 
 function isAdmin(req): boolean {
-    if (req.headers.authorization)
-        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
+    if (req.user)
+        return req.user.admin;
     else
         return false;
 }
