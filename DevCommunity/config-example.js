@@ -27,5 +27,6 @@ exports.server = {
     sendEmails: false,  // if false emails won't actually be sent and information will be printed to the console instead
     domain: 'http://mydomain.com',
     admin: 'admin@emailaddress.com',
-    jwtSecret: 'mySuperSecret'
+    jwtSecret: 'mySuperSecret',
+    sendEmailToAuthor: false
 };

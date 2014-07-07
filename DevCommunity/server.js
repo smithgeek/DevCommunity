@@ -140,7 +140,7 @@ function sendNewMeetingTopicEmails(meeting) {
             body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
-                if (user != meeting.email) {
+                if (config.server.sendEmailToAuthor || user != meeting.email) {
                     sendEmail(user, subject, body);
                 }
             }
@@ -154,11 +154,11 @@ function sendNewStoryEmails(story) {
     userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
-            var body = "<h3>" + story.title + "</h3><a href='" + story.url + "'>" + story.url + "</a><br/>" + story.description;
+            var body = "<h3>" + story.title + "</h3><a href='" + config.server.domain + "/api/url/" + story.url + "'>" + story.url + "</a><br/>" + story.description;
             body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
-                if (user != story.submittor) {
+                if (config.server.sendEmailToAuthor || user != story.submittor) {
                     sendEmail(user, subject, body);
                 }
             }
@@ -236,6 +236,13 @@ app.get('/api/GetMeetingById/:id', function (req, res) {
         else
             res.send(404, err);
     });
+});
+
+app.get('/api/url/:url*', function (req, res) {
+    var redirect = req.params.url + req.params[0];
+    console.log(req.connection.remoteAddress + " is going to " + redirect);
+    res.writeHead(302, { 'Location': redirect });
+    res.end();
 });
 
 app.post('/api/restricted/Vote', function (req, res) {
