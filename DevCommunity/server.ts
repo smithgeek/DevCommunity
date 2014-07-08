@@ -164,7 +164,7 @@ function sendNewStoryEmails(story: Story) {
     userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
-            var body = "<h3>" + story.title + "</h3><a href='" + config.server.domain + "/api/url/" + story.url + "'>" + story.url + "</a><br/>" + story.description;
+            var body = "<h3>" + story.title + "</h3><a href='" + config.server.domain + "/api/url?url=" + story.url + "'>" + story.url + "</a><br/>" + story.description;
             body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
@@ -259,17 +259,14 @@ app.get('/api/GetStoryById/:id', function (req, res) {
     });
 });
 
-app.get('/api/url/:url*', function (req, res) {
-    var redirect: string = req.params.url;
-    if (req.params[0]) {
-        redirect += req.params[0];
-    }
-    if (redirect.substr(0, 4) != "http") {
-        redirect = "http://" + redirect;
-    }
+app.get('/api/url', function (req, res) {
+    var redirect: string = req.query.url;
     console.log(req.connection.remoteAddress + " is going to " + redirect);
-    res.writeHead(302, { 'Location': redirect });
-    res.end();
+    res.redirect(redirect);
+});
+
+app.get('/api/url/:url*', function (req, res) {
+    res.redirect('/#!/stories');
 });
 
 app.post('/api/restricted/Vote', function (req, res) {

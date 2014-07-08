@@ -39,5 +39,5 @@ div(ng-controller='StoryController as controller')
       .panel-body
         div(ng-bind-html="story.description")
         .story-details
-          a(href="/api/url/{{story.url}}") {{story.url}}
+          a(href="/api/url?url={{story.url}}") {{story.url}}
           div Last Modified: {{controller.getHumanTime(story)}}
