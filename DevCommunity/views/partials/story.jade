@@ -1,0 +1,20 @@
+﻿br
+br
+br
+div(ng-controller='SingleStoryController as controller')
+  .panel.panel-primary
+    .panel-heading
+      .pull-right
+        button.editable(ng-click='controller.EditStory(story)' ng-show="controller.isUserSubmittor(story)")
+          span.glyphicon.glyphicon-edit
+        //button.editable
+          span.glyphicon.glyphicon-trash
+      .panel-title 
+        a(href="/api/url/{{story.url}}") {{story.title}}
+    .panel-body
+      div(ng-bind-html="story.description")
+      .story-details
+        a(href="/api/url/{{story.url}}") {{story.url}}
+        div Last Modified: {{controller.getHumanTime(story)}}
+  if disqus.enabled
+    dir-disqus(disqus-shortname="#{disqus.shortname}" disqus-title="{{story.title}}" disqus-identifier="story/{{story._id}}", disqus-url="http://g/pnddevcommunity/#!/story/{{story._id}}" ready-to-bind="{{ contentLoaded }}")

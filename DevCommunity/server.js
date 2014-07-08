@@ -62,6 +62,7 @@ app.get('/partials/pastMeetings', routes.pastMeetings);
 app.get('/partials/stories', routes.stories);
 app.get('/partials/UserSettings', routes.UserSettings);
 app.get('/partials/meeting', routes.meeting);
+app.get('/partials/story', routes.story);
 app.get('/partials/admin', routes.admin);
 
 var oneDayInMilliseconds = 86400000;
@@ -136,8 +137,8 @@ function sendNewMeetingTopicEmails(meeting) {
     userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings) {
         if (err == null) {
             var subject = "Developer Community: New Meeting Idea";
-            var body = "<a href='" + config.server.domain + "/#/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
-            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
+            var body = "<a href='" + config.server.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
+            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (config.server.sendEmailToAuthor || user != meeting.email) {
@@ -155,7 +156,7 @@ function sendNewStoryEmails(story) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
             var body = "<h3>" + story.title + "</h3><a href='" + config.server.domain + "/api/url/" + story.url + "'>" + story.url + "</a><br/>" + story.description;
-            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#/UserSettings'>here</a>.";
+            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
                 if (config.server.sendEmailToAuthor || user != story.submittor) {
@@ -238,8 +239,23 @@ app.get('/api/GetMeetingById/:id', function (req, res) {
     });
 });
 
+app.get('/api/GetStoryById/:id', function (req, res) {
+    storyDb.find({ _id: req.params.id }).exec(function (err, story) {
+        if (err == null)
+            res.send(200, story[0]);
+        else
+            res.send(404, err);
+    });
+});
+
 app.get('/api/url/:url*', function (req, res) {
-    var redirect = req.params.url + req.params[0];
+    var redirect = req.params.url;
+    if (req.params[0]) {
+        redirect += req.params[0];
+    }
+    if (redirect.substr(0, 4) != "http") {
+        redirect = "http://" + redirect;
+    }
     console.log(req.connection.remoteAddress + " is going to " + redirect);
     res.writeHead(302, { 'Location': redirect });
     res.end();

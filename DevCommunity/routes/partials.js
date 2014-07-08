@@ -56,9 +56,15 @@ exports.UserSettings = UserSettings;
 ;
 
 function meeting(req, res) {
-    res.render('partials/meeting');
+    res.render('partials/meeting', { disqus: config.disqus });
 }
 exports.meeting = meeting;
+;
+
+function story(req, res) {
+    res.render('partials/story', { disqus: config.disqus });
+}
+exports.story = story;
 ;
 
 function admin(req, res) {

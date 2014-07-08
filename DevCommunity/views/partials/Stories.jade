@@ -35,7 +35,7 @@ div(ng-controller='StoryController as controller')
           //button.editable
             span.glyphicon.glyphicon-trash
         .panel-title 
-          a(href="/api/url/{{story.url}}") {{story.title}}
+          a(href='#!/story/{{story._id}}') {{story.title}}
       .panel-body
         div(ng-bind-html="story.description")
         .story-details

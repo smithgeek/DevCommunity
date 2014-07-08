@@ -30,3 +30,8 @@ exports.server = {
     jwtSecret: 'mySuperSecret',
     sendEmailToAuthor: false
 };
+
+exports.disqus = {
+    enabled: false,
+    shortname: 'EnterShortnameHere'
+};

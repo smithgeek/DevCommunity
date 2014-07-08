@@ -45,7 +45,11 @@ export function UserSettings(req: express.Request, res: express.Response) {
 };
 
 export function meeting(req: express.Request, res: express.Response) {
-    res.render('partials/meeting');
+    res.render('partials/meeting', { disqus: config.disqus });
+};
+
+export function story(req: express.Request, res: express.Response) {
+    res.render('partials/story', { disqus: config.disqus });
 };
 
 export function admin(req: express.Request, res: express.Response) {

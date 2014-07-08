@@ -1,13 +1,13 @@
 ﻿/// <reference path="../../../typings/angularjs/angular.d.ts" />
 
-class MeetingController {
+class SingleStoryController {
 
-    constructor($scope, $http: ng.IHttpService, $routeParams, meetingSvc) {
+    constructor($scope, $http: ng.IHttpService, $routeParams) {
         $('.navbar-nav li.active').removeClass('active');
         $scope.contentLoaded = false;
 
-        $http.get('/api/GetMeetingById/' + $routeParams.id).success((data: MeetingData) => {
-            $scope.meeting = meetingSvc.createMeeting(data);
+        $http.get('/api/GetStoryById/' + $routeParams.id).success((data: Story) => {
+            $scope.story = data;
             $('.hidden').removeClass('hidden');
             $scope.contentLoaded = true;
         });

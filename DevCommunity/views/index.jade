@@ -54,23 +54,23 @@ html(lang='en')
           .navbar-collapse.collapse
             ul.nav.navbar-nav
               li.active(id='NavHome')
-                a(href='#') Home
+                a(href='#!/') Home
               li(id='NavStories')
-                a(href='#stories') Stories
+                a(href='#!/stories') Stories
               //li(id='NavPastMeetings')
-                a(href='#pastMeetings') Past Meetings
+                a(href='#!/pastMeetings') Past Meetings
               //li(id='NavBrainstorming')
-                a(href='#brainstorming') Brainstorming
+                a(href='#!/brainstorming') Brainstorming
               li(id='NavAbout')
-                a(href='#about') About
+                a(href='#!/about') About
               li(id='NavContact')
-                a(href='#contact') Contact
+                a(href='#!/contact') Contact
             ul.nav.navbar-nav.navbar-right.login-nav
               //if admin
                 li(id='NavAdmin')
-                  a(href='#Admin' ng-show="isLoggedIn()") Admin
+                  a(href='#!/Admin' ng-show="isLoggedIn()") Admin
               li(id='NavUserSettings')
-                a(href='#UserSettings' ng-show="isLoggedIn()") Settings
+                a(href='#!/UserSettings' ng-show="isLoggedIn()") Settings
               li
                 a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()") Logout
                 a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()") Login
@@ -109,5 +109,6 @@ html(lang='en')
     script(src='#{pathToAssets}/assets/js/Services.js')
     script(src='#{pathToAssets}/assets/js/HomeController.js')
     script(src='#{pathToAssets}/assets/js/StoryController.js')
+    script(src='#{pathToAssets}/assets/js/SingleStoryController.js')
     script(src='#{pathToAssets}/assets/js/MeetingController.js')
     script(src='#{pathToAssets}/assets/js/app.js')

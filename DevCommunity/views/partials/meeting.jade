@@ -20,3 +20,5 @@ div.hidden(ng-controller='MeetingController as controller')
 
       .media-body
           div(ng-bind-html="meeting.details")
+    if disqus.enabled
+      dir-disqus(disqus-shortname="#{disqus.shortname}" disqus-title="{{meeting.description}}" disqus-identifier="meeting/{{meeting._id}}", disqus-url="http://g/pnddevcommunity/#!/meeting/{{meeting._id}}" ready-to-bind="{{ contentLoaded }}")
