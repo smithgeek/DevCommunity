@@ -189,6 +189,14 @@ app.post('/verify', function (req, res) {
                 var token = jwt.sign(profile, config.server.jwtSecret);
                 res.json({ token: token });
                 clearVerificationCodes(req.body.email);
+                var emailAddressString: string = req.body.email;
+                var settings = { email: emailAddressString, NewMeetingEmailNotification: true, NewStoryEmailNotification: true };
+                userSettingsDb.insert(settings, (err, newDoc) => {
+                    if (err != null)
+                        console.log("Could not add user " + emailAddressString);
+                    else
+                        console.log("Added user settings for " + emailAddressString);
+                });
                 return;
             }
         }
@@ -261,12 +269,11 @@ app.get('/api/GetStoryById/:id', function (req, res) {
 
 app.get('/api/url', function (req, res) {
     var redirect: string = req.query.url;
+    if (redirect.substr(0, 4) != 'http') {
+        redirect = 'http://' + redirect;
+    }
     console.log(req.connection.remoteAddress + " is going to " + redirect);
     res.redirect(redirect);
-});
-
-app.get('/api/url/:url*', function (req, res) {
-    res.redirect('/#!/stories');
 });
 
 app.post('/api/restricted/Vote', function (req, res) {
