@@ -114,7 +114,7 @@ function sendEmail(toEmailAddress, subject, body) {
 }
 
 function sendVerificationEmail(verificationCode, emailAddress) {
-    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. <br/>Verification Code: " + verificationCode);
+    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. <br/><br/>Verification Code: " + verificationCode);
 }
 
 function clearVerificationCodes(email) {
@@ -155,7 +155,7 @@ function sendNewStoryEmails(story) {
     userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
-            var body = "<h3>" + story.title + "</h3><a href='" + config.server.domain + "/api/url?url=" + story.url + "'>" + story.url + "</a><br/>" + story.description;
+            var body = "<h3><a href='" + config.server.domain + "/#!/story/" + story._id + "'>" + story.title + "</a></h3><br/>" + story.description;
             body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
             for (var i = 0; i < settings.length; i++) {
                 var user = settings[i].email;
