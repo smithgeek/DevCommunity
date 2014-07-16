@@ -133,6 +133,20 @@ function getUserEmail(req) {
         return "";
 }
 
+function decodeEmail(req, func) {
+    if (req.headers && req.headers.authorization) {
+        jwt.verify(req.headers.authorization.substr(7), config.server.jwtSecret, function (err, decoded) {
+            console.log(err, decoded);
+            if (err == null) {
+                func(decoded.email);
+            } else {
+                func("");
+            }
+        });
+    } else
+        func("");
+}
+
 function sendNewMeetingTopicEmails(meeting) {
     userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings) {
         if (err == null) {
@@ -247,12 +261,22 @@ app.get('/api/GetMeetingById/:id', function (req, res) {
     });
 });
 
+function anonymizeStory(story, user) {
+    if (story.submittor != user) {
+        story.submittor = "";
+    }
+    return story;
+}
+
 app.get('/api/GetStoryById/:id', function (req, res) {
-    storyDb.find({ _id: req.params.id }).exec(function (err, story) {
-        if (err == null)
-            res.send(200, story[0]);
-        else
+    storyDb.find({ _id: req.params.id }).exec(function (err, stories) {
+        if (err == null) {
+            decodeEmail(req, function (email) {
+                res.send(200, anonymizeStory(stories[0], email));
+            });
+        } else {
             res.send(404, err);
+        }
     });
 });
 
@@ -278,10 +302,17 @@ app.post('/api/restricted/Vote', function (req, res) {
 
 app.get('/api/GetStories', function (req, res) {
     storyDb.find({}).sort({ timestamp: -1 }).exec(function (err, stories) {
-        if (err == null)
-            res.send(200, stories);
-        else
+        if (err == null) {
+            decodeEmail(req, function (email) {
+                var sendStories = new Array();
+                for (var i = 0; i < stories.length; ++i) {
+                    sendStories.push(anonymizeStory(stories[i], email));
+                }
+                res.send(200, sendStories);
+            });
+        } else {
             res.send(404, err);
+        }
     });
 });
 

@@ -44,7 +44,7 @@ var StoryController = (function () {
     };
 
     StoryController.prototype.isUserSubmittor = function (story) {
-        return this.userSvc.getUser() == story.submittor;
+        return this.userSvc.getUser() == story.submittor && story.submittor != "";
     };
 
     StoryController.prototype.getHumanTime = function (story) {

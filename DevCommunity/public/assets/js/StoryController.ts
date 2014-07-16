@@ -7,7 +7,6 @@
 /// <reference path="Story.ts" />
 
 class StoryController {
-
     constructor($scope, $http: ng.IHttpService, private userSvc: UserSvc, private storySvc: StorySvc) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavStories').addClass('active');
@@ -21,7 +20,7 @@ class StoryController {
             for (var i = 0; i < data.length; ++i) {
                 $scope.stories.push(data[i]);
             }
-            
+
             setTimeout(()=> {
                 $('.panel-body').readmore({
                     maxHeight: 60,
@@ -47,7 +46,7 @@ class StoryController {
     }
 
     public isUserSubmittor(story: Story): boolean {
-        return this.userSvc.getUser() == story.submittor;
+        return this.userSvc.getUser() == story.submittor && story.submittor != "";
     }
 
     public getHumanTime(story): string {
