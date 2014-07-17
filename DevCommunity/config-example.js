@@ -28,7 +28,9 @@ exports.server = {
     domain: 'http://mydomain.com',
     admin: 'admin@emailaddress.com',
     jwtSecret: 'mySuperSecret',
-    sendEmailToAuthor: false
+    sendEmailToAuthor: false,
+    restrictedLoginDomain: ""   // If you want to restrict logins to a specific domain enter the domain here, for example: "@gmail.com"
+
 };
 
 exports.disqus = {

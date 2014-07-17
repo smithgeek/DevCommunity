@@ -144,7 +144,6 @@ function getUserEmail(req): string {
 function decodeEmail(req, func) {
     if (req.headers && req.headers.authorization) {
         jwt.verify(req.headers.authorization.substr(7), config.server.jwtSecret, function (err, decoded) {
-            console.log(err, decoded);
             if (err == null) {
                 func(decoded.email);
             }
@@ -221,13 +220,19 @@ app.post('/verify', function (req, res) {
 });
 
 app.post('/identify', (req, res) => {
-    clearVerificationCodes(req.body.email);
+    var email: string = req.body.email;
+    if (config.server.restrictedLoginDomain == "" || email.indexOf(config.server.restrictedLoginDomain) != -1) {
+        clearVerificationCodes(req.body.email);
 
-    var verificationCode = generateVerificationCode();
-    userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
-    sendVerificationEmail(verificationCode, req.body.email);
-    console.log("Verification code: " + verificationCode);
-    res.send(200, "Success");
+        var verificationCode = generateVerificationCode();
+        userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
+        sendVerificationEmail(verificationCode, req.body.email);
+        console.log("Verification code: " + verificationCode);
+        res.send(200, "Success");
+    }
+    else {
+        res.send(401, "Invalid, you must use a " + config.server.restrictedLoginDomain + " address.");
+    }
 });
 
 app.post('/api/restricted/AddMeeting', function (req:any, res) {

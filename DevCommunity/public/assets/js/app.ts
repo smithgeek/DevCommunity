@@ -174,11 +174,12 @@ class LoginController {
         this.$http.post('/identify', this.$scope.user)
             .success( (data, status, headers, config) => {
                 this.$scope.step = 'Verification';
+                this.$scope.message = "";
             })
             .error( (data, status, headers, config) => {
                 this.localStorageService.remove('userToken');
                 this.localStorageService.remove('userEmail');
-                this.$scope.message = "Error communicating with server.";
+                this.$scope.message = data;
             });
     }
 

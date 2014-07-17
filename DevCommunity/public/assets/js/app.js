@@ -171,10 +171,11 @@ var LoginController = (function () {
         this.$scope.user.email = this.$scope.user.email.toLowerCase();
         this.$http.post('/identify', this.$scope.user).success(function (data, status, headers, config) {
             _this.$scope.step = 'Verification';
+            _this.$scope.message = "";
         }).error(function (data, status, headers, config) {
             _this.localStorageService.remove('userToken');
             _this.localStorageService.remove('userEmail');
-            _this.$scope.message = "Error communicating with server.";
+            _this.$scope.message = data;
         });
     };
 
