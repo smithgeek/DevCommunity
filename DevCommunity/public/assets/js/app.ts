@@ -189,6 +189,7 @@ class LoginController {
                 this.localStorageService.set('userToken', data.token);
                 this.localStorageService.set('userEmail', this.$scope.user);
                 this.close();
+                location.reload();
             })
             .error( (data, status, headers, config) => {
                 this.localStorageService.remove('userToken');

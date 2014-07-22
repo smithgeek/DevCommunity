@@ -252,21 +252,39 @@ app.post('/api/restricted/AddMeeting', function (req, res) {
     }
 });
 
+function anonymizeMeeting(meeting, user) {
+    if (meeting.email != user) {
+        meeting.email = "";
+    }
+    meeting.votes = meeting.votes.filter(function (value, index, array) {
+        return value == user;
+    });
+    return meeting;
+}
 app.get('/api/GetSuggestions', function (req, res) {
     meetingIdeasDb.find({}).sort({ vote_count: -1 }).exec(function (err, suggestions) {
-        if (err == null)
-            res.send(200, suggestions);
-        else
+        if (err == null) {
+            decodeEmail(req, function (email) {
+                suggestions.forEach(function (value, index, array) {
+                    anonymizeMeeting(value, email);
+                });
+                res.send(200, suggestions);
+            });
+        } else {
             res.send(404, err);
+        }
     });
 });
 
 app.get('/api/GetMeetingById/:id', function (req, res) {
     meetingIdeasDb.find({ _id: req.params.id }).exec(function (err, meeting) {
-        if (err == null)
-            res.send(200, meeting[0]);
-        else
+        if (err == null) {
+            decodeEmail(req, function (email) {
+                res.send(200, anonymizeMeeting(meeting[0], email));
+            });
+        } else {
             res.send(404, err);
+        }
     });
 });
 
@@ -300,12 +318,27 @@ app.get('/api/url', function (req, res) {
 
 app.post('/api/restricted/Vote', function (req, res) {
     req.user.email = getUserEmail(req);
-    console.log('user ' + req.user.email + ' is calling /api/restricted/Vote');
-    meetingIdeasDb.update({ _id: req.body._id }, req.body, {}, function (err, newDoc) {
-        if (err != null)
+    meetingIdeasDb.find({ _id: req.body._id }).exec(function (err, meetings) {
+        if (err == null) {
+            var meeting = meetings[0];
+            if (-1 == meeting.votes.indexOf(req.user.email)) {
+                meeting.vote_count++;
+                meeting.votes.push(req.user.email);
+                console.log('user ' + req.user.email + ' voted for ' + meeting.description);
+            } else {
+                meeting.vote_count--;
+                meeting.votes.splice(meeting.votes.indexOf(req.user.email), 1);
+                console.log('user ' + req.user.email + ' removed vote for ' + meeting.description);
+            }
+            meetingIdeasDb.update({ _id: req.body._id }, meeting, {}, function (err, newDoc) {
+                if (err != null)
+                    res.send(404, "Failure");
+                else
+                    res.send(200, "Success");
+            });
+        } else {
             res.send(404, "Failure");
-        else
-            res.send(200, "Success");
+        }
     });
 });
 

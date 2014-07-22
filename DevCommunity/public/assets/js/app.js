@@ -185,6 +185,7 @@ var LoginController = (function () {
             _this.localStorageService.set('userToken', data.token);
             _this.localStorageService.set('userEmail', _this.$scope.user);
             _this.close();
+            location.reload();
         }).error(function (data, status, headers, config) {
             _this.localStorageService.remove('userToken');
             _this.localStorageService.remove('userEmail');
