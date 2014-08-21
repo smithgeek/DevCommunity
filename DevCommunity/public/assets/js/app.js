@@ -337,10 +337,7 @@ var RouteConfig = (function () {
 
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
-    app.controller('PastMeetingsController', function ($scope) {
-        $('.navbar-nav li.active').removeClass('active');
-        $('#NavPastMeetings').addClass('active');
-    });
+    app.controller('PastMeetingsController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', PastMeetingsController]);
 
     app.controller('BrainstormingController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

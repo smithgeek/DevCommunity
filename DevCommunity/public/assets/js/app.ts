@@ -132,7 +132,6 @@ class UserSettingsController {
             if(data != "" && data != null)
                 this.$scope.settings = data;
         });
-
     }
 
     public isLoggedIn(): boolean {
@@ -205,7 +204,6 @@ class LoginController {
         this.$scope.step = 'Email';
     }
 }
-
 
 class RouteConfig {
     constructor($routeProvider: ng.route.IRouteProvider, localStorageServiceProvider, $locationProvider: ng.ILocationProvider, $httpProvider: ng.IHttpProvider) {
@@ -324,7 +322,6 @@ class RouteConfig {
         };
     }]);
 
-
     app.config(['$routeProvider', 'localStorageServiceProvider', '$locationProvider', '$httpProvider', RouteConfig]);
 
     app.service('userSvc', ['localStorageService', UserSvc]);
@@ -349,10 +346,7 @@ class RouteConfig {
 
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
-    app.controller('PastMeetingsController', function ($scope) {
-        $('.navbar-nav li.active').removeClass('active');
-        $('#NavPastMeetings').addClass('active');
-    });
+    app.controller('PastMeetingsController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', PastMeetingsController]);
 
     app.controller('BrainstormingController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');
@@ -379,7 +373,6 @@ class RouteConfig {
         };
 
         setTimeout( () => {$('.login-nav').removeClass('login-nav') }, 1);
-        
     });
 
     app.controller('LoginController', ['$scope', '$http', 'localStorageService', LoginController]);

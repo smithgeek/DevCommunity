@@ -70,6 +70,11 @@ app.get('/partials/meeting', routes.meeting);
 app.get('/partials/story', routes.story);
 app.get('/partials/admin', routes.admin);
 
+function LOG(value) {
+    console.log(value);
+    logFile.write(value + '\r\n');
+}
+
 var oneDayInMilliseconds = 86400000;
 
 var meetingIdeasDb = new nedb({ filename: 'meeting_ideas.db.json', autoload: true });
@@ -85,7 +90,7 @@ var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: tru
 userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 userSettingsDb.ensureIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {
-        console.log('User settings index error: ' + err.toString());
+        LOG('User settings index error: ' + err.toString());
     }
 });
 
@@ -106,15 +111,15 @@ function sendEmail(toEmailAddress, subject, body) {
 
         smtpTransport.sendMail(message, function (error) {
             if (error) {
-                console.log(error);
+                LOG(error.message);
             } else {
-                console.log("Sent email to " + toEmailAddress + ": " + subject);
+                LOG("Sent email to " + toEmailAddress + ": " + subject);
             }
             smtpTransport.close();
         });
     } else {
-        console.log("Emailing " + subject + " to " + toEmailAddress);
-        console.log(body);
+        LOG("Emailing " + subject + " to " + toEmailAddress);
+        LOG(body);
     }
 }
 
@@ -164,7 +169,7 @@ function sendNewMeetingTopicEmails(meeting) {
                 }
             }
         } else {
-            console.log(err);
+            LOG(err);
         }
     });
 }
@@ -182,7 +187,7 @@ function sendNewStoryEmails(story) {
                 }
             }
         } else {
-            console.log(err);
+            LOG(err);
         }
     });
 }
@@ -201,9 +206,9 @@ app.post('/verify', function (req, res) {
                 var settings = { email: emailAddressString, NewMeetingEmailNotification: true, NewStoryEmailNotification: true };
                 userSettingsDb.insert(settings, function (err, newDoc) {
                     if (err != null)
-                        console.log("Could not add user " + emailAddressString);
+                        LOG("Could not add user " + emailAddressString);
                     else
-                        console.log("Added user settings for " + emailAddressString);
+                        LOG("Added user settings for " + emailAddressString);
                 });
                 return;
             }
@@ -221,7 +226,7 @@ app.post('/identify', function (req, res) {
         userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) {
         });
         sendVerificationEmail(verificationCode, req.body.email);
-        console.log("Verification code: " + verificationCode);
+        LOG("Verification code: " + verificationCode);
         res.send(200, "Success");
     } else {
         res.send(401, "Invalid, you must use a " + config.server.restrictedLoginDomain + " address.");
@@ -237,11 +242,17 @@ app.post('/api/restricted/AddMeeting', function (req, res) {
                 res.send(404, "Failure");
             else {
                 res.send(200, { action: "Added", meeting: newDoc });
-                sendNewMeetingTopicEmails(newDoc);
+                if (newDoc.date == null) {
+                    sendNewMeetingTopicEmails(newDoc);
+                }
             }
         });
     } else {
-        meetingIdeasDb.update({ _id: meeting._id, email: getUserEmail(req) }, { $set: { description: meeting.description, details: meeting.details } }, {}, function (err, numReplaced) {
+        var condition = { _id: meeting._id };
+        if (!isAdmin(getUserEmail(req))) {
+            condition = { _id: meeting._id, email: getUserEmail(req) };
+        }
+        meetingIdeasDb.update(condition, { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, {}, function (err, numReplaced) {
             if (err != null)
                 res.send(404, "Could not update");
             else if (numReplaced > 0)
@@ -262,7 +273,22 @@ function anonymizeMeeting(meeting, user) {
     return meeting;
 }
 app.get('/api/GetSuggestions', function (req, res) {
-    meetingIdeasDb.find({}).sort({ vote_count: -1 }).exec(function (err, suggestions) {
+    meetingIdeasDb.find({ $or: [{ date: { $exists: false } }, { date: null }] }).sort({ vote_count: -1 }).exec(function (err, suggestions) {
+        if (err == null) {
+            decodeEmail(req, function (email) {
+                suggestions.forEach(function (value, index, array) {
+                    anonymizeMeeting(value, email);
+                });
+                res.send(200, suggestions);
+            });
+        } else {
+            res.send(404, err);
+        }
+    });
+});
+
+app.get('/api/GetArchivedMeetings', function (req, res) {
+    meetingIdeasDb.find({ $and: [{ date: { $exists: true } }, { $not: { date: null } }] }).sort({ date: -1 }).exec(function (err, suggestions) {
         if (err == null) {
             decodeEmail(req, function (email) {
                 suggestions.forEach(function (value, index, array) {
@@ -312,7 +338,7 @@ app.get('/api/url', function (req, res) {
     if (redirect.substr(0, 4) != 'http') {
         redirect = 'http://' + redirect;
     }
-    console.log(req.connection.remoteAddress + " is going to " + redirect);
+    LOG(req.connection.remoteAddress + " is going to " + redirect);
     res.redirect(redirect);
 });
 
@@ -324,11 +350,11 @@ app.post('/api/restricted/Vote', function (req, res) {
             if (-1 == meeting.votes.indexOf(req.user.email)) {
                 meeting.vote_count++;
                 meeting.votes.push(req.user.email);
-                console.log('user ' + req.user.email + ' voted for ' + meeting.description);
+                LOG('user ' + req.user.email + ' voted for ' + meeting.description);
             } else {
                 meeting.vote_count--;
                 meeting.votes.splice(meeting.votes.indexOf(req.user.email), 1);
-                console.log('user ' + req.user.email + ' removed vote for ' + meeting.description);
+                LOG('user ' + req.user.email + ' removed vote for ' + meeting.description);
             }
             meetingIdeasDb.update({ _id: req.body._id }, meeting, {}, function (err, newDoc) {
                 if (err != null)
@@ -382,7 +408,7 @@ app.post('/api/restricted/AddStory', function (req, res) {
 });
 
 app.get('/api/restricted/GetUserSettings', function (req, res) {
-    console.log(getUserEmail(req));
+    LOG(getUserEmail(req));
     userSettingsDb.find({ email: getUserEmail(req) }).exec(function (err, settings) {
         if (err == null)
             res.send(200, settings[0]);
@@ -418,6 +444,6 @@ app.post('/api/restricted/AddUser', function (req, res) {
 });
 
 http.createServer(app).listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
+    LOG('Express server listening on port ' + app.get('port'));
 });
 //# sourceMappingURL=server.js.map

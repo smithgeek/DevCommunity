@@ -32,13 +32,14 @@ var UserSvc = (function () {
 })();
 
 var MeetingData = (function () {
-    function MeetingData(votes, _id, vote_count, email, description, details) {
+    function MeetingData(votes, _id, vote_count, email, description, details, date) {
         this.votes = votes && votes || [];
         this._id = _id && _id || '';
         this.vote_count = vote_count && vote_count || 0;
         this.email = email && email || '';
         this.description = description && description || '';
         this.details = details && details || '';
+        this.date = date && date || null;
     }
     return MeetingData;
 })();
@@ -46,7 +47,7 @@ var MeetingData = (function () {
 var Meeting = (function (_super) {
     __extends(Meeting, _super);
     function Meeting(userSvc, $http, data) {
-        _super.call(this, data.votes, data._id, data.vote_count, data.email, data.description, data.details);
+        _super.call(this, data.votes, data._id, data.vote_count, data.email, data.description, data.details, data.date);
         this.userSvc = userSvc;
         this.$http = $http;
     }
@@ -96,7 +97,7 @@ var Meeting = (function (_super) {
     };
 
     Meeting.prototype.GetData = function () {
-        return new MeetingData(this.votes, this._id, this.vote_count, this.email, this.description, this.details);
+        return new MeetingData(this.votes, this._id, this.vote_count, this.email, this.description, this.details, this.date);
     };
     return Meeting;
 })(MeetingData);

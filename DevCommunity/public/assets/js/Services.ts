@@ -26,13 +26,15 @@ class UserSvc {
 }
 
 class MeetingData {
-    constructor(votes?: Array<string>, _id?: string, vote_count?: number, email?: string, description?: string, details?: string) {
+    constructor(votes?: Array<string>, _id?: string, vote_count?: number, email?: string,
+        description?: string, details?: string, date?: Date) {
         this.votes = votes && votes || [];
         this._id = _id && _id || '';
         this.vote_count = vote_count && vote_count || 0;
         this.email = email && email || '';
         this.description = description && description || '';
         this.details = details && details || '';
+        this.date = date && date || null;
     }
 
     votes: Array<string>;
@@ -41,11 +43,12 @@ class MeetingData {
     email: string;
     description: string;
     details: string;
+    date: Date;
 }
 
 class Meeting extends MeetingData {
     constructor(private userSvc: UserSvc, private $http: ng.IHttpService, data: MeetingData) {
-        super(data.votes, data._id, data.vote_count, data.email, data.description, data.details);
+        super(data.votes, data._id, data.vote_count, data.email, data.description, data.details, data.date);
     }
 
     public SetUser(email: string): void {
@@ -92,7 +95,7 @@ class Meeting extends MeetingData {
     }
 
     public GetData(): MeetingData {
-        return new MeetingData(this.votes, this._id, this.vote_count, this.email, this.description, this.details);
+        return new MeetingData(this.votes, this._id, this.vote_count, this.email, this.description, this.details, this.date);
     }
 }
 

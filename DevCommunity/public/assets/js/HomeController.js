@@ -37,6 +37,8 @@ var HomeController = (function () {
                 });
             }, 1);
         });
+        $('.datepicker').datepicker({ todayHighlight: true, autoclose: true });
+        $('.datepicker').removeClass('datepicker');
     }
     HomeController.prototype.AddTopic = function () {
         if (this.userSvc.isLoggedIn()) {

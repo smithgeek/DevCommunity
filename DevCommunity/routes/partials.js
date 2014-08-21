@@ -2,8 +2,8 @@
 var jwt = require('jsonwebtoken');
 
 function isAdmin(req) {
-    if (req.user)
-        return req.user.admin;
+    if (req.headers.authorization)
+        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
     else
         return false;
 }
@@ -14,7 +14,7 @@ function index(req, res) {
 exports.index = index;
 ;
 function home(req, res) {
-    res.render('partials/home');
+    res.render('partials/home', { admin: isAdmin(req) });
 }
 exports.home = home;
 ;
@@ -44,7 +44,7 @@ exports.pastMeetings = pastMeetings;
 ;
 
 function stories(req, res) {
-    res.render('partials/stories');
+    res.render('partials/stories', { disqus: config.disqus });
 }
 exports.stories = stories;
 ;

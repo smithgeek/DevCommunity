@@ -7,8 +7,8 @@ var config = require('../config.js');
 var jwt = require('jsonwebtoken');
 
 function isAdmin(req): boolean {
-    if (req.user)
-        return req.user.admin;
+    if (req.headers.authorization)
+        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
     else
         return false;
 }
@@ -17,7 +17,7 @@ export function index(req: express.Request, res: express.Response) {
     res.render('index', { pathToAssets: 'public', config: config.nav, admin: isAdmin(req) });
 };
 export function home(req: express.Request, res: express.Response) {
-    res.render('partials/home');
+    res.render('partials/home', { admin: isAdmin(req) });
 };
 
 export function about(req: express.Request, res: express.Response) {
@@ -37,7 +37,7 @@ export function pastMeetings(req: express.Request, res: express.Response) {
 };
 
 export function stories(req: express.Request, res: express.Response) {
-    res.render('partials/stories');
+    res.render('partials/stories', { disqus: config.disqus });
 };
 
 export function UserSettings(req: express.Request, res: express.Response) {

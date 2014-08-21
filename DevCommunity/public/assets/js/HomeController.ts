@@ -37,6 +37,8 @@ class HomeController {
                 });
             }, 1);
         });
+        $('.datepicker').datepicker({ todayHighlight: true, autoclose: true });
+        $('.datepicker').removeClass('datepicker');
     }
 
     public AddTopic(): void {

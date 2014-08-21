@@ -1,6 +1,20 @@
 ﻿br
 br
 br
-.page-header
-  h1 Past Meetings
-p Placeholder
+div(ng-controller='PastMeetingsController as controller')
+  div(ng-repeat='meeting in meetings')
+    .media
+      .media-body
+        .panel.panel-primary
+          .panel-heading
+            //.pull-right
+              button.editable(ng-click='controller.EditMeeting(meeting)' ng-show="meeting.isUserAuthor()")
+                span.glyphicon.glyphicon-edit
+              if admin
+                button.editable(ng-click='controller.AdminEditMeeting(meeting)' ng-hide="meeting.isUserAuthor()")
+                  span.glyphicon.glyphicon-cog
+            a(href='#!/meeting/{{meeting._id}}')
+              h3.panel-title {{meeting.description}}
+          .panel-body
+            p Meeting date: {{meeting.date}}
+            div(ng-bind-html="meeting.details")

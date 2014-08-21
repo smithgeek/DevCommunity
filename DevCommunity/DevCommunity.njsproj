@@ -38,8 +38,11 @@
     <Compile Include="config.js" />
     <TypeScriptCompile Include="public\assets\js\MeetingController.ts" />
     <TypeScriptCompile Include="public\assets\js\SingleStoryController.ts" />
+    <TypeScriptCompile Include="public\assets\js\PastMeetingsController.ts" />
     <Content Include="views\partials\admin.jade" />
+    <Content Include="views\partials\HomeCarousel.jade" />
     <Content Include="views\partials\meeting.jade" />
+    <Content Include="views\partials\story.jade" />
     <Content Include="views\partials\UserSettings.jade" />
     <TypeScriptCompile Include="public\assets\js\StoryController.ts" />
     <Content Include="views\partials\Stories.jade" />

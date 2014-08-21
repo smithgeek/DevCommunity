@@ -2,14 +2,29 @@
   .modal-dialog.modal-lg
     .modal-content.highlight
       button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
-      h1 Meeting Idea
       form(role='form')
-        .form-group
-          label Title
-          input.form-control(type='text' ng-model='meeting.description')
-        .form-group
-          label Details
-          textarea.form-control.ckeditor(id="newIdeaDetails" type='text' ng-model='meeting.details')
+        if admin
+          ul.nav.nav-tabs(role="tablist")
+            li.active
+              a(href='#meetingInfo' role="tab" data-toggle="tab") Info
+            li
+              a(href='#meetingAdmin' role="tab" data-toggle="tab") Admin
+        div.tab-content
+          div.tab-pane.active(id="meetingInfo")
+            h1 Meeting Idea
+            .form-group
+              label Title
+              input.form-control(type='text' ng-model='meeting.description')
+            .form-group
+              label Details
+              textarea.form-control.ckeditor(id="newIdeaDetails" type='text' ng-model='meeting.details')
+
+          div.tab-pane(id="meetingAdmin")
+            .form-group
+              Label Date
+              p Only set this if the meeting is scheduled or has already occured.  Voting will be closed when this happens.
+              input.form-control.datepicker(type='text' ng-model='meeting.date')
+
         button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()') Submit
         span  
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
@@ -17,63 +32,9 @@
 
 .jumbotron
   .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
-    //ol.carousel-indicators
-      li(data-target="#info-carousel" data-slide-to="0" class="active")
-      li(data-target="#info-carousel" data-slide-to="1")
 
     .carousel-inner
-      .item.meeting.active
-        .row
-          .col-sm-4.visible-lg
-            div
-              iframe(src="//player.vimeo.com/video/43592685" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen)
-          .col-md-8
-            h3 
-              a(href='http://vimeo.com/43592685') Uncle Bob - Single Responsibility Principle
-            p.jumbotron-small-text
-              | Let's do a deep dive into the first of the SOLID principles. What is a responsibility? Why should it be single? How do we make it single? We'll examine all these issues in extreme detail. We'll look at some old code to see whether it conforms or not. We'll also look at various design patterns and strategies that help us conform to this principle.
-        .carousel-caption
-          p July 15th
-
-      .item.meeting
-        .row
-          .col-sm-4.visible-lg
-            div
-              iframe(src="//player.vimeo.com/video/97315969" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen)
-          .col-md-8
-            h3 
-              a(href='http://vimeo.com/97315969') Strangling the Legacy out of an Application
-            p.jumbotron-small-text
-              | An old system with a basic architecture from a distant past. New functionality built throughout the years with the then state of the art technology. On top of that some cosmetics to make the interface look modern, but in reality the application is rotten on the inside and about to fall apart any day. That’s a common work environment for many developers.
-        .carousel-caption
-          p July 1st
-
-      .item.meeting
-        .row
-          .col-sm-4.visible-lg
-            div
-              iframe(src="//player.vimeo.com/video/12643301" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen)
-          .col-md-8
-            h3 
-              a(href='http://http://vimeo.com/12643301') Clean Code: Functions
-            p
-              | Get ready for a challenge as Robert Martin dives deep into the topic of clean Java code by examining what makes a good function. In this talk you will look at a lot of code; some good and some bad.
-        .carousel-caption
-          p June 17th
-
-      .item.meeting
-        .row
-          .col-sm-4.visible-lg
-            div
-              iframe(src="//www.youtube-nocookie.com/embed/p0O1VVqRSK0" frameborder="0" allowfullscreen)
-          .col-md-8
-            h3 
-              a(href='https://www.youtube.com/watch?v=p0O1VVqRSK0') Demanding Professionalism in Software Development
-            p
-              | Robert C. Martin explains in his own unique style why professionalism is so important for software development teams and their managers.
-        .carousel-caption
-          p June 5th
-
+      include HomeCarousel.jade
 
     a.left.carousel-control(href="javascript: void();" data-target="#info-carousel" data-slide="prev")
       span.glyphicon.glyphicon-chevron-left
@@ -105,8 +66,9 @@ div(ng-controller='HomeController as controller')
             .pull-right
               button.editable(ng-click='controller.EditMeeting(meeting)' ng-show="meeting.isUserAuthor()")
                 span.glyphicon.glyphicon-edit
-              //button.editable
-                span.glyphicon.glyphicon-trash
+              if admin
+                button.editable(ng-click='controller.EditMeeting(meeting)' ng-hide="meeting.isUserAuthor()")
+                  span.glyphicon.glyphicon-cog
             a(href='#!/meeting/{{meeting._id}}')
               h3.panel-title {{meeting.description}}
           .panel-body
