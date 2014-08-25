@@ -25,12 +25,11 @@ build/Release
 node_modules
 
 *.db.json
-*/obj/*
+*/TestResults/*
 
 config.js
 *.js.map
 
 deployProd.bat
 
-# Do not check in the home carousel jade page since it is really just data
-DevCommunity/views/partials/HomeCarousel.jade
+.ntvs_analysis.dat

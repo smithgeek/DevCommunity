@@ -18,12 +18,27 @@ module.exports = function(config) {
       'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
 	  'http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
 	  'public/dist/js/readmore.min.js',
-	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-mocks.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js',
 	  'public/dist/js/angular-local-storage.min.js',
       'public/dist/ckeditor/ckeditor.js',
       'node_modules/expect.js/index.js',
+      'node_modules/sinon/lib/sinon.js',
+      'node_modules/sinon/lib/sinon.js',
+      'node_modules/sinon/lib/sinon/call.js',
+      'node_modules/sinon/lib/sinon/spy.js',
+      'node_modules/sinon/lib/sinon/behavior.js',
+      'node_modules/sinon/lib/sinon/stub.js',
+      'node_modules/sinon/lib/sinon/mock.js',
+      'node_modules/sinon/lib/sinon/collection.js',
+      'node_modules/sinon/lib/sinon/assert.js',
+      'node_modules/sinon/lib/sinon/sandbox.js',
+      'node_modules/sinon/lib/sinon/test.js',
+      'node_modules/sinon/lib/sinon/test_case.js',
+      'node_modules/sinon/lib/sinon/assert.js',
+      'node_modules/sinon/lib/sinon/match.js',
 	  
       'public/**/*.js',
       //'../routes/**/*.js',
@@ -47,15 +62,15 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage', 'html'],
 
-	htmlReporter: {
-		outputFile: 'obj/TestResults.html'
+    htmlReporter: {
+        outputDir: 'TestResults'
 	},
 
 	coverageReporter: {
 	    type: 'html',
-        dir: 'obj/coverage/'
+        dir: 'TestResults/coverage/'
 	},
 
     // web server port

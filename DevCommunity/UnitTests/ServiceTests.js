@@ -1,5 +1,7 @@
 /// <reference path="../typings/mocha/mocha.d.ts" />
 /// <reference path="../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../typings/sinon/sinon.d.ts" />
 /// <reference path="../public/assets/js/Services.ts" />
 var defaultUserEmail = 'me@someplace.com';
 
@@ -48,7 +50,20 @@ describe("UserService", function () {
     });
 });
 
-describe("UserService", function () {
+describe("Meeting", function () {
+    var $httpBackend;
+    var $http;
+
+    beforeEach(inject(function (_$httpBackend_, _$http_) {
+        $httpBackend = _$httpBackend_;
+        $http = _$http_;
+    }));
+
+    afterEach(function () {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
     it("EmptyMeeting", function () {
         var meeting = new MeetingData();
         expect(meeting.votes).to.eql([]);
@@ -69,9 +84,9 @@ describe("UserService", function () {
         expect(meeting.details).to.equal("details");
     });
 
-    function getMeeting() {
-        var http;
-        return new Meeting(getUserSvcWithKey(), http, new MeetingData());
+    function getMeeting(userService) {
+        var svc = userService && userService || getUserSvcWithKey();
+        return new Meeting(svc, $http, new MeetingData());
     }
 
     it("SetMeetingUser", function () {
@@ -98,6 +113,29 @@ describe("UserService", function () {
         var meeting = getMeeting();
         meeting.SetUser(defaultUserEmail);
         expect(meeting.isUserAuthor()).to.equal(true);
+    });
+
+    it("CanVote", function () {
+        $httpBackend.expectPOST('/api/restricted/Vote', meeting).respond(200, meeting);
+        var meeting = getMeeting();
+        meeting.Vote();
+        $httpBackend.flush();
+        expect(meeting.votes).to.eql(['me@someplace.com']);
+        expect(meeting.vote_count).to.equal(1);
+    });
+
+    it("CannotVote", function () {
+        var serviceApi = getUserSvcWithKey();
+        var mock = sinon.mock(serviceApi);
+        mock.expects("logOut").once();
+
+        $httpBackend.expectPOST('/api/restricted/Vote').respond(401);
+        var meeting = getMeeting(serviceApi);
+        meeting.Vote();
+        $httpBackend.flush();
+        expect(meeting.vote_count).to.equal(0);
+
+        mock.verify();
     });
 });
 //# sourceMappingURL=ServiceTests.js.map
