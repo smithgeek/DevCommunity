@@ -89,9 +89,10 @@ class Meeting extends MeetingData {
             this.vote_count = copiedMeeting.vote_count;
             $('.vote-btn-' + this._id).prop('disabled', false);
         }).error((data) => {
-                $('#LoginModal').modal('show');
-                $('.vote-btn-' + this._id).prop('disabled', false);
-            });
+            this.userSvc.logOut();
+            $('#LoginModal').modal('show');
+            $('.vote-btn-' + this._id).prop('disabled', false);
+        });
     }
 
     public GetData(): MeetingData {
@@ -99,7 +100,17 @@ class Meeting extends MeetingData {
     }
 }
 
-class MeetingSvc {
+interface IMeetingSvc{
+    notifyMeetingAdded(meeting: MeetingData): void;
+
+    createMeeting(data?: MeetingData): Meeting;
+
+    notifyEditMeeting(meeting: Meeting): void;
+
+    notifyAddMeeting(): void;
+}
+
+class MeetingSvc implements IMeetingSvc {
     constructor(private userSvc: UserSvc, private $http, private $rootScope) {
     }
 

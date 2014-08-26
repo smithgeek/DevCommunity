@@ -91,6 +91,7 @@ var Meeting = (function (_super) {
             _this.vote_count = copiedMeeting.vote_count;
             $('.vote-btn-' + _this._id).prop('disabled', false);
         }).error(function (data) {
+            _this.userSvc.logOut();
             $('#LoginModal').modal('show');
             $('.vote-btn-' + _this._id).prop('disabled', false);
         });
