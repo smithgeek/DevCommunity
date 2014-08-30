@@ -55,10 +55,13 @@
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\partials.ts" />
     <TypeScriptCompile Include="public\assets\js\app.ts" />
+    <TypeScriptCompile Include="UnitTests\HomeControllerTests..ts" />
     <TypeScriptCompile Include="UnitTests\MeetingControllerTests.ts">
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="UnitTests\PastMeetingsControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\RouteConfigTests.ts" />
     <TypeScriptCompile Include="UnitTests\ServiceTests.ts" />
     <Content Include="views\partials\About.jade" />
     <Content Include="views\partials\Brainstorming.jade" />
@@ -73,6 +76,8 @@
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
     <TypeScriptCompile Include="UnitTests\SingleStoryControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\SiteConfigTests.ts" />
+    <TypeScriptCompile Include="UnitTests\StoryControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\UserSettingsTests.ts" />
   </ItemGroup>
   <ItemGroup>

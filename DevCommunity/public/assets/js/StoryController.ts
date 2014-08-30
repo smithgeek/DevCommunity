@@ -6,8 +6,12 @@
 /// <reference path="Services.ts" />
 /// <reference path="Story.ts" />
 
+interface StoryControllerScope extends ng.IScope {
+    stories: Array<Story>;
+}
+
 class StoryController {
-    constructor($scope, $http: ng.IHttpService, private userSvc: UserSvc, private storySvc: StorySvc) {
+    constructor($scope: StoryControllerScope, $http: ng.IHttpService, private userSvc: IUserSvc, private storySvc: IStorySvc) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavStories').addClass('active');
 

@@ -8,7 +8,7 @@
 class HomeController {
     loggedIn: boolean;
 
-    constructor($scope, $http: ng.IHttpService, private userSvc: UserSvc, private meetingSvc: MeetingSvc, localStorageService) {
+    constructor($scope, $http: ng.IHttpService, private userSvc: IUserSvc, private meetingSvc: IMeetingSvc, localStorageService) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavHome').addClass('active');
 

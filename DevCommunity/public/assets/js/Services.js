@@ -7,6 +7,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+
 var UserSvc = (function () {
     function UserSvc(localStorageService) {
         this.localStorageService = localStorageService;

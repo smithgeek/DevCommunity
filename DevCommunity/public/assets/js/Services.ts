@@ -2,7 +2,15 @@
 /// <reference path="../../../typings/jquery/jquery.d.ts" />
 /// <reference path="../../../typings/bootstrap/bootstrap.d.ts" />
 
-class UserSvc {
+interface IUserSvc {
+    getUser(): string;
+
+    isLoggedIn(): boolean;
+
+    logOut(): void;
+}
+
+class UserSvc implements IUserSvc {
     constructor(private localStorageService) {
     }
 
@@ -131,7 +139,15 @@ class MeetingSvc implements IMeetingSvc {
     }
 }
 
-class StorySvc {
+interface IStorySvc {
+    notifyStoryAdded(story: Story): void;
+
+    notifyAddStory(): void;
+
+    notifyEditStory(story: Story): void;
+}
+
+class StorySvc implements IStorySvc {
     constructor(private $rootScope) {
     }
 
