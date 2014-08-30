@@ -8,7 +8,7 @@
 class PastMeetingsController {
     loggedIn: boolean;
 
-    constructor($scope, $http: ng.IHttpService, private userSvc: UserSvc, private meetingSvc: MeetingSvc, localStorageService) {
+    constructor($scope, $http: ng.IHttpService, private meetingSvc: IMeetingSvc) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavPastMeetings').addClass('active');
 

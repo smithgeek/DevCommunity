@@ -5,8 +5,7 @@
 /// <reference path="../../../typings/ckeditor/ckeditor.d.ts" />
 /// <reference path="Services.ts" />
 var PastMeetingsController = (function () {
-    function PastMeetingsController($scope, $http, userSvc, meetingSvc, localStorageService) {
-        this.userSvc = userSvc;
+    function PastMeetingsController($scope, $http, meetingSvc) {
         this.meetingSvc = meetingSvc;
         $('.navbar-nav li.active').removeClass('active');
         $('#NavPastMeetings').addClass('active');

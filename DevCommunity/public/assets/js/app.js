@@ -202,12 +202,17 @@ var LoginController = (function () {
     return LoginController;
 })();
 
-var RouteConfig = (function () {
-    function RouteConfig($routeProvider, localStorageServiceProvider, $locationProvider, $httpProvider) {
+var SiteConfig = (function () {
+    function SiteConfig(localStorageServiceProvider, $locationProvider, $httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
         localStorageServiceProvider.setPrefix('PndDevCommunity');
         $locationProvider.hashPrefix('!');
+    }
+    return SiteConfig;
+})();
 
+var RouteConfig = (function () {
+    function RouteConfig($routeProvider) {
         $routeProvider.when("/about", {
             templateUrl: 'partials/about',
             controller: 'AboutController'
@@ -313,7 +318,8 @@ var RouteConfig = (function () {
             };
         }]);
 
-    app.config(['$routeProvider', 'localStorageServiceProvider', '$locationProvider', '$httpProvider', RouteConfig]);
+    app.config(['localStorageServiceProvider', '$locationProvider', '$httpProvider', SiteConfig]);
+    app.config(['$routeProvider', RouteConfig]);
 
     app.service('userSvc', ['localStorageService', UserSvc]);
 
@@ -337,7 +343,7 @@ var RouteConfig = (function () {
 
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
-    app.controller('PastMeetingsController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', PastMeetingsController]);
+    app.controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
 
     app.controller('BrainstormingController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

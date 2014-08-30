@@ -205,12 +205,16 @@ class LoginController {
     }
 }
 
-class RouteConfig {
-    constructor($routeProvider: ng.route.IRouteProvider, localStorageServiceProvider, $locationProvider: ng.ILocationProvider, $httpProvider: ng.IHttpProvider) {
+class SiteConfig {
+    constructor(localStorageServiceProvider, $locationProvider: ng.ILocationProvider, $httpProvider: ng.IHttpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
         localStorageServiceProvider.setPrefix('PndDevCommunity');
         $locationProvider.hashPrefix('!');
+    }
+}
 
+class RouteConfig {
+    constructor($routeProvider: ng.route.IRouteProvider) {
         $routeProvider.when("/about", {
             templateUrl: 'partials/about',
             controller: 'AboutController'
@@ -322,7 +326,8 @@ class RouteConfig {
         };
     }]);
 
-    app.config(['$routeProvider', 'localStorageServiceProvider', '$locationProvider', '$httpProvider', RouteConfig]);
+    app.config(['localStorageServiceProvider', '$locationProvider', '$httpProvider', SiteConfig]);
+    app.config(['$routeProvider', RouteConfig]);
 
     app.service('userSvc', ['localStorageService', UserSvc]);
 
@@ -346,7 +351,7 @@ class RouteConfig {
 
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
-    app.controller('PastMeetingsController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', PastMeetingsController]);
+    app.controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
 
     app.controller('BrainstormingController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');
