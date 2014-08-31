@@ -1,7 +1,7 @@
 DevCommunity
 ============
 [![Build Status](https://travis-ci.org/brentosmith/DevCommunity.svg?branch=master)](https://travis-ci.org/brentosmith/DevCommunity)
-
+[![Coverage Status](https://img.shields.io/coveralls/brentosmith/DevCommunity.svg)](https://coveralls.io/r/brentosmith/DevCommunity?branch=master)
 Prerequisites
 ============
 [Node](http://nodejs.org/) must be installed
