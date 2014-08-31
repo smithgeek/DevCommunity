@@ -21,8 +21,9 @@ interface IMeetingControllerScope extends ng.IScope {
 }
 
 class AddMeetingController {
-    constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: MeetingSvc, private userSvc: UserSvc) {
+    constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: IMeetingSvc, private userSvc: IUserSvc) {
         $scope.meeting = meetingSvc.createMeeting();
+        $scope.errorMessage = "";
         $scope.$on('editMeeting', function (event, meeting: Meeting) {
             $scope.meeting = meeting;
             CKEDITOR.instances.newIdeaDetails.setData(meeting.details);
@@ -98,8 +99,14 @@ class StorySubmitController {
     }
 }
 
+interface AdminControllerScope extends ng.IScope {
+    emailAddress: string;
+    errorMessage: string;
+    successMessage: string;
+}
+
 class AdminController {
-    constructor(private $scope, private $http: ng.IHttpService) {
+    constructor(private $scope: AdminControllerScope, private $http: ng.IHttpService) {
         this.$scope.emailAddress = "";
         this.$scope.errorMessage = "";
         this.$scope.successMessage = "";
@@ -119,8 +126,14 @@ class AdminController {
     }
 }
 
+interface UserSettingsControllerScope extends ng.IScope {
+    settings: UserSettings;
+    errorMessage: string;
+    successMessage: string;
+}
+
 class UserSettingsController {
-    constructor(private $scope, private $http: ng.IHttpService, private userSvc: UserSvc ) {
+    constructor(private $scope: UserSettingsControllerScope, private $http: ng.IHttpService, private userSvc: IUserSvc ) {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavUserSettings').addClass('active');
 
@@ -129,8 +142,8 @@ class UserSettingsController {
         this.$scope.successMessage = "";
 
         this.$http.get('/api/restricted/GetUserSettings').success((data) => {
-            if(data != "" && data != null)
-                this.$scope.settings = data;
+            if (data != "" && data != null)
+                this.$scope.settings = <UserSettings>data;
         });
     }
 
@@ -142,9 +155,11 @@ class UserSettingsController {
         $('.settings-btn').prop('disabled', true);
         this.$http.post('/api/restricted/SetUserSettings', this.$scope.settings).success((data: any) => {
             $('.settings-btn').prop('disabled', false);
+            this.$scope.errorMessage = "";
             this.$scope.successMessage = "Settings saved.";
         }).error((data) => {
             $('.settings-btn').prop('disabled', false);
+            this.$scope.successMessage = "";
             this.$scope.errorMessage = data.toString();
         });
     }

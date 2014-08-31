@@ -55,7 +55,10 @@
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\partials.ts" />
     <TypeScriptCompile Include="public\assets\js\app.ts" />
+    <TypeScriptCompile Include="UnitTests\AddMeetingControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\AdminControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\HomeControllerTests..ts" />
+    <TypeScriptCompile Include="UnitTests\LoginControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\MeetingControllerTests.ts">
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
@@ -78,6 +81,7 @@
     <TypeScriptCompile Include="UnitTests\SingleStoryControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\SiteConfigTests.ts" />
     <TypeScriptCompile Include="UnitTests\StoryControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\UserSettingsControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\UserSettingsTests.ts" />
   </ItemGroup>
   <ItemGroup>

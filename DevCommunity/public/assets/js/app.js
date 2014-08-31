@@ -21,6 +21,7 @@ var AddMeetingController = (function () {
         this.meetingSvc = meetingSvc;
         this.userSvc = userSvc;
         $scope.meeting = meetingSvc.createMeeting();
+        $scope.errorMessage = "";
         $scope.$on('editMeeting', function (event, meeting) {
             $scope.meeting = meeting;
             CKEDITOR.instances.newIdeaDetails.setData(meeting.details);
@@ -148,9 +149,11 @@ var UserSettingsController = (function () {
         $('.settings-btn').prop('disabled', true);
         this.$http.post('/api/restricted/SetUserSettings', this.$scope.settings).success(function (data) {
             $('.settings-btn').prop('disabled', false);
+            _this.$scope.errorMessage = "";
             _this.$scope.successMessage = "Settings saved.";
         }).error(function (data) {
             $('.settings-btn').prop('disabled', false);
+            _this.$scope.successMessage = "";
             _this.$scope.errorMessage = data.toString();
         });
     };
