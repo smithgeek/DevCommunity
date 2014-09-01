@@ -119,6 +119,21 @@ var AdminController = (function () {
             _this.$scope.errorMessage = data.toString();
         });
     };
+
+    AdminController.prototype.AddTweet = function () {
+        var _this = this;
+        this.$scope.successMessage = "";
+        this.$scope.tweetErrorMessage = "";
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/AddTweet', { embedCode: this.$scope.tweetEmbedCode }).success(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.tweetSuccessMessage = data.toString();
+            _this.$scope.tweetEmbedCode = "";
+        }).error(function (data) {
+            $('.settings-btn').prop('disabled', false);
+            _this.$scope.tweetEmbedCode = data.toString();
+        });
+    };
     return AdminController;
 })();
 

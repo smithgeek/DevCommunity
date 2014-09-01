@@ -4,7 +4,7 @@ br
 .page-header
     h1 Admin
 if admin
-  div(ng-controller="AdminController as controller")
+  div.admin(ng-controller="AdminController as controller")
     h3 Add User
     form
       .form-group
@@ -12,5 +12,15 @@ if admin
       button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
       span(style="margin-left: 20px; color: red") {{errorMessage}}
       span(style="margin-left: 20px; color: green") {{successMessage}}
+
+    hr
+
+    h3 Add Tweet
+    form
+      .form-group
+        input(type='text' ng-model='tweetEmbedCode')
+      button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.AddTweet()") Add Tweet
+      span(style="margin-left: 20px; color: red") {{tweetErrorMessage}}
+      span(style="margin-left: 20px; color: green") {{tweetSuccessMessage}}
 else
   p You must log in with an administrator account to access this page.

@@ -103,6 +103,9 @@ interface AdminControllerScope extends ng.IScope {
     emailAddress: string;
     errorMessage: string;
     successMessage: string;
+    tweetErrorMessage: string;
+    tweetSuccessMessage: string;
+    tweetEmbedCode: string;
 }
 
 class AdminController {
@@ -122,6 +125,20 @@ class AdminController {
         }).error((data) => {
                 $('.settings-btn').prop('disabled', false);
                 this.$scope.errorMessage = data.toString();
+        });
+    }
+
+    public AddTweet(): void {
+        this.$scope.successMessage = "";
+        this.$scope.tweetErrorMessage = "";
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/AddTweet', { embedCode: this.$scope.tweetEmbedCode }).success((data: any) => {
+            $('.settings-btn').prop('disabled', false);
+            this.$scope.tweetSuccessMessage = data.toString();
+            this.$scope.tweetEmbedCode = "";
+        }).error((data) => {
+            $('.settings-btn').prop('disabled', false);
+            this.$scope.tweetEmbedCode = data.toString();
         });
     }
 }

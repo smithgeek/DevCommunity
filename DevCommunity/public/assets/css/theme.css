@@ -111,7 +111,7 @@ html, body {
 
 #info-carousel iframe{
     width: 280px;
-    height: 158px;
+    /*height: 350px;*/
     margin-top: 25px;
 }
 
@@ -134,4 +134,8 @@ html, body {
         padding-left: 20%; 
         padding-right: 20%;
     }
+}
+
+.admin input {
+    width: 100%;
 }

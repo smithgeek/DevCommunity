@@ -86,6 +86,9 @@ userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 var storyDb = new nedb({ filename: 'stories.db.json', autoload: true });
 storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
+var randomTweetsDb = new nedb({ filename: 'random_tweets.db.json', autoload: true });
+randomTweetsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+
 var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: true });
 userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 userSettingsDb.ensureIndex({ fieldName: 'email', unique: true }, function (err) {
@@ -443,6 +446,20 @@ app.post('/api/restricted/AddUser', function (req, res) {
     }
 });
 
+app.post('/api/restricted/AddTweet', function (req, res) {
+    if (isAdmin(getUserEmail(req))) {
+        var embedCode = req.body.embedCode.replace(/"/g, "'");
+
+        randomTweetsDb.insert({ html: embedCode }, function (err, newDoc) {
+            if (err != null)
+                res.send(404, "Could not add tweet.");
+            else
+                res.send(200, "Added tweet. " + newDoc._id);
+        });
+    } else {
+        res.send(404, "Who do you think you are?  You have to be an administrator to add a tweet.");
+    }
+});
 http.createServer(app).listen(app.get('port'), function () {
     LOG('Express server listening on port ' + app.get('port'));
 });

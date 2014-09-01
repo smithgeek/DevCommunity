@@ -1,4 +1,12 @@
-.item.meeting.active
+if showTweet
+  .item.meeting.active
+    .row
+      .col-md-12
+          h3 Random Tweet
+          div!= tweetHtml
+
+- var klass = (showTweet ? undefined : 'active')
+.item.meeting(class=klass)
   .row
     .col-sm-4.visible-lg
       div

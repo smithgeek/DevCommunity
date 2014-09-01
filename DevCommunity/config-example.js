@@ -6,7 +6,8 @@
 exports.nav = {
     name: 'Developer Community',
     // Bootstrap glyphicon
-    glyph: 'glyphicon-none'
+    glyph: 'glyphicon-none',
+    showRandomTweets: false
 };
 
 exports.mail = {
