@@ -28,9 +28,13 @@ describe("AdminController", function () {
         expect($scope.emailAddress).to.be("");
         expect($scope.errorMessage).to.be("");
         expect($scope.successMessage).to.be("");
+        expect($scope.tweetSuccessMessage).to.be("");
+        expect($scope.tweetErrorMessage).to.be("");
     });
 
     it("CanAddUser", function () {
+        $scope.successMessage = "init";
+        $scope.errorMessage = "init";
         var controller = getController();
         var address = "fake_address";
         $scope.emailAddress = address;
@@ -42,6 +46,8 @@ describe("AdminController", function () {
     });
 
     it("FailAddUser", function () {
+        $scope.successMessage = "init";
+        $scope.errorMessage = "init";
         var controller = getController();
         var address = "fake_address";
         $scope.emailAddress = address;
@@ -50,6 +56,32 @@ describe("AdminController", function () {
         $httpBackend.flush();
         expect($scope.successMessage).to.be("");
         expect($scope.errorMessage).to.be("fail");
+    });
+
+    it("CanAddTweet", function () {
+        $scope.tweetSuccessMessage = "init";
+        $scope.tweetErrorMessage = "init";
+        var controller = getController();
+        var html = "code";
+        $scope.tweetEmbedCode = html;
+        $httpBackend.expectPOST('/api/restricted/AddTweet', { embedCode: html }).respond(200, "success");
+        controller.AddTweet();
+        $httpBackend.flush();
+        expect($scope.tweetSuccessMessage).to.be("success");
+        expect($scope.tweetErrorMessage).to.be("");
+    });
+
+    it("FailAddTweet", function () {
+        $scope.tweetSuccessMessage = "init";
+        $scope.tweetErrorMessage = "init";
+        var controller = getController();
+        var html = "code";
+        $scope.tweetEmbedCode = html;
+        $httpBackend.expectPOST('/api/restricted/AddTweet', { embedCode: html }).respond(401, "fail");
+        controller.AddTweet();
+        $httpBackend.flush();
+        expect($scope.tweetSuccessMessage).to.be("");
+        expect($scope.tweetErrorMessage).to.be("fail");
     });
 });
 //# sourceMappingURL=AdminControllerTests.js.map

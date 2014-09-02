@@ -39,11 +39,9 @@ module.exports = function(config) {
       'node_modules/sinon/lib/sinon/test_case.js',
       'node_modules/sinon/lib/sinon/assert.js',
       'node_modules/sinon/lib/sinon/match.js',
-	  
+
       'public/**/*.js',
-      //'../routes/**/*.js',
       'UnitTests/*.js',
-      //'../server.js'
     ],
 
 

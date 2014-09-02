@@ -5,21 +5,21 @@
 /// <reference path="../public/assets/js/app.ts" />
 /// <reference path="../public/assets/js/Services.ts" />
 
-describe("AddMeetingController", function () {
+describe("StorySubmitController", function () {
     var $httpBackend: ng.IHttpBackendService;
     var $http: ng.IHttpService;
-    var $scope: IMeetingControllerScope;
-    var meetingSvc: IMeetingSvc;
+    var $scope: IStorySubmitControllerScope;
+    var storySvc: IStorySvc;
     var userSvc: IUserSvc;
-    var defaultMeeting;
     var rtb: IRichTextEditor;
+    var defaultStory;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
-        defaultMeeting = { details: "details", SetUser: function (user) { }, GetData: function () { return null; } };
+        defaultStory = { description: "details"};
         $httpBackend = _$httpBackend_;
         $http = _$http_;
         $scope = _$rootScope_.$new();
-        meetingSvc = <IMeetingSvc>{ createMeeting: function () { return defaultMeeting }, notifyMeetingAdded: function (meeting) { } };
+        storySvc = <IStorySvc>{ notifyStoryAdded: function (story) { } };
         rtb = <IRichTextEditor>{ setId: function (id) { }, setText: function (text) { }, getText: function () { return "text"; } };
         userSvc = <IUserSvc>{ getUser: function () { return "user"; } };
     }));
@@ -29,75 +29,69 @@ describe("AddMeetingController", function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    function getController(): AddMeetingController {
-        return new AddMeetingController($scope, $http, meetingSvc, userSvc, rtb);
+    function getController(): StorySubmitController {
+        return new StorySubmitController($scope, storySvc, $http, userSvc, rtb);
     }
 
     it("DefaultConstructed", function () {
-        var mock = sinon.mock(rtb);
-        mock.expects("setId").once().withExactArgs('newIdeaDetails');
+        var mockRtb = sinon.mock(rtb);
+        mockRtb.expects("setId").once().withExactArgs("storyDetails");
         getController();
-        expect($scope.meeting).to.be(defaultMeeting);
+        expect($scope.story).to.not.be(null);
         expect($scope.errorMessage).to.be("");
-        mock.verify();
     });
 
-    it("OnEditMeeting", function () {
+    it("OnEditStory", function () {
         var mock = sinon.mock(rtb);
         mock.expects("setText").once().withExactArgs("details");
         getController();
-        $scope.$broadcast('editMeeting', defaultMeeting);
-        expect($scope.meeting).to.be(defaultMeeting);
+        $scope.$broadcast('editStory', defaultStory);
+        expect($scope.story).to.be(defaultStory);
         expect($scope.errorMessage).to.be("");
         mock.verify();
     });
 
-    it("OnAddMeeting", function () {
+    it("OnAddStory", function () {
         getController();
-        $scope.$broadcast('addMeeting');
-        expect($scope.meeting).to.be(defaultMeeting);
+        var mock = sinon.mock(rtb);
+        mock.expects("setText").once().withExactArgs("");
+        $scope.$broadcast('addStory');
+        expect($scope.story).to.eql({});
         expect($scope.errorMessage).to.be("");
     });
 
-    function CallAddMeetingSuccess(action: string) {
-        var mockMeeting = sinon.mock(defaultMeeting);
-        mockMeeting.expects("SetUser").once();
+    function CallSubmitSuccess(action: string) {
         var mockRtb = sinon.mock(rtb);
         mockRtb.expects("getText").once().returns("new text");
-        var mockMeetingSvc = sinon.mock(meetingSvc);
+        var mockStorySvc = sinon.mock(storySvc);
         if (action == 'Added') {
-            mockMeetingSvc.expects("notifyMeetingAdded").once();
+            mockStorySvc.expects("notifyStoryAdded").once();
         }
-        $httpBackend.expectPOST('/api/restricted/AddMeeting', null).respond(200, { action: action });
+        $httpBackend.expectPOST('/api/restricted/AddStory', { submittor: "user", description: "new text" }).respond(200, { action: action });
 
-        getController().AddMeeting();
+        getController().Submit();
         $httpBackend.flush();
-        expect($scope.meeting.details).to.be("new text");
         expect($scope.errorMessage).to.be("");
-        mockMeeting.verify();
         mockRtb.verify();
-        mockMeetingSvc.verify();
+        mockStorySvc.verify();
     }
 
     it("AddMeetingSuccess", function () {
-        CallAddMeetingSuccess('Added');
+        CallSubmitSuccess('Added');
     });
 
     it("UpdateMeetingSuccess", function () {
-        CallAddMeetingSuccess('Update');
+        CallSubmitSuccess('Update');
     });
 
     it("AddMeetingFail", function () {
-        var mockMeeting = sinon.mock(defaultMeeting);
-        mockMeeting.expects("SetUser").once();
         var mockRtb = sinon.mock(rtb);
         mockRtb.expects("getText").once().returns("new text");
-        $httpBackend.expectPOST('/api/restricted/AddMeeting', null).respond(404, "fail");
+        $httpBackend.expectPOST('/api/restricted/AddStory', { submittor: "user", description: "new text" }).respond(404, "fail");
 
-        getController().AddMeeting();
+        getController().Submit();
         $httpBackend.flush();
         expect($scope.errorMessage).to.be("fail");
-        mockMeeting.verify();
         mockRtb.verify();
     });
 });

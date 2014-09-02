@@ -8,6 +8,7 @@
 /// <reference path="HomeController.ts" />
 /// <reference path="StoryController.ts" />
 /// <reference path="SingleStoryController.ts" />
+/// <reference path="Impl/Browser.ts" />
 $('.nav a').on('click', function () {
     if ($(".navbar-toggle").css('display') != 'none') {
         $(".navbar-toggle").trigger("click");
@@ -15,16 +16,19 @@ $('.nav a').on('click', function () {
 });
 
 var AddMeetingController = (function () {
-    function AddMeetingController($scope, $http, meetingSvc, userSvc) {
+    function AddMeetingController($scope, $http, meetingSvc, userSvc, rtb) {
+        var _this = this;
         this.$scope = $scope;
         this.$http = $http;
         this.meetingSvc = meetingSvc;
         this.userSvc = userSvc;
+        this.rtb = rtb;
+        this.rtb.setId('newIdeaDetails');
         $scope.meeting = meetingSvc.createMeeting();
         $scope.errorMessage = "";
         $scope.$on('editMeeting', function (event, meeting) {
             $scope.meeting = meeting;
-            CKEDITOR.instances.newIdeaDetails.setData(meeting.details);
+            _this.rtb.setText(meeting.details);
             $('#AddTopicModal').modal('show');
             $scope.errorMessage = "";
         });
@@ -38,7 +42,7 @@ var AddMeetingController = (function () {
         var _this = this;
         $('.add-modal-button').prop('disabled', true);
         this.$scope.meeting.SetUser(this.userSvc.getUser());
-        this.$scope.meeting.details = CKEDITOR.instances.newIdeaDetails.getData();
+        this.$scope.meeting.details = this.rtb.getText();
         var mtgData = this.$scope.meeting.GetData();
         this.$http.post('/api/restricted/AddMeeting', mtgData).success(function (data) {
             $('#AddTopicModal').modal('hide');
@@ -56,21 +60,25 @@ var AddMeetingController = (function () {
 })();
 
 var StorySubmitController = (function () {
-    function StorySubmitController($scope, storySvc, $http, userSvc) {
+    function StorySubmitController($scope, storySvc, $http, userSvc, rtb) {
+        var _this = this;
         this.$scope = $scope;
         this.storySvc = storySvc;
         this.$http = $http;
         this.userSvc = userSvc;
+        this.rtb = rtb;
         $scope.story = new Story();
+        this.rtb.setId("storyDetails");
+        this.$scope.errorMessage = '';
         $scope.$on('editStory', function (event, story) {
             $scope.story = story;
-            CKEDITOR.instances.storyDetails.setData(story.description);
+            _this.rtb.setText(story.description);
             $('#AddStoryModal').modal('show');
             $scope.errorMessage = "";
         });
         $scope.$on('addStory', function (event) {
             $scope.story = new Story();
-            CKEDITOR.instances.storyDetails.setData("");
+            _this.rtb.setText("");
             $('#AddStoryModal').modal('show');
             $scope.errorMessage = "";
         });
@@ -82,13 +90,14 @@ var StorySubmitController = (function () {
         var _this = this;
         $('.add-modal-button').prop('disabled', true);
         this.$scope.story.submittor = this.userSvc.getUser();
-        this.$scope.story.description = CKEDITOR.instances.storyDetails.getData();
+        this.$scope.story.description = this.rtb.getText();
         this.$http.post('/api/restricted/AddStory', this.$scope.story).success(function (data) {
             $('#AddStoryModal').modal('hide');
             $('.add-modal-button').prop('disabled', false);
             if (data.action == "Added") {
                 _this.storySvc.notifyStoryAdded(data.story);
             }
+            _this.$scope.errorMessage = '';
             _this.$scope.story = new Story();
         }).error(function (data) {
             $('.add-modal-button').prop('disabled', false);
@@ -105,6 +114,8 @@ var AdminController = (function () {
         this.$scope.emailAddress = "";
         this.$scope.errorMessage = "";
         this.$scope.successMessage = "";
+        this.$scope.tweetSuccessMessage = "";
+        this.$scope.tweetErrorMessage = "";
     }
     AdminController.prototype.Submit = function () {
         var _this = this;
@@ -122,7 +133,7 @@ var AdminController = (function () {
 
     AdminController.prototype.AddTweet = function () {
         var _this = this;
-        this.$scope.successMessage = "";
+        this.$scope.tweetSuccessMessage = "";
         this.$scope.tweetErrorMessage = "";
         $('.settings-btn').prop('disabled', true);
         this.$http.post('/api/restricted/AddTweet', { embedCode: this.$scope.tweetEmbedCode }).success(function (data) {
@@ -131,7 +142,7 @@ var AdminController = (function () {
             _this.$scope.tweetEmbedCode = "";
         }).error(function (data) {
             $('.settings-btn').prop('disabled', false);
-            _this.$scope.tweetEmbedCode = data.toString();
+            _this.$scope.tweetErrorMessage = data.toString();
         });
     };
     return AdminController;
@@ -176,10 +187,11 @@ var UserSettingsController = (function () {
 })();
 
 var LoginController = (function () {
-    function LoginController($scope, $http, localStorageService) {
+    function LoginController($scope, $http, localStorageService, location) {
         this.$scope = $scope;
         this.$http = $http;
         this.localStorageService = localStorageService;
+        this.location = location;
         $scope.user = { email: '', verificationCode: '' };
         $scope.message = '';
         $scope.step = 'Email';
@@ -203,7 +215,7 @@ var LoginController = (function () {
             _this.localStorageService.set('userToken', data.token);
             _this.localStorageService.set('userEmail', _this.$scope.user);
             _this.close();
-            location.reload();
+            _this.location.reload();
         }).error(function (data, status, headers, config) {
             _this.localStorageService.remove('userToken');
             _this.localStorageService.remove('userEmail');
@@ -243,9 +255,6 @@ var RouteConfig = (function () {
         }).when('/pastMeetings', {
             templateUrl: 'partials/pastMeetings',
             controller: 'PastMeetingsController'
-        }).when("/brainstorming", {
-            templateUrl: 'partials/brainstorming',
-            controller: 'BrainstormingController'
         }).when("/stories", {
             templateUrl: 'partials/stories',
             controller: 'StoryController'
@@ -341,17 +350,21 @@ var RouteConfig = (function () {
 
     app.service('userSvc', ['localStorageService', UserSvc]);
 
+    app.service('richTextService', [CKEditorRichText]);
+
     app.service('meetingSvc', ['userSvc', '$http', '$rootScope', MeetingSvc]);
 
     app.service('storySvc', ['$rootScope', StorySvc]);
+
+    app.service('documentLocation', [DocumentLocation]);
 
     app.controller('HomeController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', HomeController]);
 
     app.controller('StoryController', ['$scope', '$http', 'userSvc', 'storySvc', StoryController]);
 
-    app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', AddMeetingController]);
+    app.controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', 'richTextService', AddMeetingController]);
 
-    app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', StorySubmitController]);
+    app.controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', 'richTextService', StorySubmitController]);
 
     app.controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
 
@@ -362,11 +375,6 @@ var RouteConfig = (function () {
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
     app.controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
-
-    app.controller('BrainstormingController', function ($scope) {
-        $('.navbar-nav li.active').removeClass('active');
-        $('#NavBrainstorming').addClass('active');
-    });
 
     app.controller('AboutController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');
@@ -392,7 +400,7 @@ var RouteConfig = (function () {
         }, 1);
     });
 
-    app.controller('LoginController', ['$scope', '$http', 'localStorageService', LoginController]);
+    app.controller('LoginController', ['$scope', '$http', 'localStorageService', 'documentLocation', LoginController]);
 
     app.factory('authInterceptor', [
         '$q', 'localStorageService', function ($q, localStorageService) {

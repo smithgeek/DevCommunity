@@ -35,14 +35,6 @@ describe("RouteConfig", function () {
         });
     });
 
-    it("Brainstorming", function () {
-        module('devCommunity');
-        inject(function ($route) {
-            expect($route.routes['/brainstorming'].controller).to.be('BrainstormingController');
-            expect($route.routes['/brainstorming'].templateUrl).to.be('partials/brainstorming');
-        });
-    });
-
     it("Story", function () {
         module('devCommunity');
         inject(function ($route) {
