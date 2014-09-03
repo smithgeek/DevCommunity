@@ -1,5 +1,6 @@
 ﻿var config = require('../config.js');
 var jwt = require('jsonwebtoken');
+var twitter = require('../Twitter.js');
 
 function isAdmin(req) {
     if (req.headers.authorization)
@@ -15,24 +16,12 @@ exports.index = index;
 ;
 
 function home(req, res) {
-    var tweetHtml = "";
-    var shouldShowTweet = false;
     if (config.nav.showRandomTweets) {
-        var nedb = require('nedb');
-        var randomTweetsDb = new nedb({ filename: 'random_tweets.db.json', autoload: true });
-        randomTweetsDb.count({}, function (err, count) {
-            if (err == null && count > 0) {
-                var skipCount = Math.floor((Math.random() * count));
-                console.log("skip %d", skipCount);
-                randomTweetsDb.find({}).sort({ _id: 1 }).skip(skipCount).limit(1).exec(function (err, html) {
-                    if (err == null) {
-                        res.render('partials/home', { admin: isAdmin(req), showTweet: true, tweetHtml: html[0].html });
-                    } else {
-                        res.render('partials/home', { admin: isAdmin(req), showTweet: false, tweetHtml: '' });
-                    }
-                });
-            } else {
+        twitter.getRandomTweet(function (html) {
+            if (html == '') {
                 res.render('partials/home', { admin: isAdmin(req), showTweet: false, tweetHtml: '' });
+            } else {
+                res.render('partials/home', { admin: isAdmin(req), showTweet: true, tweetHtml: html });
             }
         });
     } else {

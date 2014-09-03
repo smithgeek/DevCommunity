@@ -477,7 +477,7 @@ app.post('/api/restricted/AddUser', function (req: any, res) {
 app.post('/api/restricted/AddTweet', function (req: any, res) {
     if (isAdmin(getUserEmail(req))) {
         var embedCode: string = req.body.embedCode.replace(/"/g, "'");
-        
+
         randomTweetsDb.insert({ html: embedCode }, (err, newDoc) => {
             if (err != null)
                 res.send(404, "Could not add tweet.");
@@ -489,6 +489,19 @@ app.post('/api/restricted/AddTweet', function (req: any, res) {
         res.send(404, "Who do you think you are?  You have to be an administrator to add a tweet.");
     }
 });
+
+app.get('/api/GetRandomTweet', function (req, res) {
+    var twitter = require('./Twitter.js');
+    twitter.getRandomTweet(function (html) {
+        if (html == '') {
+            res.send(401, '');
+        }
+        else {
+            res.send(200, html);
+        }
+    });
+});
+
 http.createServer(app).listen(app.get('port'), function () {
     LOG('Express server listening on port ' + app.get('port'));
 });

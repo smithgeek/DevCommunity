@@ -232,6 +232,18 @@ var LoginController = (function () {
     return LoginController;
 })();
 
+var TweetController = (function () {
+    function TweetController($http) {
+        this.$http = $http;
+    }
+    TweetController.prototype.getNewTweet = function () {
+        this.$http.get('/api/GetRandomTweet').success(function (html) {
+            $('#tweetHolder').html(html);
+        });
+    };
+    return TweetController;
+})();
+
 var SiteConfig = (function () {
     function SiteConfig(localStorageServiceProvider, $locationProvider, $httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
@@ -310,6 +322,8 @@ var RouteConfig = (function () {
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
     app.controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
+
+    app.controller('TweetController', ['$http', TweetController]);
 
     app.controller('AboutController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

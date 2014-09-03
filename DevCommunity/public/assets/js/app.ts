@@ -244,6 +244,17 @@ class LoginController {
     }
 }
 
+class TweetController {
+    constructor(private $http) {
+    }
+
+    public getNewTweet(): void {
+        this.$http.get('/api/GetRandomTweet').success((html) => {
+            $('#tweetHolder').html(html);
+        });
+    }
+}
+
 class SiteConfig {
     constructor(localStorageServiceProvider, $locationProvider: ng.ILocationProvider, $httpProvider: ng.IHttpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
@@ -328,6 +339,8 @@ class RouteConfig {
     app.controller('AdminController', ['$scope', '$http', AdminController]);
 
     app.controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
+
+    app.controller('TweetController', ['$http', TweetController]);
 
     app.controller('AboutController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

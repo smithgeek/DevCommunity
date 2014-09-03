@@ -2,11 +2,24 @@ if showTweet
   .item.meeting.active
     .row
       .col-md-12
+        div(ng-controller='TweetController as controller')
           h3 Random Tweet
-          div!= tweetHtml
+            button.editable(ng-click='controller.getNewTweet()')
+              span.glyphicon.glyphicon-refresh
+          div(id='tweetHolder')!= tweetHtml
 
 - var klass = (showTweet ? undefined : 'active')
 .item.meeting(class=klass)
+  .row
+    .col-md-12
+      h3 New! Archive section
+      p.jumbotron-small-text
+        | Check out the archive section and relive all of your favorite videos, or catch up ones you missed!  You can also now go to each archived meeting and leave comments discussing how much you loved or hated the video.
+        br
+        center
+          img(src="public/assets/images/NewArchives.png")
+
+.item.meeting
   .row
     .col-sm-4.visible-lg
       div
@@ -21,17 +34,8 @@ if showTweet
         a(href='http://www.youtube.com/watch?v=OIHvp7WzuH0') Interview
       p.jumbotron-small-text Interview of Uncle Bob by VKSI magazine.
   .carousel-caption
-    p Next Meeting (Aug 26th)
+    p August 26th
 
-.item.meeting
-  .row
-    .col-md-12
-      h3 New! Archive section
-      p.jumbotron-small-text
-        | Check out the archive section and relive all of your favorite videos, or catch up ones you missed!  You can also now go to each archived meeting and leave comments discussing how much you loved or hated the video.
-        br
-        center
-          img(src="public/assets/images/NewArchives.png")
 
 .item.meeting
   .row

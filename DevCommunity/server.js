@@ -460,6 +460,18 @@ app.post('/api/restricted/AddTweet', function (req, res) {
         res.send(404, "Who do you think you are?  You have to be an administrator to add a tweet.");
     }
 });
+
+app.get('/api/GetRandomTweet', function (req, res) {
+    var twitter = require('./Twitter.js');
+    twitter.getRandomTweet(function (html) {
+        if (html == '') {
+            res.send(401, '');
+        } else {
+            res.send(200, html);
+        }
+    });
+});
+
 http.createServer(app).listen(app.get('port'), function () {
     LOG('Express server listening on port ' + app.get('port'));
 });

@@ -31,7 +31,7 @@ var HomeController = (function () {
                     speed: 500
                 });
                 $(document).ready(function () {
-                    $('#info-carousel').carousel({ interval: 10000 });
+                    $('#info-carousel').carousel({ interval: 10000, pause: "hover" });
                     _this.NormalizeCarouselHeights();
                     $('#newIdeaDetails').ckeditor();
                 });
@@ -59,7 +59,7 @@ var HomeController = (function () {
                 items.each(function () {
                     heights.push($(this).height());
                 });
-                tallest = Math.max.apply(null, heights) + 5; //cache largest value
+                tallest = Math.max.apply(null, heights) + 10; //cache largest value
                 items.each(function () {
                     $(this).css('min-height', tallest + 'px');
                 });
