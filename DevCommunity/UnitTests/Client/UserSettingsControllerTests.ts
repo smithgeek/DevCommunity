@@ -1,14 +1,15 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/app.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/app.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
+
 describe("UserSettingsController", function () {
-    var $httpBackend;
-    var $http;
-    var $scope;
-    var userSvc;
+    var $httpBackend: ng.IHttpBackendService;
+    var $http: ng.IHttpService;
+    var $scope: UserSettingsControllerScope;
+    var userSvc: IUserSvc;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
         $httpBackend = _$httpBackend_;
@@ -21,11 +22,11 @@ describe("UserSettingsController", function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    function getController() {
+    function getController(): UserSettingsController {
         return new UserSettingsController($scope, $http, userSvc);
     }
 
-    function getDefaultController() {
+    function getDefaultController(): UserSettingsController {
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(401);
         var controller = getController();
         $httpBackend.flush();
@@ -40,25 +41,21 @@ describe("UserSettingsController", function () {
     });
 
     it("IsLoggedIn", function () {
-        userSvc = {
-            isLoggedIn: function () {
-                return true;
-            }
+        userSvc = <IUserSvc>{
+            isLoggedIn: function () { return true }
         };
         expect(getDefaultController().isLoggedIn()).to.be(true);
     });
 
     it("IsNotLoggedIn", function () {
-        userSvc = {
-            isLoggedIn: function () {
-                return false;
-            }
+        userSvc = <IUserSvc>{
+            isLoggedIn: function () { return false }
         };
         expect(getDefaultController().isLoggedIn()).to.be(false);
     });
 
     it("UpdateSettingsFromServer", function () {
-        var settings = new UserSettings();
+        var settings: UserSettings = new UserSettings();
         settings.email = "not default";
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(200, settings);
         getController();
@@ -67,7 +64,7 @@ describe("UserSettingsController", function () {
     });
 
     it("GetEmptySettingsFromServer", function () {
-        var settings = new UserSettings();
+        var settings: UserSettings = new UserSettings();
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(200, "");
         getController();
         $httpBackend.flush();
@@ -75,7 +72,7 @@ describe("UserSettingsController", function () {
     });
 
     it("GetNullSettingsFromServer", function () {
-        var settings = new UserSettings();
+        var settings: UserSettings = new UserSettings();
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(200, null);
         getController();
         $httpBackend.flush();
@@ -83,7 +80,7 @@ describe("UserSettingsController", function () {
     });
 
     it("SettingsUpdated", function () {
-        var controller = getDefaultController();
+        var controller: UserSettingsController = getDefaultController();
         $scope.successMessage = "fail";
         $httpBackend.expectPOST('/api/restricted/SetUserSettings', $scope.settings).respond(200);
         controller.Submit();
@@ -93,7 +90,7 @@ describe("UserSettingsController", function () {
     });
 
     it("SettingsFailedUpdated", function () {
-        var controller = getDefaultController();
+        var controller: UserSettingsController = getDefaultController();
         $scope.successMessage = "success";
         $httpBackend.expectPOST('/api/restricted/SetUserSettings', $scope.settings).respond(404, "failure");
         controller.Submit();
@@ -102,4 +99,3 @@ describe("UserSettingsController", function () {
         expect($scope.successMessage).to.be("");
     });
 });
-//# sourceMappingURL=UserSettingsControllerTests.js.map

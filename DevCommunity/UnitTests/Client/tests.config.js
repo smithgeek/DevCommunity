@@ -41,7 +41,7 @@ module.exports = function(config) {
       'node_modules/sinon/lib/sinon/match.js',
 
       'public/**/*.js',
-      'UnitTests/Client/*.js',
+      'UnitTests/*.js',
     ],
 
 

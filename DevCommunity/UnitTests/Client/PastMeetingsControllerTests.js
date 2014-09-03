@@ -1,17 +1,16 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
-/// <reference path="../public/assets/js/PastMeetingsController.ts" />
-
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path=../"../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
+/// <reference path="../../public/assets/js/PastMeetingsController.ts" />
 describe("PastMeetingsController", function () {
-    var $httpBackend: ng.IHttpBackendService;
-    var $http: ng.IHttpService;
+    var $httpBackend;
+    var $http;
     var $routeParams;
     var $scope;
-    var controller: PastMeetingsController;
-    var meetingSvc: IMeetingSvc;
-    var serverCounter: number;
+    var controller;
+    var meetingSvc;
+    var serverCounter;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
         serverCounter = 0;
@@ -19,7 +18,9 @@ describe("PastMeetingsController", function () {
         $http = _$http_;
         $routeParams = { id: 3 };
         $scope = _$rootScope_.$new();
-        meetingSvc = <IMeetingSvc>{ createMeeting: function () { return null; } };
+        meetingSvc = { createMeeting: function () {
+                return null;
+            } };
     }));
 
     afterEach(function () {
@@ -36,7 +37,7 @@ describe("PastMeetingsController", function () {
     });
 
     it("NoPastMeetingsExist", function () {
-        var meetings: Array<MeetingData> = [];
+        var meetings = [];
         $httpBackend.expectGET('/api/GetArchivedMeetings').respond(200, meetings);
         controller = new PastMeetingsController($scope, $http, meetingSvc);
         $httpBackend.flush();
@@ -44,10 +45,11 @@ describe("PastMeetingsController", function () {
     });
 
     it("CanGetPastMeetings", function () {
-        var serverMeetings: Array<MeetingData> = [new MeetingData(), new MeetingData()];
+        var serverMeetings = [new MeetingData(), new MeetingData()];
         $httpBackend.expectGET('/api/GetArchivedMeetings').respond(200, serverMeetings);
         controller = new PastMeetingsController($scope, $http, meetingSvc);
         $httpBackend.flush();
         expect($scope.meetings.length).to.be(serverMeetings.length);
     });
 });
+//# sourceMappingURL=PastMeetingsControllerTests.js.map

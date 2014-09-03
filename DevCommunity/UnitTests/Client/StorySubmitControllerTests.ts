@@ -1,33 +1,27 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/app.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/app.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
+
 describe("StorySubmitController", function () {
-    var $httpBackend;
-    var $http;
-    var $scope;
-    var storySvc;
-    var userSvc;
-    var rtb;
+    var $httpBackend: ng.IHttpBackendService;
+    var $http: ng.IHttpService;
+    var $scope: IStorySubmitControllerScope;
+    var storySvc: IStorySvc;
+    var userSvc: IUserSvc;
+    var rtb: IRichTextEditor;
     var defaultStory;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
-        defaultStory = { description: "details" };
+        defaultStory = { description: "details"};
         $httpBackend = _$httpBackend_;
         $http = _$http_;
         $scope = _$rootScope_.$new();
-        storySvc = { notifyStoryAdded: function (story) {
-            } };
-        rtb = { setId: function (id) {
-            }, setText: function (text) {
-            }, getText: function () {
-                return "text";
-            } };
-        userSvc = { getUser: function () {
-                return "user";
-            } };
+        storySvc = <IStorySvc>{ notifyStoryAdded: function (story) { } };
+        rtb = <IRichTextEditor>{ setId: function (id) { }, setText: function (text) { }, getText: function () { return "text"; } };
+        userSvc = <IUserSvc>{ getUser: function () { return "user"; } };
     }));
 
     afterEach(function () {
@@ -35,7 +29,7 @@ describe("StorySubmitController", function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    function getController() {
+    function getController(): StorySubmitController {
         return new StorySubmitController($scope, storySvc, $http, userSvc, rtb);
     }
 
@@ -66,7 +60,7 @@ describe("StorySubmitController", function () {
         expect($scope.errorMessage).to.be("");
     });
 
-    function CallSubmitSuccess(action) {
+    function CallSubmitSuccess(action: string) {
         var mockRtb = sinon.mock(rtb);
         mockRtb.expects("getText").once().returns("new text");
         var mockStorySvc = sinon.mock(storySvc);
@@ -101,4 +95,3 @@ describe("StorySubmitController", function () {
         mockRtb.verify();
     });
 });
-//# sourceMappingURL=StorySubmitControllerTests.js.map

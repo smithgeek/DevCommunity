@@ -1,27 +1,38 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/app.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
-
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/app.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
 describe("AddMeetingController", function () {
-    var $httpBackend: ng.IHttpBackendService;
-    var $http: ng.IHttpService;
-    var $scope: IMeetingControllerScope;
-    var meetingSvc: IMeetingSvc;
-    var userSvc: IUserSvc;
+    var $httpBackend;
+    var $http;
+    var $scope;
+    var meetingSvc;
+    var userSvc;
     var defaultMeeting;
-    var rtb: IRichTextEditor;
+    var rtb;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
-        defaultMeeting = { details: "details", SetUser: function (user) { }, GetData: function () { return null; } };
+        defaultMeeting = { details: "details", SetUser: function (user) {
+            }, GetData: function () {
+                return null;
+            } };
         $httpBackend = _$httpBackend_;
         $http = _$http_;
         $scope = _$rootScope_.$new();
-        meetingSvc = <IMeetingSvc>{ createMeeting: function () { return defaultMeeting }, notifyMeetingAdded: function (meeting) { } };
-        rtb = <IRichTextEditor>{ setId: function (id) { }, setText: function (text) { }, getText: function () { return "text"; } };
-        userSvc = <IUserSvc>{ getUser: function () { return "user"; } };
+        meetingSvc = { createMeeting: function () {
+                return defaultMeeting;
+            }, notifyMeetingAdded: function (meeting) {
+            } };
+        rtb = { setId: function (id) {
+            }, setText: function (text) {
+            }, getText: function () {
+                return "text";
+            } };
+        userSvc = { getUser: function () {
+                return "user";
+            } };
     }));
 
     afterEach(function () {
@@ -29,7 +40,7 @@ describe("AddMeetingController", function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    function getController(): AddMeetingController {
+    function getController() {
         return new AddMeetingController($scope, $http, meetingSvc, userSvc, rtb);
     }
 
@@ -59,7 +70,7 @@ describe("AddMeetingController", function () {
         expect($scope.errorMessage).to.be("");
     });
 
-    function CallAddMeetingSuccess(action: string) {
+    function CallAddMeetingSuccess(action) {
         var mockMeeting = sinon.mock(defaultMeeting);
         mockMeeting.expects("SetUser").once();
         var mockRtb = sinon.mock(rtb);
@@ -101,3 +112,4 @@ describe("AddMeetingController", function () {
         mockRtb.verify();
     });
 });
+//# sourceMappingURL=AddMeetingControllerTests.js.map

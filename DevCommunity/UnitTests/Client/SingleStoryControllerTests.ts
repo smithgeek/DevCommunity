@@ -1,15 +1,16 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
-/// <reference path="../public/assets/js/SingleStoryController.ts" />
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
+/// <reference path="../../public/assets/js/SingleStoryController.ts" />
+
 describe("SingleStoryController", function () {
-    var $httpBackend;
-    var $http;
+    var $httpBackend: ng.IHttpBackendService;
+    var $http: ng.IHttpService;
     var $routeParams;
     var $scope;
-    var controller;
+    var controller: SingleStoryController;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
         $httpBackend = _$httpBackend_;
@@ -37,4 +38,3 @@ describe("SingleStoryController", function () {
         expect($scope.contentLoaded).to.equal(true);
     });
 });
-//# sourceMappingURL=SingleStoryControllerTests.js.map

@@ -1,9 +1,8 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
-
+/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
 var defaultUserEmail = 'me@someplace.com';
 
 function getUserSvc(storage) {
@@ -11,11 +10,15 @@ function getUserSvc(storage) {
 }
 
 function getUserSvcWithoutKey() {
-    return getUserSvc({ get: function (key) { return null; } });
+    return getUserSvc({ get: function (key) {
+            return null;
+        } });
 }
 
 function getUserSvcWithKey() {
-    return getUserSvc({ get: function (key) { return { email: defaultUserEmail }; } });
+    return getUserSvc({ get: function (key) {
+            return { email: defaultUserEmail };
+        } });
 }
 
 describe("UserService", function () {
@@ -28,11 +31,11 @@ describe("UserService", function () {
     });
 
     it("UserLoggedIn", function () {
-        expect(getUserSvcWithKey().isLoggedIn()).to.equal( true);
+        expect(getUserSvcWithKey().isLoggedIn()).to.equal(true);
     });
 
     it("UserNotLoggedIn", function () {
-        expect(getUserSvcWithoutKey().isLoggedIn()).to.equal( false);
+        expect(getUserSvcWithoutKey().isLoggedIn()).to.equal(false);
     });
 
     it("UserLogsOut", function () {
@@ -42,14 +45,14 @@ describe("UserService", function () {
                 count++;
             }
         };
-        getUserSvc(localStorage).logOut()
-        expect(count).to.equal( 1);
+        getUserSvc(localStorage).logOut();
+        expect(count).to.equal(1);
     });
 });
 
 describe("Meeting", function () {
-    var $httpBackend: ng.IHttpBackendService;
-    var $http: ng.IHttpService;
+    var $httpBackend;
+    var $http;
 
     beforeEach(inject(function (_$httpBackend_, _$http_) {
         $httpBackend = _$httpBackend_;
@@ -62,56 +65,56 @@ describe("Meeting", function () {
     });
 
     it("EmptyMeeting", function () {
-        var meeting: MeetingData = new MeetingData();
-        expect(meeting.votes).to.eql( []);
-        expect(meeting.vote_count).to.equal( 0);
-        expect(meeting._id).to.equal( "");
-        expect(meeting.email).to.equal( "");
-        expect(meeting.description).to.equal( "");
+        var meeting = new MeetingData();
+        expect(meeting.votes).to.eql([]);
+        expect(meeting.vote_count).to.equal(0);
+        expect(meeting._id).to.equal("");
+        expect(meeting.email).to.equal("");
+        expect(meeting.description).to.equal("");
         expect(meeting.details).to.equal("");
         expect(meeting.date).to.not.be.ok;
     });
 
     it("MeetingConstructed", function () {
-        var meeting: MeetingData = new MeetingData(['a', 'b'], 'id', 2, 'email', 'description', 'details', new Date(1));
-        expect(meeting.votes).to.eql( ['a', 'b']);
-        expect(meeting.vote_count).to.equal( 2);
-        expect(meeting._id).to.equal( 'id');
-        expect(meeting.email).to.equal( "email");
-        expect(meeting.description).to.equal( "description");
+        var meeting = new MeetingData(['a', 'b'], 'id', 2, 'email', 'description', 'details', new Date(1));
+        expect(meeting.votes).to.eql(['a', 'b']);
+        expect(meeting.vote_count).to.equal(2);
+        expect(meeting._id).to.equal('id');
+        expect(meeting.email).to.equal("email");
+        expect(meeting.description).to.equal("description");
         expect(meeting.details).to.equal("details");
         expect(meeting.date).to.eql(new Date(1));
     });
 
-    function getMeeting(userService?): Meeting {
-        var svc: UserSvc = userService && userService || getUserSvcWithKey();
+    function getMeeting(userService) {
+        var svc = userService && userService || getUserSvcWithKey();
         return new Meeting(svc, $http, new MeetingData());
     }
 
     it("SetMeetingUser", function () {
         var meeting = getMeeting();
         meeting.SetUser('me');
-        expect(meeting.email).to.equal( 'me');
+        expect(meeting.email).to.equal('me');
     });
 
     it("UserHasNotVoted", function () {
-        expect(getMeeting().HasUserVoted()).to.equal( false);
+        expect(getMeeting().HasUserVoted()).to.equal(false);
     });
 
     it("UserHasVoted", function () {
         var meeting = getMeeting();
         meeting.votes.push(defaultUserEmail);
-        expect(meeting.HasUserVoted()).to.equal( true);
+        expect(meeting.HasUserVoted()).to.equal(true);
     });
 
     it("UserIsNotAuthor", function () {
-        expect(getMeeting().isUserAuthor()).to.equal( false);
+        expect(getMeeting().isUserAuthor()).to.equal(false);
     });
 
     it("UserIsAuthor", function () {
         var meeting = getMeeting();
         meeting.SetUser(defaultUserEmail);
-        expect(meeting.isUserAuthor()).to.equal( true);
+        expect(meeting.isUserAuthor()).to.equal(true);
     });
 
     it("CanVote", function () {
@@ -177,10 +180,10 @@ describe("Meeting", function () {
 
 describe("MeetingSvc", function () {
     var mockUserService;
-    var $httpBackend: ng.IHttpBackendService;
-    var $http: ng.IHttpService;
-    var $rootscope: ng.IRootScopeService;
-    var meetingSvc: MeetingSvc;
+    var $httpBackend;
+    var $http;
+    var $rootscope;
+    var meetingSvc;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
         $httpBackend = _$httpBackend_;
@@ -196,8 +199,8 @@ describe("MeetingSvc", function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    function getMeeting(userService?): Meeting {
-        var svc: UserSvc = userService && userService || getUserSvcWithKey();
+    function getMeeting(userService) {
+        var svc = userService && userService || getUserSvcWithKey();
         var meeting = new Meeting(svc, $http, new MeetingData());
         meeting._id = '33';
         return meeting;
@@ -206,7 +209,10 @@ describe("MeetingSvc", function () {
     it("CanNotifyMeetingAdded", function () {
         var meeting = getMeeting();
         var count = 0;
-        $rootscope.$on(("meetingAdded"), (e, m: MeetingData) => { count++; expect(m._id).to.equal('33'); });
+        $rootscope.$on(("meetingAdded"), function (e, m) {
+            count++;
+            expect(m._id).to.equal('33');
+        });
 
         meetingSvc.notifyMeetingAdded(meeting);
         expect(count).to.be(1);
@@ -215,7 +221,10 @@ describe("MeetingSvc", function () {
     it("CanNotifyMeetingAddedWithNoData", function () {
         var meeting = getMeeting();
         var count = 0;
-        $rootscope.$on(("meetingAdded"), (e, m: MeetingData) => { count++; expect(m).to.be.ok; });
+        $rootscope.$on(("meetingAdded"), function (e, m) {
+            count++;
+            expect(m).to.be.ok;
+        });
 
         meetingSvc.notifyMeetingAdded(null);
         expect(count).to.be(1);
@@ -224,7 +233,9 @@ describe("MeetingSvc", function () {
     it("CanNotifyAddMeeting", function () {
         var meeting = getMeeting();
         var count = 0;
-        $rootscope.$on(("addMeeting"), () => { count++; });
+        $rootscope.$on(("addMeeting"), function () {
+            count++;
+        });
 
         meetingSvc.notifyAddMeeting();
         expect(count).to.be(1);
@@ -233,7 +244,10 @@ describe("MeetingSvc", function () {
     it("CanNotifyEditMeeting", function () {
         var meeting = getMeeting();
         var count = 0;
-        $rootscope.$on(("editMeeting"), (e, m: MeetingData) => { count++; expect(m._id).to.equal('33'); });
+        $rootscope.$on(("editMeeting"), function (e, m) {
+            count++;
+            expect(m._id).to.equal('33');
+        });
 
         meetingSvc.notifyEditMeeting(meeting);
         expect(count).to.be(1);
@@ -241,8 +255,8 @@ describe("MeetingSvc", function () {
 });
 
 describe("StorySvc", function () {
-    var $rootscope: ng.IRootScopeService;
-    var storySvc: StorySvc;
+    var $rootscope;
+    var storySvc;
 
     beforeEach(inject(function (_$rootScope_) {
         $rootscope = _$rootScope_;
@@ -253,7 +267,10 @@ describe("StorySvc", function () {
         var story = new Story();
         story._id = '33';
         var count = 0;
-        $rootscope.$on(("storyAdded"), (e, s: Story) => { count++; expect(s._id).to.equal('33'); });
+        $rootscope.$on(("storyAdded"), function (e, s) {
+            count++;
+            expect(s._id).to.equal('33');
+        });
 
         storySvc.notifyStoryAdded(story);
         expect(count).to.be(1);
@@ -261,7 +278,9 @@ describe("StorySvc", function () {
 
     it("CanNotifyAddStory", function () {
         var count = 0;
-        $rootscope.$on(("addStory"), (e, s: Story) => { count++; });
+        $rootscope.$on(("addStory"), function (e, s) {
+            count++;
+        });
 
         storySvc.notifyAddStory();
         expect(count).to.be(1);
@@ -271,9 +290,13 @@ describe("StorySvc", function () {
         var story = new Story();
         story._id = '33';
         var count = 0;
-        $rootscope.$on(("editStory"), (e, s: Story) => { count++; expect(s._id).to.equal('33'); });
+        $rootscope.$on(("editStory"), function (e, s) {
+            count++;
+            expect(s._id).to.equal('33');
+        });
 
         storySvc.notifyEditStory(story);
         expect(count).to.be(1);
     });
 });
+//# sourceMappingURL=ServiceTests.js.map

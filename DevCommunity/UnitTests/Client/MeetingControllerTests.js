@@ -1,25 +1,25 @@
-﻿/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../typings/sinon/sinon.d.ts" />
-/// <reference path="../public/assets/js/Services.ts" />
-/// <reference path="../public/assets/js/MeetingController.ts" />
-
+﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
+/// <reference path="../../typings/expect.js/expect.js.d.ts" />
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
+/// <reference path="../../typings/sinon/sinon.d.ts" />
+/// <reference path="../../public/assets/js/Services.ts" />
+/// <reference path="../../public/assets/js/MeetingController.ts" />
 describe("MeetingController", function () {
-    var $httpBackend: ng.IHttpBackendService;
-    var $http: ng.IHttpService;
+    var $httpBackend;
+    var $http;
     var $routeParams;
     var $rootScope;
-    var controller: MeetingController;
-    var meetingSvc: IMeetingSvc;
-    var mockMeetingSvc: SinonMock;
+    var controller;
+    var meetingSvc;
+    var mockMeetingSvc;
 
     beforeEach(inject(function (_$httpBackend_, _$http_, _$rootScope_) {
         $httpBackend = _$httpBackend_;
         $http = _$http_;
         $routeParams = { id: 3 };
         $rootScope = _$rootScope_.$new();
-        meetingSvc = <IMeetingSvc>{ createMeeting: function () {}};
+        meetingSvc = { createMeeting: function () {
+            } };
         mockMeetingSvc = sinon.mock(meetingSvc);
     }));
 
@@ -43,3 +43,4 @@ describe("MeetingController", function () {
         expect($rootScope.contentLoaded).to.equal(true);
     });
 });
+//# sourceMappingURL=MeetingControllerTests.js.map
