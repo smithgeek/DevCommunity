@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="config.js" />
+    <TypeScriptCompile Include="public\assets\js\Impl\Browser.ts" />
     <TypeScriptCompile Include="public\assets\js\MeetingController.ts" />
     <TypeScriptCompile Include="public\assets\js\SingleStoryController.ts" />
     <TypeScriptCompile Include="public\assets\js\PastMeetingsController.ts" />
@@ -81,6 +82,7 @@
     <TypeScriptCompile Include="UnitTests\SingleStoryControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\SiteConfigTests.ts" />
     <TypeScriptCompile Include="UnitTests\StoryControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\StorySubmitControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\UserSettingsControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\UserSettingsTests.ts" />
   </ItemGroup>
@@ -89,6 +91,7 @@
     <Folder Include="public\assets\" />
     <Folder Include="public\assets\css\" />
     <Folder Include="public\assets\js\" />
+    <Folder Include="public\assets\js\Impl\" />
     <Folder Include="public\dist\" />
     <Folder Include="public\dist\css\" />
     <Folder Include="public\images\" />
