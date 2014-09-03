@@ -1,6 +1,11 @@
 ﻿var config = require('../config.js');
 var jwt = require('jsonwebtoken');
-var twitter = require('../Twitter.js');
+var twitter;
+
+function setTwitterInstance(t) {
+    twitter = t;
+}
+exports.setTwitterInstance = setTwitterInstance;
 
 function isAdmin(req) {
     if (req.headers.authorization)

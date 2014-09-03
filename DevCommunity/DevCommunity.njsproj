@@ -56,6 +56,7 @@
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\partials.ts" />
     <TypeScriptCompile Include="public\assets\js\app.ts" />
+    <TypeScriptCompile Include="Twitter.ts" />
     <TypeScriptCompile Include="UnitTests\AddMeetingControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\AdminControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\HomeControllerTests..ts" />

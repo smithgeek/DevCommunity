@@ -3,9 +3,14 @@
  * GET partials page.
  */
 import express = require('express');
+import Twitter = require('../Twitter');
 var config = require('../config.js');
 var jwt = require('jsonwebtoken');
-var twitter = require('../Twitter.js');
+var twitter: Twitter.store;
+
+export function setTwitterInstance(t: Twitter.store) {
+    twitter = t;
+}
 
 function isAdmin(req): boolean {
     if (req.headers.authorization)

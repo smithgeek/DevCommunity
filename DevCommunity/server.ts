@@ -2,6 +2,7 @@
 /// <reference path="typings/nodemailer/nodemailer.d.ts" />
 /// <reference path="public/assets/js/Story.ts" />
 /// <reference path="public/assets/js/UserSettings.ts" />
+/// <reference path="Twitter.ts" />
 
 /**
  * Module dependencies.
@@ -12,6 +13,8 @@ import routes = require('./routes/partials');
 import http = require('http');
 import path = require('path');
 import fs = require('fs');
+import Twitter = require('./Twitter');
+
 var nedb = require('nedb');
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
@@ -69,6 +72,11 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
+var randomTweetsDb = new nedb({ filename: 'random_tweets.db.json', autoload: true });
+randomTweetsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+var twitter: Twitter.store = new Twitter.store(randomTweetsDb);
+
+routes.setTwitterInstance(twitter);
 app.get('/', routes.index);
 app.get('/partials/home', routes.home);
 app.get('/partials/about', routes.about);
@@ -96,9 +104,6 @@ userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
 var storyDb = new nedb({ filename: 'stories.db.json', autoload: true });
 storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
-
-var randomTweetsDb = new nedb({ filename: 'random_tweets.db.json', autoload: true });
-randomTweetsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
 var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: true });
 userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
@@ -479,10 +484,13 @@ app.post('/api/restricted/AddTweet', function (req: any, res) {
         var embedCode: string = req.body.embedCode.replace(/"/g, "'");
 
         randomTweetsDb.insert({ html: embedCode }, (err, newDoc) => {
-            if (err != null)
+            if (err != null) {
                 res.send(404, "Could not add tweet.");
-            else
+            }
+            else {
                 res.send(200, "Added tweet. " + newDoc._id);
+                twitter.tweetAdded();
+            }
         });
     }
     else {
@@ -491,7 +499,6 @@ app.post('/api/restricted/AddTweet', function (req: any, res) {
 });
 
 app.get('/api/GetRandomTweet', function (req, res) {
-    var twitter = require('./Twitter.js');
     twitter.getRandomTweet(function (html) {
         if (html == '') {
             res.send(401, '');
