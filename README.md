@@ -6,7 +6,7 @@ Prerequisites
 ============
 [Node](http://nodejs.org/) must be installed
 
-Installation and Configuration for development
+Dev Installation
 ============
 Once you have project cloned open a command prompt at the DevCommunity directory.   Then install of the dependencies using npm. 
 ```javascript
@@ -26,7 +26,14 @@ deploy.bat DEPLOY_DESTINATION
 ```
 this will handle copying all the necessary files, but won't include the typescript files since they aren't really necessary.
 
-Installation for production server
+Running Tests
+============
+Unit tests are ran using travis-ci and can be run manually by running
+```javascript
+npm test
+```
+
+Production Installation
 ============
 ```javascript
 npm install --production

@@ -17,13 +17,13 @@ module.exports = function(config) {
     files: [
       'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
 	  'http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
-	  'public/dist/js/readmore.min.js',
+	  'server/public/dist/js/readmore.min.js',
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js',
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-mocks.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js',
-	  'public/dist/js/angular-local-storage.min.js',
-      'public/dist/ckeditor/ckeditor.js',
+	  'server/public/dist/js/angular-local-storage.min.js',
+      'server/public/dist/ckeditor/ckeditor.js',
       'node_modules/expect.js/index.js',
       'node_modules/sinon/lib/sinon.js',
       'node_modules/sinon/lib/sinon.js',
@@ -40,21 +40,21 @@ module.exports = function(config) {
       'node_modules/sinon/lib/sinon/assert.js',
       'node_modules/sinon/lib/sinon/match.js',
 
-      'public/**/*.js',
+      'server/public/**/*.js',
       'UnitTests/Client/*.js',
     ],
 
 
     // list of files to exclude
     exclude: [
-      'public/assets/js/Impl/DisqusDirective.js'
+      'server/public/assets/js/Impl/DisqusDirective.js'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'public/assets/js/*.js': ['coverage']
+        'server/public/assets/js/*.js': ['coverage']
     },
 
     // test results reporter to use
