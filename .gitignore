@@ -34,3 +34,4 @@ config.js
 deployProd.bat
 
 .ntvs_analysis.dat
+*.tmp

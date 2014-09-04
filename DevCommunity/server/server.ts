@@ -1,5 +1,5 @@
-﻿/// <reference path="typings/express/express.d.ts" />
-/// <reference path="typings/nodemailer/nodemailer.d.ts" />
+﻿/// <reference path="../typings/express/express.d.ts" />
+/// <reference path="../typings/nodemailer/nodemailer.d.ts" />
 /// <reference path="public/assets/js/Story.ts" />
 /// <reference path="public/assets/js/UserSettings.ts" />
 /// <reference path="Twitter.ts" />
@@ -64,15 +64,17 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use("/public", express.static(__dirname + '/public'));
+
+var publicPath: string = path.join(__dirname, 'public');
+app.use(require('stylus').middleware(publicPath));
+app.use("/public", express.static(publicPath));
 
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-var randomTweetsDb = new nedb({ filename: 'random_tweets.db.json', autoload: true });
+var randomTweetsDb = new nedb({ filename: 'Data/random_tweets.db.json', autoload: true });
 randomTweetsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 var twitter: Twitter.store = new Twitter.store(randomTweetsDb);
 
@@ -96,16 +98,16 @@ function LOG(value: string) {
 
 var oneDayInMilliseconds = 86400000;
 
-var meetingIdeasDb = new nedb({ filename: 'meeting_ideas.db.json', autoload: true });
+var meetingIdeasDb = new nedb({ filename: 'Data/meeting_ideas.db.json', autoload: true });
 meetingIdeasDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
-var userVerificationDb = new nedb({ filename: 'user_verification.db.json', autoload: true });
+var userVerificationDb = new nedb({ filename: 'Data/user_verification.db.json', autoload: true });
 userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
-var storyDb = new nedb({ filename: 'stories.db.json', autoload: true });
+var storyDb = new nedb({ filename: 'Data/stories.db.json', autoload: true });
 storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 
-var userSettingsDb = new nedb({ filename: 'user_settings.db.json', autoload: true });
+var userSettingsDb = new nedb({ filename: 'Data/user_settings.db.json', autoload: true });
 userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
 userSettingsDb.ensureIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {

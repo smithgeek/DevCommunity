@@ -3,18 +3,24 @@
   "version": "1.0.0",
   "description": "DeveloperCommunity",
   "main": "server.js",
+  "private": true,
   "author": {
     "name": "Brent",
     "email": ""
   },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/brentosmith/DevCommunity.git"
+  },
   "dependencies": {
     "express": "3.4.4",
-    "jade": "*",
-    "stylus": "*",
-    "nedb": "*",
     "express-jwt": "*",
+    "jade": "*",
     "jsonwebtoken": "*",
-    "nodemailer": "*"
+    "nedb": "*",
+    "nodemailer": "*",
+    "stylus": "*",
+    "supervisor": "^0.6.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
@@ -29,6 +35,7 @@
     "sinon": "^1.10.3"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js"
+    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js",
+    "start": "./node_modules/.bin/supervisor -w server -i server/public server/server.js"
   }
 }

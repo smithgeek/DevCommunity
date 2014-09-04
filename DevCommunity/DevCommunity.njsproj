@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="config.js" />
+    <Compile Include="UnitTests\Client\tests.config.js" />
     <TypeScriptCompile Include="public\assets\js\Impl\Browser.ts" />
     <TypeScriptCompile Include="public\assets\js\MeetingController.ts" />
     <TypeScriptCompile Include="public\assets\js\SingleStoryController.ts" />
@@ -57,17 +58,6 @@
     <TypeScriptCompile Include="routes\partials.ts" />
     <TypeScriptCompile Include="public\assets\js\app.ts" />
     <TypeScriptCompile Include="Twitter.ts" />
-    <TypeScriptCompile Include="UnitTests\AddMeetingControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\AdminControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\HomeControllerTests..ts" />
-    <TypeScriptCompile Include="UnitTests\LoginControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\MeetingControllerTests.ts">
-      <SubType>Code</SubType>
-      <TestFramework>ExportRunner</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="UnitTests\PastMeetingsControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\RouteConfigTests.ts" />
-    <TypeScriptCompile Include="UnitTests\ServiceTests.ts" />
     <Content Include="views\partials\About.jade" />
     <Content Include="views\partials\Brainstorming.jade" />
     <Content Include="views\partials\Contact.jade" />
@@ -80,12 +70,21 @@
     </Content>
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
-    <TypeScriptCompile Include="UnitTests\SingleStoryControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\SiteConfigTests.ts" />
-    <TypeScriptCompile Include="UnitTests\StoryControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\StorySubmitControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\UserSettingsControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\UserSettingsTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\AddMeetingControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\AdminControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\HomeControllerTests..ts" />
+    <TypeScriptCompile Include="UnitTests\Client\LoginControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\MeetingControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\PastMeetingsControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\RouteConfigTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\ServiceTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\SingleStoryControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\SiteConfigTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\StoryControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\StorySubmitControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\UserSettingsControllerTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Client\UserSettingsTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\ConfigTest.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
@@ -99,6 +98,8 @@
     <Folder Include="public\javascripts\" />
     <Folder Include="routes\" />
     <Folder Include="UnitTests\" />
+    <Folder Include="UnitTests\Client\" />
+    <Folder Include="UnitTests\Server\" />
     <Folder Include="views\" />
     <Folder Include="views\partials\" />
   </ItemGroup>

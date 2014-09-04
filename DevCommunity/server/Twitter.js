@@ -19,7 +19,7 @@ var store = (function () {
         }
         var skipCount = this.indexes.pop();
         this.randomTweetsDb.find({}).sort({ _id: 1 }).skip(skipCount).limit(1).exec(function (err, html) {
-            if (err == null) {
+            if (err == null && html.length > 0) {
                 callback(html[0].html);
             } else {
                 callback('');
