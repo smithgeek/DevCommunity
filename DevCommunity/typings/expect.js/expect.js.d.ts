@@ -3,7 +3,8 @@
 // Definitions by: Teppei Sato <https://github.com/teppeis>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-declare function expect(target?: any): Expect.Root;
+// This line was commented out to fix typescript parser
+//declare function expect(target?: any): Expect.Root;
 
 declare module Expect {
     interface Assertion {

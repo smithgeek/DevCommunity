@@ -3,6 +3,7 @@
 /// <reference path="public/assets/js/Story.ts" />
 /// <reference path="public/assets/js/UserSettings.ts" />
 /// <reference path="Twitter.ts" />
+/// <reference path="Database.ts" />
 
 /**
  * Module dependencies.
@@ -14,8 +15,8 @@ import http = require('http');
 import path = require('path');
 import fs = require('fs');
 import Twitter = require('./Twitter');
+import db = require('./Database');
 
-var nedb = require('nedb');
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var nodemailer:Nodemailer = require ('nodemailer'); // https://github.com/andris9/nodemailer
@@ -74,8 +75,7 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-var randomTweetsDb = new nedb({ filename: 'Data/random_tweets.db.json', autoload: true });
-randomTweetsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+var randomTweetsDb: db.Database = new db.NeDb('Data/random_tweets.db.json');
 var twitter: Twitter.store = new Twitter.store(randomTweetsDb);
 
 routes.setTwitterInstance(twitter);
@@ -98,18 +98,12 @@ function LOG(value: string) {
 
 var oneDayInMilliseconds = 86400000;
 
-var meetingIdeasDb = new nedb({ filename: 'Data/meeting_ideas.db.json', autoload: true });
-meetingIdeasDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
+var meetingIdeasDb: db.Database = new db.NeDb('Data/meeting_ideas.db.json');
+var userVerificationDb: db.Database = new db.NeDb('Data/user_verification.db.json');
+var storyDb: db.Database = new db.NeDb('Data/stories.db.json');
+var userSettingsDb: db.Database = new db.NeDb('Data/user_settings.db.json');
 
-var userVerificationDb = new nedb({ filename: 'Data/user_verification.db.json', autoload: true });
-userVerificationDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
-
-var storyDb = new nedb({ filename: 'Data/stories.db.json', autoload: true });
-storyDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
-
-var userSettingsDb = new nedb({ filename: 'Data/user_settings.db.json', autoload: true });
-userSettingsDb.persistence.setAutocompactionInterval(oneDayInMilliseconds);
-userSettingsDb.ensureIndex({ fieldName: 'email', unique: true }, function (err) {
+userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {
         LOG('User settings index error: ' + err.toString());
     }
@@ -151,7 +145,7 @@ function sendVerificationEmail(verificationCode, emailAddress) {
 }
 
 function clearVerificationCodes(email) {
-    userVerificationDb.remove({ email: email }, { multi: true }, function (err, numRemoved) { });
+    userVerificationDb.remove({ Condition: { email: email }, Options: { multi: true } }, function (err, numRemoved) { });
 }
 
 function isAdmin(email: string): boolean {
@@ -181,7 +175,7 @@ function decodeEmail(req, func) {
 }
 
 function sendNewMeetingTopicEmails(meeting: Meeting) {
-    userSettingsDb.find({ NewMeetingEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
+    userSettingsDb.find({ Condition: { NewMeetingEmailNotification: true } }, function (err, settings: Array<UserSettings>) {
         if (err == null) {
             var subject = "Developer Community: New Meeting Idea";
             var body = "<a href='" + config.server.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
@@ -200,7 +194,7 @@ function sendNewMeetingTopicEmails(meeting: Meeting) {
 }
 
 function sendNewStoryEmails(story: Story) {
-    userSettingsDb.find({ NewStoryEmailNotification: true }).exec(function (err, settings: Array<UserSettings>) {
+    userSettingsDb.find({ Condition: { NewStoryEmailNotification: true } }, function (err, settings: Array<UserSettings>) {
         if (err == null) {
             var subject = "Developer Community: New Story Posted";
             var body = "<h3><a href='" + config.server.domain + "/#!/story/" + story._id + "'>" + story.title + "</a></h3><br/>" + story.description;
@@ -219,7 +213,7 @@ function sendNewStoryEmails(story: Story) {
 }
 
 app.post('/verify', function (req, res) {
-    userVerificationDb.find({ email: req.body.email }, function (err, docs) {
+    userVerificationDb.find({ Condition: { email: req.body.email } }, function (err, docs) {
         if (docs.length == 1) {
             var storedCode = docs[0];
             var timeout = storedCode.timestamp + 10 * 60 * 1000;
@@ -279,7 +273,7 @@ app.post('/api/restricted/AddMeeting', function (req:any, res) {
         if (!isAdmin(getUserEmail(req))) {
             condition = { _id: meeting._id, email: getUserEmail(req) };
         }
-        meetingIdeasDb.update(condition, { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, {}, (err, numReplaced) => {
+        meetingIdeasDb.update({ Query: condition, Update: { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, Options: {} }, (err, numReplaced) => {
             if (err != null)
                 res.send(404, "Could not update");
             else
@@ -301,7 +295,7 @@ function anonymizeMeeting(meeting: Meeting, user: string): Meeting {
     return meeting;
 }
 app.get('/api/GetSuggestions', function (req, res) {
-    meetingIdeasDb.find({ $or: [{ date: { $exists: false } }, { date: null }] }).sort({ vote_count: -1 }).exec( (err, suggestions: Meeting[]) => {
+    meetingIdeasDb.find({ Condition: { $or: [{ date: { $exists: false } }, { date: null }] }, Sort: { vote_count: -1 } }, (err, suggestions: Meeting[]) => {
         if (err == null) {
             decodeEmail(req, function (email) {
                 suggestions.forEach((value: Meeting, index: number, array: Meeting[]) => {
@@ -317,7 +311,7 @@ app.get('/api/GetSuggestions', function (req, res) {
 });
 
 app.get('/api/GetArchivedMeetings', function (req, res) {
-    meetingIdeasDb.find({ $and: [{ date: { $exists: true } }, { $not: { date: null } }] }).sort({ date: -1 }).exec((err, suggestions: Meeting[]) => {
+    meetingIdeasDb.find({ Condition: { $and: [{ date: { $exists: true } }, { $not: { date: null } }] }, Sort: { date: -1 } }, (err, suggestions: Meeting[]) => {
         if (err == null) {
             decodeEmail(req, function (email) {
                 suggestions.forEach((value: Meeting, index: number, array: Meeting[]) => {
@@ -333,7 +327,7 @@ app.get('/api/GetArchivedMeetings', function (req, res) {
 });
 
 app.get('/api/GetMeetingById/:id', function (req, res) {
-    meetingIdeasDb.find({ _id: req.params.id }).exec(function (err, meeting) {
+    meetingIdeasDb.find({ Condition: { _id: req.params.id } }, function (err, meeting) {
         if (err == null) {
             decodeEmail(req, function (email) {
                 res.send(200, anonymizeMeeting(meeting[0], email));
@@ -353,7 +347,7 @@ function anonymizeStory(story: Story, user: string): Story {
 }
 
 app.get('/api/GetStoryById/:id', function (req, res) {
-    storyDb.find({ _id: req.params.id }).exec(function (err, stories) {
+    storyDb.find({ Condition: { _id: req.params.id } }, function (err, stories) {
         if (err == null) {
             decodeEmail(req, function (email) {
                 res.send(200, anonymizeStory(stories[0], email));
@@ -376,7 +370,7 @@ app.get('/api/url', function (req, res) {
 
 app.post('/api/restricted/Vote', function (req, res) {
     req.user.email = getUserEmail(req);
-    meetingIdeasDb.find({ _id: req.body._id }).exec(function (err, meetings: Meeting[]) {
+    meetingIdeasDb.find({ Condition: { _id: req.body._id } }, function (err, meetings: Meeting[]) {
         if (err == null) {
             var meeting: Meeting = meetings[0];
             if (-1 == meeting.votes.indexOf(req.user.email)) {
@@ -389,7 +383,7 @@ app.post('/api/restricted/Vote', function (req, res) {
                 meeting.votes.splice(meeting.votes.indexOf(req.user.email), 1);
                 LOG('user ' + req.user.email + ' removed vote for ' + meeting.description);
             }
-            meetingIdeasDb.update({ _id: req.body._id }, meeting, {}, function (err, newDoc) {
+            meetingIdeasDb.update({ Query: { _id: req.body._id }, Update: meeting, Options: {} }, function (err, newDoc) {
                 if (err != null)
                     res.send(404, "Failure");
                 else
@@ -403,7 +397,7 @@ app.post('/api/restricted/Vote', function (req, res) {
 });
 
 app.get('/api/GetStories', function (req, res) {
-    storyDb.find({}).sort({ timestamp: -1 }).exec(function (err, stories: Array<Story>) {
+    storyDb.find({ Condition: {}, Sort: { timestamp: -1 } }, function (err, stories: Array<Story>) {
         if (err == null) {
             decodeEmail(req, function (email) {
                 var sendStories: Array<Story> = new Array<Story>();
@@ -434,7 +428,7 @@ app.post('/api/restricted/AddStory', function (req:any, res) {
         });
     }
     else {
-        storyDb.update({ _id: story._id, submittor: getUserEmail(req) }, { $set: { description: story.description, title: story.title, url: story.url } }, {}, (err, numReplaced) => {
+        storyDb.update({ Query: { _id: story._id, submittor: getUserEmail(req) }, Update: { $set: { description: story.description, title: story.title, url: story.url } }, Options: {} }, (err, numReplaced) => {
             if (err != null || numReplaced < 1)
                 res.send(404, "Could not update");
             else
@@ -445,7 +439,7 @@ app.post('/api/restricted/AddStory', function (req:any, res) {
 
 app.get('/api/restricted/GetUserSettings', function (req, res) {
     LOG(getUserEmail(req));
-    userSettingsDb.find({ email: getUserEmail(req) }).exec(function (err, settings) {
+    userSettingsDb.find({ Condition: { email: getUserEmail(req) } }, function (err, settings) {
         if (err == null)
             res.send(200, settings[0]);
         else
@@ -456,8 +450,16 @@ app.get('/api/restricted/GetUserSettings', function (req, res) {
 app.post('/api/restricted/SetUserSettings', function (req: any, res) {
     var settings: UserSettings = req.body;
     settings.email = getUserEmail(req);
-    userSettingsDb.update({ email: settings.email }, { $set: { NewMeetingEmailNotification: settings.NewMeetingEmailNotification, NewStoryEmailNotification: settings.NewStoryEmailNotification } },
-        { upsert: true }, (err, numReplaced) => {
+    userSettingsDb.update({
+        Query: { email: settings.email },
+        Update: {
+            $set: {
+                NewMeetingEmailNotification: settings.NewMeetingEmailNotification,
+                NewStoryEmailNotification: settings.NewStoryEmailNotification
+            }
+        },
+        Options: { upsert: true }
+    }, (err, numReplaced) => {
             if (err != null || numReplaced < 1)
                 res.send(404, "Could not update");
             else

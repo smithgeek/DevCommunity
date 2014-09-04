@@ -1,12 +1,15 @@
-﻿import express = require('express');
+﻿/// <reference path="Database.ts" />
+
+import express = require('express');
 var config = require('./config.js');
 var nedb = require('nedb');
+import db = require('./Database');
 
 export class store {
     private indexes: Array<number>
     private count: number;
 
-    constructor(private randomTweetsDb) {
+    constructor(private randomTweetsDb: db.Database) {
         this.indexes = new Array<number>();
         this.count = 0;
         this.randomTweetsDb.count({}, (err, c) => {
@@ -21,7 +24,7 @@ export class store {
             this.generateIndexArray(this.count);
         }
         var skipCount = this.indexes.pop();
-        this.randomTweetsDb.find({}).sort({ _id: 1 }).skip(skipCount).limit(1).exec(function (err, html) {
+        this.randomTweetsDb.find({ Condition: {}, Sort: { _id: 1 }, Skip: skipCount, Limit: 1 }, function (err, html) {
             if (err == null && html.length > 0) {
                 callback(html[0].html);
             }
