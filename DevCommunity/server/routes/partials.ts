@@ -4,7 +4,7 @@
  */
 import express = require('express');
 import Twitter = require('../Twitter');
-var config = require('../config.js');
+var config = require('../config/config.js');
 var jwt = require('jsonwebtoken');
 var twitter: Twitter.store;
 

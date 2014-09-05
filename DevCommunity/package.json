@@ -8,9 +8,9 @@
     "name": "Brent",
     "email": ""
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/brentosmith/DevCommunity.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brentosmith/DevCommunity.git"
   },
   "dependencies": {
     "express": "3.4.4",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "coveralls": "^2.11.1",
     "expect.js": "^0.3.1",
+    "istanbul": "^0.3.2",
     "karma": "^0.12.16",
     "karma-cli": "0.0.4",
     "karma-coverage": "^0.2.4",
@@ -35,7 +36,10 @@
     "sinon": "^1.10.3"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js",
+    "test": "npm run test-client && npm run coverage-server",
+    "test-client": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js",
+    "test-server": "node_modules/.bin/mocha UnitTests/Server",
+    "coverage-server": "node_modules/.bin/istanbul cover -x **/config/** -x **/UnitTests/** --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec UnitTests/Server server",
     "start": "./node_modules/.bin/supervisor -w server -i server/public server/server.js"
   }
 }

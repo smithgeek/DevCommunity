@@ -35,41 +35,40 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="config.js" />
+    <Compile Include="server\config-example.js" />
+    <Compile Include="server\config.js" />
     <Compile Include="UnitTests\Client\tests.config.js" />
-    <TypeScriptCompile Include="public\assets\js\Impl\Browser.ts" />
-    <TypeScriptCompile Include="public\assets\js\MeetingController.ts" />
-    <TypeScriptCompile Include="public\assets\js\SingleStoryController.ts" />
-    <TypeScriptCompile Include="public\assets\js\PastMeetingsController.ts" />
-    <Content Include="views\partials\admin.jade" />
-    <Content Include="views\partials\HomeCarousel.jade" />
-    <Content Include="views\partials\meeting.jade" />
-    <Content Include="views\partials\story.jade" />
-    <Content Include="views\partials\UserSettings.jade" />
-    <TypeScriptCompile Include="public\assets\js\StoryController.ts" />
-    <Content Include="views\partials\Stories.jade" />
-    <Content Include="views\partials\PastMeetings.jade" />
-    <TypeScriptCompile Include="public\assets\js\HomeController.ts" />
-    <TypeScriptCompile Include="public\assets\js\Services.ts" />
-    <TypeScriptCompile Include="public\assets\js\Story.ts" />
-    <TypeScriptCompile Include="public\assets\js\UserSettings.ts" />
-    <TypeScriptCompile Include="server.ts" />
-    <TypeScriptCompile Include="routes\index.ts" />
-    <TypeScriptCompile Include="routes\partials.ts" />
-    <TypeScriptCompile Include="public\assets\js\app.ts" />
-    <TypeScriptCompile Include="Twitter.ts" />
-    <Content Include="views\partials\About.jade" />
-    <Content Include="views\partials\Brainstorming.jade" />
-    <Content Include="views\partials\Contact.jade" />
-    <Content Include="views\partials\home.jade" />
+    <Content Include="server\public\assets\css\theme.css" />
+    <Content Include="server\public\assets\images\NewArchives.png" />
+    <Content Include="server\views\index.jade" />
+    <Content Include="server\views\partials\About.jade" />
+    <Content Include="server\views\partials\admin.jade" />
+    <Content Include="server\views\partials\Brainstorming.jade" />
+    <Content Include="server\views\partials\Contact.jade" />
+    <Content Include="server\views\partials\Error.jade" />
+    <Content Include="server\views\partials\home.jade" />
+    <Content Include="server\views\partials\HomeCarousel.jade" />
+    <Content Include="server\views\partials\meeting.jade" />
+    <Content Include="server\views\partials\PastMeetings.jade" />
+    <Content Include="server\views\partials\Stories.jade" />
+    <Content Include="server\views\partials\story.jade" />
+    <Content Include="server\views\partials\UserSettings.jade" />
+    <TypeScriptCompile Include="server\Database.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\app.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\HomeController.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\Impl\Browser.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\Impl\DisqusDirective.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\MeetingController.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\PastMeetingsController.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\Services.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\SingleStoryController.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\Story.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\StoryController.ts" />
+    <TypeScriptCompile Include="server\public\assets\js\UserSettings.ts" />
+    <TypeScriptCompile Include="server\routes\partials.ts" />
+    <TypeScriptCompile Include="server\server.ts" />
+    <TypeScriptCompile Include="server\Twitter.ts" />
     <Content Include="package.json" />
-    <Content Include="public\assets\css\theme.css" />
-    <Content Include="public\dist\css\bootstrap-theme.min.css" />
-    <Content Include="public\dist\css\bootstrap.min.css">
-      <Publish>True</Publish>
-    </Content>
-    <Content Include="views\index.jade" />
-    <Content Include="views\layout.jade" />
     <TypeScriptCompile Include="UnitTests\Client\AddMeetingControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\AdminControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\HomeControllerTests..ts" />
@@ -84,24 +83,22 @@
     <TypeScriptCompile Include="UnitTests\Client\StorySubmitControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsTests.ts" />
-    <TypeScriptCompile Include="UnitTests\Server\ConfigTest.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\TwitterTest.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="public\" />
-    <Folder Include="public\assets\" />
-    <Folder Include="public\assets\css\" />
-    <Folder Include="public\assets\js\" />
-    <Folder Include="public\assets\js\Impl\" />
-    <Folder Include="public\dist\" />
-    <Folder Include="public\dist\css\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="routes\" />
+    <Folder Include="server\" />
+    <Folder Include="server\public\" />
+    <Folder Include="server\public\assets\" />
+    <Folder Include="server\public\assets\css\" />
+    <Folder Include="server\public\assets\images\" />
+    <Folder Include="server\public\assets\js\" />
+    <Folder Include="server\public\assets\js\Impl\" />
+    <Folder Include="server\routes\" />
+    <Folder Include="server\views\" />
+    <Folder Include="server\views\partials\" />
     <Folder Include="UnitTests\" />
     <Folder Include="UnitTests\Client\" />
     <Folder Include="UnitTests\Server\" />
-    <Folder Include="views\" />
-    <Folder Include="views\partials\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
   <ProjectExtensions>

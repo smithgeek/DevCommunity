@@ -18,7 +18,7 @@ var db = require('./Database');
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
-var config = require('./config.js');
+var config = require('./config/config.js');
 
 var app = express();
 

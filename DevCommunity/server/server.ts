@@ -20,7 +20,7 @@ import db = require('./Database');
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var nodemailer:Nodemailer = require ('nodemailer'); // https://github.com/andris9/nodemailer
-var config = require('./config.js');
+var config = require('./config/config.js');
 
 var app = express();
 

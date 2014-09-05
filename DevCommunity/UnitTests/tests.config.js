@@ -63,12 +63,12 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage', 'html'],
 
     htmlReporter: {
-        outputDir: 'TestResults'
+        outputDir: 'TestResults/Client/'
 	},
 
 	coverageReporter: {
 	    type: 'lcov',
-        dir: 'TestResults/coverage/'
+        dir: 'TestResults/Client/coverage/'
 	},
 
     // web server port
