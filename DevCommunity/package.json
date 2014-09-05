@@ -39,7 +39,7 @@
     "test": "npm run test-client && npm run coverage-server",
     "test-client": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js",
     "test-server": "node_modules/.bin/mocha UnitTests/Server",
-    "coverage-server": "node_modules/.bin/istanbul cover -x **/config/** -x **/UnitTests/** --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec UnitTests/Server server",
+    "coverage-server": "node_modules/.bin/istanbul cover -x config*.js -x **/UnitTests/** --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec UnitTests/Server server",
     "start": "./node_modules/.bin/supervisor -w server -i server/public server/server.js"
   }
 }
