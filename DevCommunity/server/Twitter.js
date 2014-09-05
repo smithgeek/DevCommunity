@@ -1,5 +1,4 @@
 ﻿/// <reference path="Database.ts" />
-var config = require('./config/config.js');
 var nedb = require('nedb');
 
 var store = (function () {

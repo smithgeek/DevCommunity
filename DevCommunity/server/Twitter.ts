@@ -1,7 +1,5 @@
 ﻿/// <reference path="Database.ts" />
 
-import express = require('express');
-var config = require('./config/config.js');
 var nedb = require('nedb');
 import db = require('./Database');
 
