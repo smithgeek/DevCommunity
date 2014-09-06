@@ -1,8 +1,8 @@
-﻿/// <reference path="../../../typings/angularjs/angular.d.ts" />
-/// <reference path="../../../typings/jquery/jquery.d.ts" />
-/// <reference path="../../../typings/bootstrap/bootstrap.d.ts" />
-/// <reference path="../../../typings/readmore/readmore.d.ts" />
-/// <reference path="../../../typings/ckeditor/ckeditor.d.ts" />
+﻿/// <reference path="../../../../typings/angularjs/angular.d.ts" />
+/// <reference path="../../../../typings/jquery/jquery.d.ts" />
+/// <reference path="../../../../typings/bootstrap/bootstrap.d.ts" />
+/// <reference path="../../../../typings/readmore/readmore.d.ts" />
+/// <reference path="../../../../typings/ckeditor/ckeditor.d.ts" />
 /// <reference path="Services.ts" />
 /// <reference path="Story.ts" />
 

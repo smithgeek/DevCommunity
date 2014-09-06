@@ -2,6 +2,7 @@
 /// <reference path="../typings/nodemailer/nodemailer.d.ts" />
 /// <reference path="public/assets/js/Story.ts" />
 /// <reference path="public/assets/js/UserSettings.ts" />
+/// <reference path="public/assets/js/Services.ts" />
 /// <reference path="Twitter.ts" />
 /// <reference path="Database.ts" />
 

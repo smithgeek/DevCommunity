@@ -28,10 +28,13 @@ node_modules
 *.db.json
 */TestResults/*
 
-config.js
+config.json
 *.js.map
 
 deployProd.bat
 
 .ntvs_analysis.dat
 *.tmp
+
+//typescript cache
+*/.tscache/*

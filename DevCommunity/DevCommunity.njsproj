@@ -35,6 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GruntFile.js" />
     <Compile Include="server\config-example.js" />
     <Compile Include="server\config.js" />
     <Compile Include="UnitTests\Client\tests.config.js" />
