@@ -24,8 +24,7 @@ describe('DevCommunityEmailerTests', function () {
             mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", true, logger);
-            sinon.spy(mailer, "sendEmail");
-            spy = mailer.sendEmail;
+            spy = sinon.spy(mailer, "sendEmail");
         });
 
         afterEach(() => {

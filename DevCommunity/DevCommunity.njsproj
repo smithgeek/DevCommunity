@@ -93,7 +93,7 @@
     <TypeScriptCompile Include="server\WebsiteVisitorFactory.ts" />
     <TypeScriptCompile Include="UnitTests\Client\AddMeetingControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\AdminControllerTests.ts" />
-    <TypeScriptCompile Include="UnitTests\Client\HomeControllerTests..ts" />
+    <TypeScriptCompile Include="UnitTests\Client\HomeControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\LoginControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\MeetingControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\PastMeetingsControllerTests.ts" />
@@ -111,6 +111,7 @@
       <TestFramework>
       </TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="UnitTests\Server\SecurityTest.ts" />
     <TypeScriptCompile Include="UnitTests\Server\TwitterTest.ts" />
     <TypeScriptCompile Include="UnitTests\Server\WebsiteVisitorFactoryTests.ts" />
     <TypeScriptCompile Include="UnitTests\Server\WebsiteVisitorTest.ts" />
