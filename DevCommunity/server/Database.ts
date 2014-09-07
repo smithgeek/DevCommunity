@@ -2,7 +2,7 @@
 var nedb = require('nedb');
 
 export interface SelectQuery {
-    Condition: any;
+    Condition?: any;
     Sort?: any;
     Skip?: number;
     Limit?: number;
@@ -20,17 +20,17 @@ export interface RemoveQuery {
 }
 
 export interface Database {
-    count(query, callback): void;
+    count(query, callback: (count: number) => void): void;
 
-    find(query: SelectQuery, callback): void;
+    find(query: SelectQuery, callback: (err: any, results: Array<any>) => void): void;
 
-    insert(obj, callback): void;
+    insert(obj, callback: (err: any, inserted: any) => void): void;
 
-    update(query: UpdateQuery, callback): void;
+    update(query: UpdateQuery, callback: (err: any, updatedCount: number) => void): void;
 
-    remove(query: RemoveQuery, callback): void;
+    remove(query: RemoveQuery, callback: (err: any, removedCount: number) => void): void;
 
-    addIndex(condition, callback): void;
+    addIndex(condition, callback: (err: any) => void): void;
 }
 
 export class NeDb implements Database {
@@ -42,7 +42,7 @@ export class NeDb implements Database {
         this.db.persistence.setAutocompactionInterval(oneDayInMilliseconds);
     }
 
-    public count(query, callback): void{
+    public count(query, callback: (count: number) => void): void{
         this.db.count(query, (err, count) => {
             if (err == null) {
                 callback(count);
@@ -53,7 +53,10 @@ export class NeDb implements Database {
         });
     }
 
-    public find(query: SelectQuery, callback): void {
+    public find(query: SelectQuery, callback: (err: any, results: Array<any>) => void): void {
+        if (query.Condition == null) {
+            query.Condition = {};
+        }
         var cursor = this.db.find(query.Condition);
         if (query.Sort != null) {
             cursor.sort(query.Sort);
@@ -67,19 +70,19 @@ export class NeDb implements Database {
         cursor.exec(callback);
     }
 
-    public insert(obj, callback): void {
+    public insert(obj, callback: (err: any, inserted: any) => void): void {
         this.db.insert(obj, callback);
     }
 
-    public update(query: UpdateQuery, callback): void {
+    public update(query: UpdateQuery, callback: (err: any, updatedCount: number) => void): void {
         this.db.update(query.Query, query.Update, query.Options, callback);
     }
 
-    public remove(query: RemoveQuery, callback): void {
+    public remove(query: RemoveQuery, callback: (err: any, removedCount: number) => void): void {
         this.db.remove(query.Condition, query.Options, callback);
     }
 
-    public addIndex(condition, callback): void {
+    public addIndex(condition, callback: (err: any) => void): void {
         this.db.ensureIndex(condition, callback);
     }
 }

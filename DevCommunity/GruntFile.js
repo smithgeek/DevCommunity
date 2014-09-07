@@ -22,4 +22,6 @@ module.exports = function (grunt) {
         },
     });
     grunt.registerTask('build', ['ts:client_dev', 'ts:server_dev']);
+    grunt.registerTask('build_server', ['ts:server_dev']);
+    grunt.registerTask('build_client', ['ts:client_dev']);
 }

@@ -3,8 +3,7 @@
 // Definitions by: Teppei Sato <https://github.com/teppeis>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-// This line was commented out to fix typescript parser
-//declare function expect(target?: any): Expect.Root;
+declare function expect(target?: any): Expect.Root;
 
 declare module Expect {
     interface Assertion {
@@ -185,8 +184,8 @@ declare module Expect {
         (type: Function): Assertion;
     }
 
-    interface Not extends Expect.NotBase {
-        to: Expect.ToBase;
+    interface Not extends NotBase {
+        to: ToBase;
     }
 
     interface NotBase extends Assertion {
@@ -196,8 +195,8 @@ declare module Expect {
         only: Only;
     }
 
-    interface To extends Expect.ToBase {
-        not: Expect.NotBase;
+    interface To extends ToBase {
+        not: NotBase;
     }
 
     interface ToBase extends Assertion {

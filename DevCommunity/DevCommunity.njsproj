@@ -10,6 +10,12 @@
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <DebuggerPort>5858</DebuggerPort>
+    <NodeExePath>
+    </NodeExePath>
+    <NodeExeArguments>
+    </NodeExeArguments>
+    <ScriptArguments>
+    </ScriptArguments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -26,7 +32,7 @@
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ProjectFiles</ProjectView>
     <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>True</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,11 +40,15 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Mocha' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Mocha\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="GruntFile.js" />
-    <Compile Include="server\config-example.js" />
-    <Compile Include="server\config.js" />
+    <Compile Include="server\config\config.js" />
     <Compile Include="UnitTests\Client\tests.config.js" />
+    <Content Include="server\config\config.js.example" />
     <Content Include="server\public\assets\css\theme.css" />
     <Content Include="server\public\assets\images\NewArchives.png" />
     <Content Include="server\views\index.jade" />
@@ -54,6 +64,13 @@
     <Content Include="server\views\partials\Stories.jade" />
     <Content Include="server\views\partials\story.jade" />
     <Content Include="server\views\partials\UserSettings.jade" />
+    <TypeScriptCompile Include="server\Api.ts" />
+    <TypeScriptCompile Include="server\DevCommunityEmailer.ts" />
+    <TypeScriptCompile Include="server\HttpResponse.ts" />
+    <TypeScriptCompile Include="server\Logger.ts" />
+    <TypeScriptCompile Include="server\Mailer.ts" />
+    <TypeScriptCompile Include="server\PublicApi.ts" />
+    <TypeScriptCompile Include="server\RestrictedApi.ts" />
     <TypeScriptCompile Include="server\Database.ts" />
     <TypeScriptCompile Include="server\public\assets\js\app.ts" />
     <TypeScriptCompile Include="server\public\assets\js\HomeController.ts" />
@@ -67,9 +84,13 @@
     <TypeScriptCompile Include="server\public\assets\js\StoryController.ts" />
     <TypeScriptCompile Include="server\public\assets\js\UserSettings.ts" />
     <TypeScriptCompile Include="server\routes\partials.ts" />
+    <TypeScriptCompile Include="server\Security.ts" />
     <TypeScriptCompile Include="server\server.ts" />
     <TypeScriptCompile Include="server\Twitter.ts" />
     <Content Include="package.json" />
+    <TypeScriptCompile Include="server\Visitor.ts" />
+    <TypeScriptCompile Include="server\WebsiteVisitor.ts" />
+    <TypeScriptCompile Include="server\WebsiteVisitorFactory.ts" />
     <TypeScriptCompile Include="UnitTests\Client\AddMeetingControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\AdminControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\HomeControllerTests..ts" />
@@ -84,10 +105,12 @@
     <TypeScriptCompile Include="UnitTests\Client\StorySubmitControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\DatabaseTests.ts" />
     <TypeScriptCompile Include="UnitTests\Server\TwitterTest.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="server\" />
+    <Folder Include="server\config\" />
     <Folder Include="server\public\" />
     <Folder Include="server\public\assets\" />
     <Folder Include="server\public\assets\css\" />

@@ -17,6 +17,14 @@ import path = require('path');
 import fs = require('fs');
 import Twitter = require('./Twitter');
 import db = require('./Database');
+import API = require('./Api');
+import Visitor = require('./Visitor');
+import DevCommunityEmailer = require('./DevCommunityEmailer');
+import Mailer = require('./Mailer');
+import PublicApi = require('./PublicApi');
+import RestrictedApi = require('./RestrictedApi');
+import Security = require('./Security');
+import WebsiteVisitorFactory = require('./WebsiteVisitorFactory');
 
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
@@ -77,7 +85,7 @@ if ('development' == app.get('env')) {
 }
 
 var randomTweetsDb: db.Database = new db.NeDb('Data/random_tweets.db.json');
-var twitter: Twitter.store = new Twitter.store(randomTweetsDb);
+var twitter: Twitter = new Twitter(randomTweetsDb);
 
 routes.setTwitterInstance(twitter);
 app.get('/', routes.index);
@@ -92,9 +100,12 @@ app.get('/partials/meeting', routes.meeting);
 app.get('/partials/story', routes.story);
 app.get('/partials/admin', routes.admin);
 
-function LOG(value: string) {
-    console.log(value);
-    logFile.write(value + '\r\n');
+import Logger = require('./Logger');
+class ConsoleAndFileLogger implements Logger {
+    log(message?: any, ...optionalParams: any[]): void {
+        console.log(message);
+        logFile.write(message + '\r\n');
+    }
 }
 
 var oneDayInMilliseconds = 86400000;
@@ -104,416 +115,115 @@ var userVerificationDb: db.Database = new db.NeDb('Data/user_verification.db.jso
 var storyDb: db.Database = new db.NeDb('Data/stories.db.json');
 var userSettingsDb: db.Database = new db.NeDb('Data/user_settings.db.json');
 
+var logger: Logger = new ConsoleAndFileLogger();
+var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, config.mail.smtp, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
+
+var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb);
+var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsDb, storyDb, meetingIdeasDb, emailer, logger);
+var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger);
+var api: API = new API(publicApi, restrictedApi, security);
+
+var visitorFactory: WebsiteVisitorFactory = new WebsiteVisitorFactory(security, config.server.admin);
 userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {
-        LOG('User settings index error: ' + err.toString());
+        logger.log('User settings index error: ' + err.toString());
     }
 });
 
-function generateVerificationCode() {
-    return Math.floor(Math.random() * 900000) + 100000;
-}
-
-function sendEmail(toEmailAddress, subject, body) {
-    if (config.server.sendEmails) {
-        var smtpTransport: Transport = nodemailer.createTransport("SMTP", config.mail.smtp);
-
-        var message: MailComposer = {
-            from: config.mail.from,
-            to: toEmailAddress,
-            subject: subject,
-            html: body
-        };
-
-        smtpTransport.sendMail(message, function (error) {
-            if (error) {
-                LOG(error.message);
-            }
-            else {
-                LOG("Sent email to " + toEmailAddress + ": " + subject);
-            }
-            smtpTransport.close();
-        });
-    }
-    else {
-        LOG("Emailing " + subject + " to " + toEmailAddress);
-        LOG(body);
-    }
-}
-
-function sendVerificationEmail(verificationCode, emailAddress) {
-    sendEmail(emailAddress, "Developer Community: Verification Code", "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. <br/><br/>Verification Code: " + verificationCode);
-}
-
-function clearVerificationCodes(email) {
-    userVerificationDb.remove({ Condition: { email: email }, Options: { multi: true } }, function (err, numRemoved) { });
-}
-
-function isAdmin(email: string): boolean {
-    return config.server.admin == email;
-}
-
-function getUserEmail(req): string {
-    if (req.user && req.user.email)
-        return req.user.email;
-    else
-        return "";
-}
-
-function decodeEmail(req, func) {
-    if (req.headers && req.headers.authorization) {
-        jwt.verify(req.headers.authorization.substr(7), config.server.jwtSecret, function (err, decoded) {
-            if (err == null) {
-                func(decoded.email);
-            }
-            else {
-                func("");
-            }
-        });
-    }
-    else
-        func("");
-}
-
-function sendNewMeetingTopicEmails(meeting: Meeting) {
-    userSettingsDb.find({ Condition: { NewMeetingEmailNotification: true } }, function (err, settings: Array<UserSettings>) {
-        if (err == null) {
-            var subject = "Developer Community: New Meeting Idea";
-            var body = "<a href='" + config.server.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
-            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
-            for (var i = 0; i < settings.length; i++) {
-                var user = settings[i].email;
-                if (config.server.sendEmailToAuthor || user != meeting.email) {
-                    sendEmail(user, subject, body);
-                }
-            }
-        }
-        else {
-            LOG(err);
-        }
-    });
-}
-
-function sendNewStoryEmails(story: Story) {
-    userSettingsDb.find({ Condition: { NewStoryEmailNotification: true } }, function (err, settings: Array<UserSettings>) {
-        if (err == null) {
-            var subject = "Developer Community: New Story Posted";
-            var body = "<h3><a href='" + config.server.domain + "/#!/story/" + story._id + "'>" + story.title + "</a></h3><br/>" + story.description;
-            body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + config.server.domain + "/#!/UserSettings'>here</a>.";
-            for (var i = 0; i < settings.length; i++) {
-                var user = settings[i].email;
-                if (config.server.sendEmailToAuthor || user != story.submittor) {
-                    sendEmail(user, subject, body);
-                }
-            }
-        }
-        else {
-            LOG(err);
-        }
-    });
-}
-
 app.post('/verify', function (req, res) {
-    userVerificationDb.find({ Condition: { email: req.body.email } }, function (err, docs) {
-        if (docs.length == 1) {
-            var storedCode = docs[0];
-            var timeout = storedCode.timestamp + 10 * 60 * 1000;
-            if (req.body.verificationCode == storedCode.verificationCode && Date.now() <= timeout) {
-                var profile = { email: req.body.email, admin: isAdmin(req.body.email) };
-                var token = jwt.sign(profile, config.server.jwtSecret);
-                res.json({ token: token });
-                clearVerificationCodes(req.body.email);
-                var emailAddressString: string = req.body.email;
-                var settings = { email: emailAddressString, NewMeetingEmailNotification: true, NewStoryEmailNotification: true };
-                userSettingsDb.insert(settings, (err, newDoc) => {
-                    if (err != null)
-                        LOG("Could not add user " + emailAddressString);
-                    else
-                        LOG("Added user settings for " + emailAddressString);
-                });
-                return;
-            }
-        }
-        res.send(401, "Invalid verification code.");
+    visitorFactory.get(req, (visitor) => {
+        api.security.verify(visitor, req.body.verificationCode, res);
     });
 });
 
 app.post('/identify', (req, res) => {
-    var email: string = req.body.email;
-    if (config.server.restrictedLoginDomain == "" || email.indexOf(config.server.restrictedLoginDomain) != -1) {
-        clearVerificationCodes(req.body.email);
-
-        var verificationCode = generateVerificationCode();
-        userVerificationDb.insert({ email: req.body.email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
-        sendVerificationEmail(verificationCode, req.body.email);
-        LOG("Verification code: " + verificationCode);
-        res.send(200, "Success");
-    }
-    else {
-        res.send(401, "Invalid, you must use a " + config.server.restrictedLoginDomain + " address.");
-    }
-});
-
-app.post('/api/restricted/AddMeeting', function (req:any, res) {
-    var meeting = req.body;
-    meeting.email = getUserEmail(req);
-    if (meeting._id == "") {
-        meetingIdeasDb.insert(meeting, function (err, newDoc) {
-            if (err != null)
-                res.send(404, "Failure");
-            else {
-                res.send(200, { action: "Added", meeting: newDoc });
-                if (newDoc.date == null) {
-                    sendNewMeetingTopicEmails(newDoc);
-                }
-            }
-        });
-    }
-    else {
-        var condition = { _id: meeting._id };
-        if (!isAdmin(getUserEmail(req))) {
-            condition = { _id: meeting._id, email: getUserEmail(req) };
-        }
-        meetingIdeasDb.update({ Query: condition, Update: { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, Options: {} }, (err, numReplaced) => {
-            if (err != null)
-                res.send(404, "Could not update");
-            else
-                if (numReplaced > 0)
-                    res.send(200, { action: "Updated", meeting: meeting });
-                else
-                    res.send(404, "Could not update");
-        });
-    }
-});
-
-function anonymizeMeeting(meeting: Meeting, user: string): Meeting {
-    if (meeting.email != user) {
-        meeting.email = "";
-    }
-    meeting.votes = meeting.votes.filter((value: string, index: number, array: string[]): boolean => {
-        return value == user;
+    visitorFactory.get(req, (visitor) => {
+        api.security.identify(visitor, res);
     });
-    return meeting;
-}
+});
+
+app.post('/api/restricted/AddMeeting', function (req: any, res) {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.addMeeting(visitor, req.body, res);
+    });
+});
+
 app.get('/api/GetSuggestions', function (req, res) {
-    meetingIdeasDb.find({ Condition: { $or: [{ date: { $exists: false } }, { date: null }] }, Sort: { vote_count: -1 } }, (err, suggestions: Meeting[]) => {
-        if (err == null) {
-            decodeEmail(req, function (email) {
-                suggestions.forEach((value: Meeting, index: number, array: Meeting[]) => {
-                    anonymizeMeeting(value, email);
-                });
-                res.send(200, suggestions);
-            });
-        }
-        else {
-            res.send(404, err);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.public.getMeetingSuggestions(visitor, res);
     });
 });
 
 app.get('/api/GetArchivedMeetings', function (req, res) {
-    meetingIdeasDb.find({ Condition: { $and: [{ date: { $exists: true } }, { $not: { date: null } }] }, Sort: { date: -1 } }, (err, suggestions: Meeting[]) => {
-        if (err == null) {
-            decodeEmail(req, function (email) {
-                suggestions.forEach((value: Meeting, index: number, array: Meeting[]) => {
-                    anonymizeMeeting(value, email);
-                });
-                res.send(200, suggestions);
-            });
-        }
-        else {
-            res.send(404, err);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.public.getArhivedMeetings(visitor, res);
     });
 });
 
 app.get('/api/GetMeetingById/:id', function (req, res) {
-    meetingIdeasDb.find({ Condition: { _id: req.params.id } }, function (err, meeting) {
-        if (err == null) {
-            decodeEmail(req, function (email) {
-                res.send(200, anonymizeMeeting(meeting[0], email));
-            });
-        }
-        else {
-            res.send(404, err);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.public.getMeetingById(req.params.id, visitor, res);
     });
 });
 
-function anonymizeStory(story: Story, user: string): Story {
-    if (story.submittor != user) {
-        story.submittor = "";
-    }
-    return story;
-}
-
 app.get('/api/GetStoryById/:id', function (req, res) {
-    storyDb.find({ Condition: { _id: req.params.id } }, function (err, stories) {
-        if (err == null) {
-            decodeEmail(req, function (email) {
-                res.send(200, anonymizeStory(stories[0], email));
-            });
-        }
-        else {
-            res.send(404, err);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.public.getStoryById(req.params.id, visitor, res);
     });
 });
 
 app.get('/api/url', function (req, res) {
-    var redirect: string = req.query.url;
-    if (redirect.substr(0, 4) != 'http') {
-        redirect = 'http://' + redirect;
-    }
-    LOG(req.connection.remoteAddress + " is going to " + redirect);
-    res.redirect(redirect);
+    var redirect: string = api.public.redirectUrl(req.query.url, res);
+    logger.log(req.connection.remoteAddress + " is going to " + redirect);
 });
 
 app.post('/api/restricted/Vote', function (req, res) {
-    req.user.email = getUserEmail(req);
-    meetingIdeasDb.find({ Condition: { _id: req.body._id } }, function (err, meetings: Meeting[]) {
-        if (err == null) {
-            var meeting: Meeting = meetings[0];
-            if (-1 == meeting.votes.indexOf(req.user.email)) {
-                meeting.vote_count++;
-                meeting.votes.push(req.user.email);
-                LOG('user ' + req.user.email + ' voted for ' + meeting.description);
-            }
-            else {
-                meeting.vote_count--;
-                meeting.votes.splice(meeting.votes.indexOf(req.user.email), 1);
-                LOG('user ' + req.user.email + ' removed vote for ' + meeting.description);
-            }
-            meetingIdeasDb.update({ Query: { _id: req.body._id }, Update: meeting, Options: {} }, function (err, newDoc) {
-                if (err != null)
-                    res.send(404, "Failure");
-                else
-                    res.send(200, "Success");
-            });
-        }
-        else {
-            res.send(404, "Failure");
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.vote(visitor, req.body._id, res);
     });
 });
 
 app.get('/api/GetStories', function (req, res) {
-    storyDb.find({ Condition: {}, Sort: { timestamp: -1 } }, function (err, stories: Array<Story>) {
-        if (err == null) {
-            decodeEmail(req, function (email) {
-                var sendStories: Array<Story> = new Array<Story>();
-                for (var i = 0; i < stories.length; ++i) {
-                    sendStories.push(anonymizeStory(stories[i], email));
-                }
-                res.send(200, sendStories);
-            });
-        }
-        else {
-            res.send(404, err);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.public.getStories(visitor, res);
     });
 });
 
-app.post('/api/restricted/AddStory', function (req:any, res) {
-    var story: Story = req.body;
-    story.submittor = getUserEmail(req);
-    story.timestamp = Date.now();
-    if (story._id == null || story._id == "") {
-        storyDb.insert(story, function (err, newDoc) {
-            if (err != null)
-                res.send(404, "Failure");
-            else {
-                res.send(200, { action: "Added", story: newDoc });
-                sendNewStoryEmails(newDoc);
-            }
-        });
-    }
-    else {
-        storyDb.update({ Query: { _id: story._id, submittor: getUserEmail(req) }, Update: { $set: { description: story.description, title: story.title, url: story.url } }, Options: {} }, (err, numReplaced) => {
-            if (err != null || numReplaced < 1)
-                res.send(404, "Could not update");
-            else
-                res.send(200, { action: "Updated", story: story });
-        });
-    }
+app.post('/api/restricted/AddStory', function (req: any, res) {
+    visitorFactory.get(res, (visitor) => {
+        api.restricted.addStory(visitor, req.body, res);
+    });
 });
 
 app.get('/api/restricted/GetUserSettings', function (req, res) {
-    LOG(getUserEmail(req));
-    userSettingsDb.find({ Condition: { email: getUserEmail(req) } }, function (err, settings) {
-        if (err == null)
-            res.send(200, settings[0]);
-        else
-            res.send(404, err);
+    visitorFactory.get(req, (visitor) => {
+        logger.log("Get user settings" + visitor.getEmail());
+        api.restricted.getUserSettings(visitor, res);
     });
 });
 
 app.post('/api/restricted/SetUserSettings', function (req: any, res) {
-    var settings: UserSettings = req.body;
-    settings.email = getUserEmail(req);
-    userSettingsDb.update({
-        Query: { email: settings.email },
-        Update: {
-            $set: {
-                NewMeetingEmailNotification: settings.NewMeetingEmailNotification,
-                NewStoryEmailNotification: settings.NewStoryEmailNotification
-            }
-        },
-        Options: { upsert: true }
-    }, (err, numReplaced) => {
-            if (err != null || numReplaced < 1)
-                res.send(404, "Could not update");
-            else
-                res.send(200, { action: "Updated", settings: settings });
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.setUserSettings(visitor, req.body, res);
     });
 });
 
 app.post('/api/restricted/AddUser', function (req: any, res) {
-    if (isAdmin(getUserEmail(req))) {
-        var email: string = req.body.user;
-        var settings = { email: email, NewMeetingEmailNotification: true, NewStoryEmailNotification: true};
-        userSettingsDb.insert(settings, (err, newDoc) => {
-            if (err != null)
-                res.send(404, "Could not add user " + email);
-            else
-                res.send(200, "Added user " + email);
-        });
-    }
-    else {
-        res.send(404, "Who do you think you are?  You have to be an administrator to add a user.");
-    }
-});
-
-app.post('/api/restricted/AddTweet', function (req: any, res) {
-    if (isAdmin(getUserEmail(req))) {
-        var embedCode: string = req.body.embedCode.replace(/"/g, "'");
-
-        randomTweetsDb.insert({ html: embedCode }, (err, newDoc) => {
-            if (err != null) {
-                res.send(404, "Could not add tweet.");
-            }
-            else {
-                res.send(200, "Added tweet. " + newDoc._id);
-                twitter.tweetAdded();
-            }
-        });
-    }
-    else {
-        res.send(404, "Who do you think you are?  You have to be an administrator to add a tweet.");
-    }
-});
-
-app.get('/api/GetRandomTweet', function (req, res) {
-    twitter.getRandomTweet(function (html) {
-        if (html == '') {
-            res.send(401, '');
-        }
-        else {
-            res.send(200, html);
-        }
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.addUser(visitor, req.body.user, res);
     });
 });
 
+app.post('/api/restricted/AddTweet', function (req: any, res) {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.addTweet(visitor, req.body.embedCode, res);
+    });
+});
+
+app.get('/api/GetRandomTweet', function (req, res) {
+    api.public.getRandomTweet(res);
+});
+
 http.createServer(app).listen(app.get('port'), function () {
-    LOG('Express server listening on port ' + app.get('port'));
+    logger.log('Express server listening on port ' + app.get('port'));
 });

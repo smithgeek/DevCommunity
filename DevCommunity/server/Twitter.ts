@@ -1,17 +1,17 @@
-﻿/// <reference path="Database.ts" />
-
-var nedb = require('nedb');
+﻿var nedb = require('nedb');
 import db = require('./Database');
 
-export class store {
+class Twitter {
     private indexes: Array<number>
     private count: number;
+    private randomTweetsDb: db.Database;
 
-    constructor(private randomTweetsDb: db.Database) {
+    constructor(database: db.Database) {
+        this.randomTweetsDb = database;
         this.indexes = new Array<number>();
         this.count = 0;
-        this.randomTweetsDb.count({}, (err, c) => {
-            if (err == null && c > 0) {
+        this.randomTweetsDb.count({}, (c) => {
+            if (c > 0) {
                 this.generateIndexArray(c);
             }
         });
@@ -59,3 +59,5 @@ export class store {
         this.generateIndexArray(this.count + 1);
     }
 }
+
+export = Twitter;
