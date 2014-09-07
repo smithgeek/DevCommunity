@@ -2,8 +2,8 @@
 /// <reference path="../../typings/expect.js/expect.js.d.ts" />
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
-/// <reference path="../../public/assets/js/Services.ts" />
-/// <reference path="../../public/assets/js/MeetingController.ts" />
+/// <reference path="../../server/public/assets/js/Services.ts" />
+/// <reference path="../../server/public/assets/js/MeetingController.ts" />
 
 describe("MeetingController", function () {
     var $httpBackend: ng.IHttpBackendService;

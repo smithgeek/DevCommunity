@@ -2,7 +2,7 @@
 /// <reference path="../../typings/expect.js/expect.js.d.ts" />
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
-/// <reference path="../../public/assets/js/app.ts" />
+/// <reference path="../../server/public/assets/js/app.ts" />
 
 describe("LoginController", function () {
     var $httpBackend: ng.IHttpBackendService;

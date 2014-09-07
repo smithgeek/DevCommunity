@@ -2,8 +2,8 @@
 /// <reference path="../../typings/expect.js/expect.js.d.ts" />
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
 /// <reference path="../../typings/sinon/sinon.d.ts" />
-/// <reference path="../../public/assets/js/Services.ts" />
-/// <reference path="../../public/assets/js/SingleStoryController.ts" />
+/// <reference path="../../server/public/assets/js/Services.ts" />
+/// <reference path="../../server/public/assets/js/SingleStoryController.ts" />
 
 describe("SingleStoryController", function () {
     var $httpBackend: ng.IHttpBackendService;

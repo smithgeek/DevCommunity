@@ -4,7 +4,7 @@ module.exports = function (grunt) {
         ts: {
             // Browser code
             client_dev: {
-                src: ["server/public/**/*.ts"],
+                src: ["server/public/**/*.ts", "UnitTests/Client/**/*.ts"],
                 options: {
                     removeComments: false
                 }
@@ -12,7 +12,7 @@ module.exports = function (grunt) {
             
             // Server code
             server_dev: {
-                src: ["server/*.ts", "server/routes/*.ts"],
+                src: ["server/*.ts", "server/routes/*.ts", "UnitTests/Server/**/*.ts"],
                 options: {
                     module: 'commonjs',
                     sourceMap: false,

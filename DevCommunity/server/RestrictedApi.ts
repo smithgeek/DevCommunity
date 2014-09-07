@@ -125,7 +125,7 @@ class RestrictedApi {
     public addMeeting(visitor: Visitor, meeting: Meeting, res: HttpResponse): void {
         meeting.email = visitor.getEmail();
         if (meeting._id == "") {
-            this.meetingIdeasDb.insert(meeting, (err, newDoc) => {
+            this.meetingIdeasDb.insert(meeting, (err, newDoc: Meeting) => {
                 if (err != null)
                     res.send(404, "Failure");
                 else {

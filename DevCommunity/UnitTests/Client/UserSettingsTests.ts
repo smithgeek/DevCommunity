@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/expect.js/expect.js.d.ts" />
-/// <reference path="../../public/assets/js/UserSettings.ts" />
+/// <reference path="../../server/public/assets/js/UserSettings.ts" />
 
 describe("UserSettings", function () {
     it("ConstructedWithDefaults", function () {

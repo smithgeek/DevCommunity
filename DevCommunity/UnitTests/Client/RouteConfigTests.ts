@@ -1,7 +1,7 @@
 ﻿/// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/expect.js/expect.js.d.ts" />
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../../public/assets/js/app.ts" />
+/// <reference path="../../server/public/assets/js/app.ts" />
 
 describe("RouteConfig", function () {
     it("About", function () {

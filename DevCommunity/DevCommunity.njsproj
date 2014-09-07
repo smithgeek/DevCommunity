@@ -106,7 +106,14 @@
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsControllerTests.ts" />
     <TypeScriptCompile Include="UnitTests\Client\UserSettingsTests.ts" />
     <TypeScriptCompile Include="UnitTests\Server\DatabaseTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\DevCommunityEmailerTests.ts">
+      <SubType>Code</SubType>
+      <TestFramework>
+      </TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="UnitTests\Server\TwitterTest.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\WebsiteVisitorFactoryTests.ts" />
+    <TypeScriptCompile Include="UnitTests\Server\WebsiteVisitorTest.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="server\" />

@@ -12,7 +12,7 @@ class DevCommunityEmailer {
         this.sendMail(emailAddress, subject, body );
     }
 
-    public sendNewMeetingTopicEmails(meeting: Meeting) {
+    public sendNewMeetingTopicEmails(meeting: MeetingData) {
         this.userSettingsDb.find({ Condition: { NewMeetingEmailNotification: true } }, (err, settings: Array<UserSettings>) => {
             if (err == null) {
                 var subject = "Developer Community: New Meeting Idea";
