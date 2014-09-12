@@ -1,0 +1,109 @@
+﻿doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    meta(name="mobile-web-app-capable" content="yes")
+    link(rel='shortcut icon', href='#{pathToAssets}/assets/ico/favicon.png')
+    title #{config.name}
+    // Bootstrap core CSS
+    link(href='#{pathToAssets}/dist/css/bootstrap.min.css', rel='stylesheet')
+    // Bootstrap theme
+    //link(href='#{pathToAssets}/dist/css/bootstrap-theme.min.css', rel='stylesheet')
+    // Custom styles for this template
+    //link(href='#{pathToSelectedTemplateWithinBootstrap}/theme.css', rel='stylesheet')
+    link(href='#{pathToAssets}/assets/css/theme.css', rel='stylesheet')
+    link(href='#{pathToAssets}/dist/css/datepicker.css', rel='stylesheet')
+    // HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
+    //if lt IE 9
+      script(src='#{pathToAssets}/assets/js/html5shiv.js')
+      script(src='#{pathToAssets}/assets/js/respond.min.js')
+  body(ng-app='devCommunity')
+    div(id='wrap')
+      .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
+        .modal-dialog.modal-lg
+          .modal-content.highlight
+            button.close(type="button" ng-click="controller.close()" aria-hidden="true") &times;
+            form(ng-submit='controller.submitEmail()' ng-show="step==='Email'")
+              h1 Login
+              .form-group
+                input.form-control(type='email' placeholder='Email address' ng-model='user.email')
+              button.btn.btn-lg.btn-success.add-modal-button(type='submit') Login
+              span(style="margin-left: 20px; color: red") {{message}}
+
+            form(ng-submit='controller.submitVerification()' ng-show="step==='Verification'")
+              h1 Verify
+              p Enter the verification code that was sent to the email address entered.  Valid for 10 minutes.
+              .form-group
+                input.form-control(type='text' placeholder='Verification Code' ng-model='user.verificationCode')
+              button.btn.btn-lg.btn-success.add-modal-button(type='submit') Verify
+              span(style="margin-left: 20px; color: red") {{message}}
+
+      // Fixed navbar
+      .navbar.navbar-default.navbar-fixed-top(ng-controller='NavBarController as controller')
+        .container
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='#') 
+              span(class="glyphicon #{config.glyph}")
+              span  #{config.name}
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav
+              li.active(id='NavHome')
+                a(href='#!/') Home
+              li(id='NavStories')
+                a(href='#!/stories') Stories
+              li(id='NavPastMeetings')
+                a(href='#!/pastMeetings') Archives
+              //li(id='NavBrainstorming')
+                a(href='#!/brainstorming') Brainstorming
+              li(id='NavAbout')
+                a(href='#!/about') About
+              li(id='NavContact')
+                a(href='#!/contact') Contact
+            ul.nav.navbar-nav.navbar-right.login-nav
+              //if isAdmin
+                li(id='NavAdmin')
+                  a(href='#!/Admin' ng-show="isLoggedIn()") Admin
+              li(id='NavUserSettings')
+                a(href='#!/UserSettings' ng-show="isLoggedIn()") Settings
+              li
+                a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()") Logout
+                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()") Login
+      .container.theme-showcase
+        ng-view
+
+  div(id="footer")
+    div.container
+      .text-muted 
+        p Built using 
+          a(href="https://angularjs.org/") angular
+          | , 
+          a(href="http://jquery.com/") jquery
+          | , 
+          a(href="http://getbootstrap.com/") bootstrap
+          | , and 
+          a(href="http://glyphicons.com/") glyphicons
+          | .
+
+    // /container
+    //
+       Bootstrap core JavaScript
+    //================================================== 
+    // Placed at the end of the document so the pages load faster
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src='#{pathToAssets}/dist/js/bootstrap-datepicker.js')
+    script(src='#{pathToAssets}/dist/js/readmore.min.js')
+    script(src='#{pathToAssets}/dist/ckeditor/ckeditor.js')
+    script(src='#{pathToAssets}/dist/ckeditor/adapters/jquery.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js')
+    script(src='#{pathToAssets}/dist/js/angular-local-storage.min.js')
+    script(src='#{pathToAssets}/assets/js/main.js')

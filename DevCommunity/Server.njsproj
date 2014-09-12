@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>Server</Name>
+    <RootNamespace>ExpressApp7</RootNamespace>
+    <NameOfLastUsedPublishProfile>Share</NameOfLastUsedPublishProfile>
+    <EnableTypeScript>true</EnableTypeScript>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <DebuggerPort>5858</DebuggerPort>
+    <NodeExePath>
+    </NodeExePath>
+    <NodeExeArguments>
+    </NodeExeArguments>
+    <ScriptArguments>
+    </ScriptArguments>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>83aac9f6-1094-40fc-8ce9-2ca0fe8ccbac</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>server.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <ProjectView>ProjectFiles</ProjectView>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>False</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Mocha' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Mocha\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="GruntFile.js" />
+    <Compile Include="source\Resources\dist\ckeditor\adapters\jquery.js" />
+    <Compile Include="source\Resources\dist\ckeditor\build-config.js" />
+    <Compile Include="source\Resources\dist\ckeditor\ckeditor.js" />
+    <Compile Include="source\Resources\dist\ckeditor\lang\en.js" />
+    <Compile Include="source\Resources\dist\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Compile Include="source\Resources\dist\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Compile Include="source\Resources\dist\ckeditor\plugins\link\dialogs\link.js" />
+    <Compile Include="source\Resources\dist\ckeditor\samples\assets\uilanguages\languages.js" />
+    <Compile Include="source\Resources\dist\ckeditor\samples\plugins\dialog\assets\my_dialog.js" />
+    <Compile Include="source\Resources\dist\ckeditor\samples\sample.js" />
+    <Compile Include="source\Resources\dist\ckeditor\styles.js" />
+    <Compile Include="source\Resources\dist\js\angular-local-storage.min.js" />
+    <Compile Include="source\Resources\dist\js\bootstrap-datepicker.js" />
+    <Compile Include="source\Resources\dist\js\bootstrap.min.js" />
+    <Compile Include="source\Resources\dist\js\readmore.min.js" />
+    <Compile Include="source\Server\config\config.js" />
+    <Compile Include="source\Tests\tests.config.js" />
+    <Content Include="package.json" />
+    <Content Include="source\Resources\assets\css\theme.css" />
+    <Content Include="source\Resources\assets\images\NewArchives.png" />
+    <Content Include="source\Resources\dist\ckeditor\CHANGES.md" />
+    <Content Include="source\Resources\dist\ckeditor\contents.css" />
+    <Content Include="source\Resources\dist\ckeditor\LICENSE.md" />
+    <Content Include="source\Resources\dist\ckeditor\plugins\icons.png" />
+    <Content Include="source\Resources\dist\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="source\Resources\dist\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="source\Resources\dist\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="source\Resources\dist\ckeditor\README.md" />
+    <Content Include="source\Resources\dist\ckeditor\samples\ajax.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\api.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\appendto.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\assets\inlineall\logo.png" />
+    <Content Include="source\Resources\dist\ckeditor\samples\assets\outputxhtml\outputxhtml.css" />
+    <Content Include="source\Resources\dist\ckeditor\samples\assets\posteddata.php" />
+    <Content Include="source\Resources\dist\ckeditor\samples\assets\sample.css" />
+    <Content Include="source\Resources\dist\ckeditor\samples\assets\sample.jpg" />
+    <Content Include="source\Resources\dist\ckeditor\samples\datafiltering.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\divreplace.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\index.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\inlineall.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\inlinebycode.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\inlinetextarea.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\jquery.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\plugins\dialog\dialog.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\plugins\enterkey\enterkey.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\plugins\toolbar\toolbar.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\plugins\wysiwygarea\fullpage.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\readonly.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\replacebyclass.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\replacebycode.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\sample.css" />
+    <Content Include="source\Resources\dist\ckeditor\samples\sample_posteddata.php" />
+    <Content Include="source\Resources\dist\ckeditor\samples\tabindex.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\uicolor.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\uilanguages.html" />
+    <Content Include="source\Resources\dist\ckeditor\samples\xhtmlstyle.html" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog_ie.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog_ie7.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog_ie8.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog_iequirks.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\dialog_opera.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor_gecko.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor_ie.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor_ie7.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor_ie8.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\editor_iequirks.css" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\icons.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\icons_hidpi.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\arrow.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\close.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\hidpi\close.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\hidpi\lock-open.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\hidpi\lock.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\hidpi\refresh.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\lock-open.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\lock.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\images\refresh.png" />
+    <Content Include="source\Resources\dist\ckeditor\skins\moonocolor\readme.md" />
+    <Content Include="source\Resources\dist\css\bootstrap-theme.min.css" />
+    <Content Include="source\Resources\dist\css\bootstrap.min.css" />
+    <Content Include="source\Resources\dist\css\datepicker.css" />
+    <Content Include="source\Resources\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="source\Resources\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="source\Resources\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="source\Resources\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="source\Server\config\config.js.example" />
+    <Content Include="source\Server\views\index.jade" />
+    <Content Include="source\Server\views\layout.jade" />
+    <Content Include="source\Server\views\partials\About.jade" />
+    <Content Include="source\Server\views\partials\admin.jade" />
+    <Content Include="source\Server\views\partials\Brainstorming.jade" />
+    <Content Include="source\Server\views\partials\Contact.jade" />
+    <Content Include="source\Server\views\partials\Error.jade" />
+    <Content Include="source\Server\views\partials\home.jade" />
+    <Content Include="source\Server\views\partials\HomeCarousel.jade" />
+    <Content Include="source\Server\views\partials\meeting.jade" />
+    <Content Include="source\Server\views\partials\PastMeetings.jade" />
+    <Content Include="source\Server\views\partials\Stories.jade" />
+    <Content Include="source\Server\views\partials\story.jade" />
+    <Content Include="source\Server\views\partials\UserSettings.jade" />
+    <Content Include="source\Tests\Client\.gitignore" />
+    <Content Include="source\Tests\Server\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="source\" />
+    <Folder Include="source\Client\" />
+    <Folder Include="source\Client\Impl\" />
+    <Folder Include="source\Common\" />
+    <Folder Include="source\Resources\" />
+    <Folder Include="source\Resources\assets\" />
+    <Folder Include="source\Resources\assets\css\" />
+    <Folder Include="source\Resources\assets\images\" />
+    <Folder Include="source\Resources\assets\js\" />
+    <Folder Include="source\Resources\dist\" />
+    <Folder Include="source\Resources\dist\ckeditor\" />
+    <Folder Include="source\Resources\dist\ckeditor\adapters\" />
+    <Folder Include="source\Resources\dist\ckeditor\lang\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\dialog\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\link\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\link\dialogs\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\link\images\" />
+    <Folder Include="source\Resources\dist\ckeditor\plugins\link\images\hidpi\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\assets\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\assets\inlineall\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\assets\outputxhtml\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\assets\uilanguages\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\dialog\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\dialog\assets\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\enterkey\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\toolbar\" />
+    <Folder Include="source\Resources\dist\ckeditor\samples\plugins\wysiwygarea\" />
+    <Folder Include="source\Resources\dist\ckeditor\skins\" />
+    <Folder Include="source\Resources\dist\ckeditor\skins\moonocolor\" />
+    <Folder Include="source\Resources\dist\ckeditor\skins\moonocolor\images\" />
+    <Folder Include="source\Resources\dist\ckeditor\skins\moonocolor\images\hidpi\" />
+    <Folder Include="source\Resources\dist\css\" />
+    <Folder Include="source\Resources\dist\fonts\" />
+    <Folder Include="source\Resources\dist\js\" />
+    <Folder Include="source\Server\" />
+    <Folder Include="source\Server\config\" />
+    <Folder Include="source\Server\routes\" />
+    <Folder Include="source\Server\views\" />
+    <Folder Include="source\Server\views\partials\" />
+    <Folder Include="source\Tests\" />
+    <Folder Include="source\Tests\Client\" />
+    <Folder Include="source\Tests\Server\" />
+    <Folder Include="source\Typings\" />
+    <Folder Include="source\Typings\Client\" />
+    <Folder Include="source\Typings\Client\angularjs\" />
+    <Folder Include="source\Typings\Client\bootstrap\" />
+    <Folder Include="source\Typings\Client\ckeditor\" />
+    <Folder Include="source\Typings\Client\datepicker\" />
+    <Folder Include="source\Typings\Client\expect.js\" />
+    <Folder Include="source\Typings\Client\jquery\" />
+    <Folder Include="source\Typings\Common\" />
+    <Folder Include="source\Typings\Server\" />
+    <Folder Include="source\Typings\Server\express\" />
+    <Folder Include="source\Typings\Common\mocha\" />
+    <Folder Include="source\Typings\Server\nodemailer\" />
+    <Folder Include="source\Typings\Server\node\" />
+    <Folder Include="source\Typings\Client\readmore\" />
+    <Folder Include="source\Typings\Common\sinon\" />
+    <Folder Include="source\Typings\Client\stylus\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="source\Client\AddMeetingController.ts" />
+    <TypeScriptCompile Include="source\Client\AdminController.ts" />
+    <TypeScriptCompile Include="source\Client\AdminControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\app.ts" />
+    <TypeScriptCompile Include="source\Client\HomeController.ts" />
+    <TypeScriptCompile Include="source\Client\ILoginControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\IMeetingControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\IMeetingSvc.ts" />
+    <TypeScriptCompile Include="source\Client\Impl\Browser.ts" />
+    <TypeScriptCompile Include="source\Client\Impl\DisqusDirective.ts" />
+    <TypeScriptCompile Include="source\Client\IStorySubmitControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\IStorySvc.ts" />
+    <TypeScriptCompile Include="source\Client\IUserSvc.ts" />
+    <TypeScriptCompile Include="source\Client\IUserVerifier.ts" />
+    <TypeScriptCompile Include="source\Client\LoginController.ts" />
+    <TypeScriptCompile Include="source\Client\Meeting.ts" />
+    <TypeScriptCompile Include="source\Client\MeetingController.ts" />
+    <TypeScriptCompile Include="source\Client\MeetingSvc.ts" />
+    <TypeScriptCompile Include="source\Client\PastMeetingsController.ts" />
+    <TypeScriptCompile Include="source\Client\SingleStoryController.ts" />
+    <TypeScriptCompile Include="source\Client\SiteConfig.ts" />
+    <TypeScriptCompile Include="source\Client\StoryControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\StorySubmitController.ts" />
+    <TypeScriptCompile Include="source\Client\StorySvc.ts" />
+    <TypeScriptCompile Include="source\Client\UserSettingsController.ts" />
+    <TypeScriptCompile Include="source\Client\UserSettingsControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\UserSvc.ts" />
+    <TypeScriptCompile Include="source\Common\MeetingData.ts" />
+    <TypeScriptCompile Include="source\Common\Story.ts" />
+    <TypeScriptCompile Include="source\Client\StoryController.ts" />
+    <TypeScriptCompile Include="source\Common\UserSettings.ts" />
+    <TypeScriptCompile Include="source\Server\Api.ts" />
+    <TypeScriptCompile Include="source\Server\Database.ts" />
+    <TypeScriptCompile Include="source\Server\DevCommunityEmailer.ts" />
+    <TypeScriptCompile Include="source\Server\HttpResponse.ts" />
+    <TypeScriptCompile Include="source\Server\Logger.ts" />
+    <TypeScriptCompile Include="source\Server\Mailer.ts" />
+    <TypeScriptCompile Include="source\Server\NeDb.ts" />
+    <TypeScriptCompile Include="source\Server\PublicApi.ts" />
+    <TypeScriptCompile Include="source\Server\Query.ts" />
+    <TypeScriptCompile Include="source\Server\RestrictedApi.ts" />
+    <TypeScriptCompile Include="source\Server\routes\partials.ts" />
+    <TypeScriptCompile Include="source\Server\Security.ts" />
+    <TypeScriptCompile Include="source\Server\server.ts" />
+    <TypeScriptCompile Include="source\Server\Twitter.ts" />
+    <TypeScriptCompile Include="source\Server\UserSettingsRepository.ts" />
+    <TypeScriptCompile Include="source\Server\Visitor.ts" />
+    <TypeScriptCompile Include="source\Server\WebsiteVisitor.ts" />
+    <TypeScriptCompile Include="source\Server\WebsiteVisitorFactory.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\AddMeetingControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\AdminControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\HomeControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\LoginControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\MeetingControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\PastMeetingsControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\RouteConfigTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\ServiceTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\SingleStoryControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\SiteConfigTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\StoryControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\StorySubmitControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\UserSettingsControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\DatabaseTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\DevCommunityEmailerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\RestrictedApiTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\SecurityTest.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\TwitterTest.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\UserSettingsRepositoryTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\UserSettingsTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\WebsiteVisitorFactoryTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\WebsiteVisitorTest.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\angularjs\angular-mocks.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\angularjs\angular-route.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\ckeditor\ckeditor.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\datepicker\datepicker.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\expect.js\expect.js.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Server\express\express.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Common\mocha\mocha.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Server\nodemailer\nodemailer.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Server\node\node.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\readmore\readmore.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Common\sinon\sinon.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\stylus\stylus.d.ts" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
+  </PropertyGroup>
+</Project>

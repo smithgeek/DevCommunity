@@ -23,14 +23,19 @@
     "supervisor": "^0.6.0"
   },
   "devDependencies": {
+    "browserify": "^5.11.2",
     "coveralls": "^2.11.1",
     "expect.js": "^0.3.1",
     "grunt": "^0.4.5",
+    "grunt-browserify": "^3.0.1",
     "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-uglify": "^0.5.1",
     "grunt-ts": "^1.11.8",
     "istanbul": "^0.3.2",
     "karma": "^0.12.16",
     "karma-cli": "0.0.4",
+    "karma-commonjs": "0.0.12",
     "karma-coverage": "^0.2.4",
     "karma-firefox-launcher": "^0.1.3",
     "karma-html-reporter": "^0.2.3",
@@ -40,10 +45,10 @@
   },
   "scripts": {
     "test": "npm run test-client && npm run coverage-server",
-    "test-client": "./node_modules/.bin/karma start --single-run --browsers Firefox UnitTests/tests.config.js",
-    "test-server": "node_modules/.bin/mocha UnitTests/Server",
-    "test-server-watch": "node_modules/.bin/mocha -w UnitTests/Server",
-    "coverage-server": "node_modules/.bin/istanbul cover -x config*.js -x **/UnitTests/** -x server/Mailer.js --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec UnitTests/Server server",
-    "start": "./node_modules/.bin/supervisor -w server -i server/public server/server.js"
+    "test-client": "./node_modules/.bin/karma start --single-run --browsers Firefox source/Tests/tests.config.js",
+    "test-server": "node_modules/.bin/mocha site/Tests/Server",
+    "test-server-watch": "node_modules/.bin/mocha -w source/Tests/Server",
+    "coverage-server": "node_modules/.bin/istanbul cover -x Config/* -x site/Tests/Server/* -x site/Server/Mailer.js --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec site/Tests/Server site/Server",
+    "start": "./node_modules/.bin/supervisor -w site -i site/public site/Server/server.js"
   }
 }
