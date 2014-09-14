@@ -10,9 +10,11 @@ import Visitor = require('./Visitor'); ///ts:import:generated
 import Story = require('../Common/Story'); ///ts:import:generated
 ///ts:import=MeetingData
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
+///ts:import=Logger
+import Logger = require('./Logger'); ///ts:import:generated
 
 class PublicApi {
-    constructor(private twitter: Twitter, private storyDb: Database, private meetingIdeasDb: Database) {
+    constructor(private twitter: Twitter, private storyDb: Database, private meetingIdeasDb: Database, private logger: Logger) {
     }
      
     public getRandomTweet(res: HttpResponse): void{

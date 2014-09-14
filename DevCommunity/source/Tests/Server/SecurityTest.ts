@@ -31,7 +31,7 @@ describe('SecurityTests', function () {
         userSettingsDb = <Database>{ insert: function (q, callback) { callback(null, q); } };
         userVerificationDb = <Database>{ insert: function (q, callback) { callback(null, q); }, find: function (q, callback) { callback(null, [{ timestamp: Date.now(), verificationCode: 8675309}]); }, remove: function (q, o) { } };
         emailer = <DevCommunityEmailer>{ sendVerificationEmail: function (code: number, email: string) { } };
-        logger = <Logger>{ log: function (message: string) { } };
+        logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
         security = new Security("domain.com", "secret", userVerificationDb, userSettingsDb, emailer, logger);
     });
 

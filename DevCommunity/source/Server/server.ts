@@ -110,12 +110,15 @@ app.get('/partials/story', routes.story);
 app.get('/partials/admin', routes.admin);
 
 class ConsoleAndFileLogger implements Logger {
-    log(message?: any, ...optionalParams: any[]): void {
+    log(message: string): void {
         console.log(message);
         logFile.write(message + '\r\n');
     }
-    error(message?: any, ...optionalParams: any[]): void {
-        this.log(message, optionalParams);
+    error(message: string): void {
+        this.log(message);
+    }
+    verbose(message: string): void {
+        logFile.write(message + '\r\n');
     }
 }
 
@@ -128,15 +131,14 @@ var userSettingsDb: Database = new NeDb(path.join(DatabaseDir, 'user_settings.db
 
 var logger: Logger = new ConsoleAndFileLogger();
 var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, config.mail.smtp, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
-logger.log("Database path: " + DatabaseDir);
 
-var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb);
+var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger);
 var userSettingsRepo: UserSettingsRepository = new UserSettingsRepository(userSettingsDb, logger);
 var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger);
 var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger);
 var api: Api = new Api(publicApi, restrictedApi, security);
 
-var visitorFactory: WebsiteVisitorFactory = new WebsiteVisitorFactory(security, config.server.admin);
+var visitorFactory: WebsiteVisitorFactory = new WebsiteVisitorFactory(security, config.server.admin, logger);
 userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {
         logger.log('User settings index error: ' + err.toString());
@@ -144,15 +146,11 @@ userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
 });
 
 app.post('/verify', function (req, res) {
-    visitorFactory.get(req, (visitor) => {
-        api.security.verify(visitor, req.body.verificationCode, res);
-    });
+    api.security.verify(visitorFactory.getByEmail(req.body.email), req.body.verificationCode, res);
 });
 
 app.post('/identify', (req, res) => {
-    visitorFactory.get(req, (visitor) => {
-        api.security.identify(visitor, res);
-    });
+    api.security.identify(visitorFactory.getByEmail(req.body.email), res);
 });
 
 app.post('/api/restricted/AddMeeting', function (req: any, res) {

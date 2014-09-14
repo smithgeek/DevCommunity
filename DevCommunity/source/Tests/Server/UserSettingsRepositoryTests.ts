@@ -20,7 +20,7 @@ describe("UserSettingsRepo", () => {
 
     beforeEach(() => {
         db = new NeDb('');
-        logger = {log: function (s) { }, error: function (s) { } };
+        logger = { log: function (s) { }, error: function (s) { }, verbose: function (s) { } };
         repo = new UserSettingsRepository(db, logger);
     });
 

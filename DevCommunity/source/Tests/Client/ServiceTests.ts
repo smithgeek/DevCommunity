@@ -121,6 +121,12 @@ describe("Meeting", function () {
         expect(meeting.isUserAuthor()).to.equal( true);
     });
 
+    it("NoUserCantBeAuthor", () => {
+        var meeting = getMeeting(getUserSvcWithoutKey());
+        meeting.SetUser("");
+        expect(meeting.isUserAuthor()).to.be(false);
+    });
+
     it("CanVote", function () {
         $httpBackend.expectPOST('/api/restricted/Vote', meeting).respond(200, meeting);
         var meeting = getMeeting();
