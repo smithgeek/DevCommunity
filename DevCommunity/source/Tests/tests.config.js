@@ -91,6 +91,7 @@ module.exports = function(config) {
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
+    autoWatchBatchDelay: 1000,
 
 
     // start these browsers

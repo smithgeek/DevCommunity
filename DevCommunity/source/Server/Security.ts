@@ -8,6 +8,8 @@ import Logger = require('./Logger'); ///ts:import:generated
 import Visitor = require('./Visitor'); ///ts:import:generated
 ///ts:import=HttpResponse
 import HttpResponse = require('./HttpResponse'); ///ts:import:generated
+///ts:import=UserSettings
+import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
 
 var jwt = require('jsonwebtoken');
 
@@ -26,7 +28,7 @@ class Security{
                     res.json({ token: token });
                     this.clearVerificationCodes(visitor.getEmail());
                     var emailAddressString: string = visitor.getEmail();
-                    var settings = { email: emailAddressString, NewMeetingEmailNotification: true, NewStoryEmailNotification: true };
+                    var settings = new UserSettings(emailAddressString);
                     this.userSettingsDb.insert(settings, (err, newDoc) => {
                         if (err != null)
                             this.logger.log("Could not add user " + emailAddressString);

@@ -14,13 +14,18 @@ import Browser = require('./Impl/Browser'); ///ts:import:generated
 import app = require('./app'); ///ts:import:generated
 
 class AddMeetingController {
-    constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: IMeetingSvc, private userSvc: IUserSvc, private rtb: Browser.IRichTextEditor) {
-        this.rtb.setId('newIdeaDetails');
+    private newIdeaRtb: Browser.IRichTextEditor;
+    private schedMeetingMessageRtb: Browser.IRichTextEditor;
+
+    constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: IMeetingSvc, private userSvc: IUserSvc, private rtbFactory: Browser.IRichTextEditorFactory) {
+        this.newIdeaRtb = rtbFactory.create('newIdeaDetails');
         $scope.meeting = meetingSvc.createMeeting();
         $scope.errorMessage = "";
+        $scope.sendEmail = false;
+        $scope.schedMeetingMessage = "";
         $scope.$on('editMeeting', (event, meeting: Meeting) => {
             $scope.meeting = meeting;
-            this.rtb.setText(meeting.details);
+            this.newIdeaRtb.setText(meeting.details);
             $('#AddTopicModal').modal('show');
             $scope.errorMessage = "";
         });
@@ -34,9 +39,9 @@ class AddMeetingController {
     public AddMeeting(): void {
         $('.add-modal-button').prop('disabled', true);
         this.$scope.meeting.SetUser(this.userSvc.getUser());
-        this.$scope.meeting.details = this.rtb.getText();
+        this.$scope.meeting.details = this.newIdeaRtb.getText();
         var mtgData: MeetingData = this.$scope.meeting.GetData();
-        this.$http.post('/api/restricted/AddMeeting', mtgData).success((data: any) => {
+        this.$http.post('/api/restricted/AddMeeting', { meeting: mtgData, sendEmail: this.$scope.sendEmail, message: this.$scope.schedMeetingMessage }).success((data: any) => {
             $('#AddTopicModal').modal('hide');
             $('.add-modal-button').prop('disabled', false);
             if (data.action == "Added") {
@@ -50,6 +55,6 @@ class AddMeetingController {
     }
 }
 
-angular.module(app.getModuleName()).controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', 'richTextService', AddMeetingController]);
+angular.module(app.getModuleName()).controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', 'richTextFactory', AddMeetingController]);
 
 export = AddMeetingController;

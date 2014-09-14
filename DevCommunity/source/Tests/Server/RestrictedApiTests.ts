@@ -41,6 +41,6 @@ describe("RestrictedApiTests", () => {
             done();
         };
         
-        api.emailUsersMeetingScheduled(message, meeting, response);
+        api.emailUsersMeetingScheduled(message, meeting);
     });
 });

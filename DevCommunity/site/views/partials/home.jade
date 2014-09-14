@@ -24,7 +24,12 @@
               Label Date
               p Only set this if the meeting is scheduled or has already occured.  Voting will be closed when this happens.
               input.form-control.datepicker(type='text' ng-model='meeting.date')
-
+              label
+                input(type="checkbox" ng-model="sendEmail")
+                | Send email about scheduled meeting?
+              .form-group(nt-enabled="sendEmail")
+                label Special message to send in email (Optional)
+                textarea.form-control(ng-model="schedMeetingMessage" type='text')
         button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()') Submit
         span  
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel

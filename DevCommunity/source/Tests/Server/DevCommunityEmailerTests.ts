@@ -26,7 +26,7 @@ describe('DevCommunityEmailerTests', function () {
             fakeSettings = [{ email: 'email1' }, { email: 'email2' }];
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
             mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
-            logger = <Logger>{ log: function (message: string) { } };
+            logger = <Logger>{ log: function (message: string) { }, verbose: function (message: string) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", true, logger);
             spy = sinon.spy(mailer, "sendEmail");
         });
@@ -80,7 +80,7 @@ describe('DevCommunityEmailerTests', function () {
             fakeSettings = [{ email: 'email1' }, { email: 'email2' }];
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
             mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
-            logger = <Logger>{ log: function (message: string) { } };
+            logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", false, logger);
             sinon.spy(mailer, "sendEmail");
             spy = mailer.sendEmail;

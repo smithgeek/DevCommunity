@@ -12,7 +12,7 @@ class UserSettingsController {
         $('.navbar-nav li.active').removeClass('active');
         $('#NavUserSettings').addClass('active');
 
-        this.$scope.settings = new UserSettings();
+        this.$scope.settings = new UserSettings("", false, false, false);
         this.$scope.errorMessage = "";
         this.$scope.successMessage = "";
 

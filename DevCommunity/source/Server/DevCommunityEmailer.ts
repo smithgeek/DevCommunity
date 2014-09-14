@@ -27,9 +27,7 @@ class DevCommunityEmailer {
                 var subject = "Developer Community: New Meeting Idea";
                 var body = "<a href='" + this.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
                 body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
-                for (var i = 0; i < settings.length; i++) {
-                    this.sendMail(settings[i].email, subject, body);
-                }
+                this.sendMailToUsers(settings, subject, body);
             }
             else {
                 this.logger.log(err);
@@ -43,9 +41,7 @@ class DevCommunityEmailer {
                 var subject = "Developer Community: New Story Posted";
                 var body = "<h3><a href='" + this.domain + "/#!/story/" + story._id + "'>" + story.title + "</a></h3><br/>" + story.description;
                 body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
-                for (var i = 0; i < settings.length; i++) {
-                    this.sendMail(settings[i].email, subject, body);
-                }
+                this.sendMailToUsers(settings, subject, body);
             }
             else {
                 this.logger.log(err);
@@ -57,14 +53,21 @@ class DevCommunityEmailer {
         var subject = "Developer Community: Meeting Scheduled";
         var body = "";
         if (specialMessage != "") {
-            body = "<b><ul>Special Message:</ul></b><br/>";
+            body = "<b><u>Special Message:</u></b><br/>";
             body += specialMessage + "<br/>";
         }
-        body += "The voters have spoken and the next topic has been determined.<br/>"
+        body += "The voters have spoken and a new topic has been selected for " + meeting.date + ".<br/ >";
         body += "<a href='" + this.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
         body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
+        this.sendMailToUsers(users, subject, body);
+    }
+
+    private sendMailToUsers(users: Array<UserSettings>, subject: string, body: string): void {
         for (var i = 0; i < users.length; i++) {
             this.sendMail(users[i].email, subject, body);
+        }
+        if (!this.allowSendMail) {
+            this.logger.verbose(body);
         }
     }
 
@@ -73,8 +76,7 @@ class DevCommunityEmailer {
             this.mailer.sendEmail(toEmailAddress, subject, body);
         }
         else {
-            this.logger.log("Emailing " + subject + " to " + toEmailAddress);
-            this.logger.log(body);
+            this.logger.log("Emailing \"" + subject + "\" to " + toEmailAddress);
         }
     }
 }

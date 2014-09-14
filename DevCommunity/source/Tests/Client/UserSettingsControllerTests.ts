@@ -37,7 +37,7 @@ describe("UserSettingsController", function () {
 
     it("DefaultConstructed", function () {
         getDefaultController();
-        expect($scope.settings).to.eql(new UserSettings());
+        expect($scope.settings).to.eql(new UserSettings("", false, false, false));
         expect($scope.errorMessage).to.be("");
         expect($scope.successMessage).to.be("");
     });
@@ -70,7 +70,7 @@ describe("UserSettingsController", function () {
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(200, "");
         getController();
         $httpBackend.flush();
-        expect($scope.settings).to.eql(new UserSettings());
+        expect($scope.settings).to.eql(new UserSettings("", false, false, false));
     });
 
     it("GetNullSettingsFromServer", function () {
@@ -78,7 +78,7 @@ describe("UserSettingsController", function () {
         $httpBackend.expectGET('/api/restricted/GetUserSettings').respond(200, null);
         getController();
         $httpBackend.flush();
-        expect($scope.settings).to.eql(new UserSettings());
+        expect($scope.settings).to.eql(new UserSettings("", false, false, false));
     });
 
     it("SettingsUpdated", function () {

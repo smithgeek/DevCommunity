@@ -155,7 +155,10 @@ app.post('/identify', (req, res) => {
 
 app.post('/api/restricted/AddMeeting', function (req: any, res) {
     visitorFactory.get(req, (visitor) => {
-        api.restricted.addMeeting(visitor, req.body, res);
+        api.restricted.addMeeting(visitor, req.body.meeting, res);
+        if (req.body.sendEmail) {
+            api.restricted.emailUsersMeetingScheduled(req.body.message, req.body.meeting);
+        }
     });
 });
 
@@ -208,7 +211,7 @@ app.post('/api/restricted/AddStory', function (req: any, res) {
 
 app.get('/api/restricted/GetUserSettings', function (req, res) {
     visitorFactory.get(req, (visitor) => {
-        logger.log("Get user settings" + visitor.getEmail());
+        logger.log("Get user settings " + visitor.getEmail());
         api.restricted.getUserSettings(visitor, res);
     });
 });

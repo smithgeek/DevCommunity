@@ -46,6 +46,7 @@
   "scripts": {
     "test": "npm run test-client && npm run coverage-server",
     "test-client": "./node_modules/.bin/karma start --single-run --browsers Firefox source/Tests/tests.config.js",
+    "test-client-watch": "./node_modules/.bin/karma start source/Tests/tests.config.js",
     "test-server": "node_modules/.bin/mocha site/Tests/Server",
     "test-server-watch": "node_modules/.bin/mocha -w source/Tests/Server",
     "coverage-server": "node_modules/.bin/istanbul cover -x 'Config/*' -x 'site/Tests/Server/*' -x site/Server/Mailer.js --dir TestResults/Server/coverage node_modules/mocha/bin/_mocha -- -R spec site/Tests/Server site/Server",

@@ -41,6 +41,18 @@ export class CKEditorRichText implements IRichTextEditor {
     }
 }
 
+export interface IRichTextEditorFactory {
+    create(id: string): IRichTextEditor;
+}
+
+export class CKEditorFactory implements IRichTextEditorFactory {
+    public create(id: string): CKEditorRichText {
+        var editor: CKEditorRichText = new CKEditorRichText();
+        editor.setId(id);
+        return editor;
+    }
+}
+
 export interface IDocumentLocation {
     reload(): void;
 }
@@ -52,4 +64,5 @@ export class DocumentLocation implements IDocumentLocation {
 }
 
 angular.module(app.getModuleName()).service('richTextService', [CKEditorRichText]);
+angular.module(app.getModuleName()).service('richTextFactory', [CKEditorFactory]);
 angular.module(app.getModuleName()).service('documentLocation', [DocumentLocation]);

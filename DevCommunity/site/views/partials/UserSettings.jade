@@ -14,6 +14,9 @@ div(ng-controller="UserSettingsController as controller")
       .form-group
         input(type='checkbox' ng-model='settings.NewStoryEmailNotification') 
         span  Receive email notification when new story is submitted.
+      .form-group
+        input(type='checkbox' ng-model='settings.NewMeetingScheduledNotification') 
+        span  Receive email when a new meeting topic has been selected and scheduled.
       button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
       span(style="margin-left: 20px; color: red") {{errorMessage}}
       span(style="margin-left: 20px; color: green") {{successMessage}}

@@ -70,7 +70,7 @@ class RestrictedApi {
     public getUserSettings(visitor: Visitor, res: HttpResponse): void {
         this.userSettingsRepo.getUserSettings(visitor.getEmail(), (success: boolean, settings: UserSettings) => {
             if (success)
-                res.send(200, settings[0]);
+                res.send(200, settings);
             else
                 res.send(404, "");
         });
@@ -157,7 +157,7 @@ class RestrictedApi {
         }
     }
 
-    public emailUsersMeetingScheduled(message: string, meeting: MeetingData, res: HttpResponse): void {
+    public emailUsersMeetingScheduled(message: string, meeting: MeetingData): void {
         this.userSettingsRepo.getMeetingScheduledSubscribers((users) => {
             this.emailer.sendMeetingScheduledEmail(message, meeting, users);
         });

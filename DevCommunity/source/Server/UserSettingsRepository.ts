@@ -33,11 +33,14 @@ class UserSettingsRepository{
     }
 
     public getUserSettings(email: string, callback: (success: boolean, settings: UserSettings) => void): void {
-        this.db.find({ Condition: { email: email } }, function (err, settings) {
-            if (err == null && settings.length > 0)
-                callback(true, settings[0]);
-            else
+        this.db.find({ Condition: { email: email } }, function (err, settings: Array<UserSettings>) {
+            if (err == null && settings.length > 0) {
+                var user: UserSettings = settings[0];
+                callback(true, new UserSettings(user.email, user.NewMeetingEmailNotification, user.NewStoryEmailNotification, user.NewMeetingScheduledNotification, user._id));
+            }
+            else {
                 callback(false, null);
+            }
         });
     }
 
