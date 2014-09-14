@@ -67,9 +67,8 @@ html(lang='en')
               li(id='NavContact')
                 a(href='#!/contact') Contact
             ul.nav.navbar-nav.navbar-right.login-nav
-              //if isAdmin
-                li(id='NavAdmin')
-                  a(href='#!/Admin' ng-show="isLoggedIn()") Admin
+              li(id='NavAdmin')
+                a(href='#!/admin' ng-show="isAdmin()") Admin
               li(id='NavUserSettings')
                 a(href='#!/UserSettings' ng-show="isLoggedIn()") Settings
               li

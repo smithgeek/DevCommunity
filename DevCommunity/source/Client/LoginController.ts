@@ -20,8 +20,7 @@ class LoginController {
                 this.$scope.message = "";
             })
             .error((data, status, headers, config) => {
-                this.localStorageService.remove('userToken');
-                this.localStorageService.remove('userEmail');
+                this.clearLocalStorage();
                 this.$scope.message = data;
             });
     }
@@ -31,12 +30,12 @@ class LoginController {
             .success((data, status, headers, config) => {
                 this.localStorageService.set('userToken', data.token);
                 this.localStorageService.set('userEmail', this.$scope.user);
+                this.localStorageService.set('admin', data.admin);
                 this.close();
                 this.location.reload();
             })
             .error((data, status, headers, config) => {
-                this.localStorageService.remove('userToken');
-                this.localStorageService.remove('userEmail');
+                this.clearLocalStorage();
                 this.$scope.message = "Invalid verification code.";
             });
     }
@@ -46,6 +45,12 @@ class LoginController {
         this.$scope.user = { email: '', verificationCode: '' };
         this.$scope.message = '';
         this.$scope.step = 'Email';
+    }
+
+    private clearLocalStorage(): void {
+        this.localStorageService.remove('userToken');
+        this.localStorageService.remove('userEmail');
+        this.localStorageService.remove('admin');
     }
 }
 

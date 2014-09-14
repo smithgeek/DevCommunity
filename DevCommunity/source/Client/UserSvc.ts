@@ -24,6 +24,15 @@ class UserSvc implements IUserSvc {
     public logOut(): void {
         this.localStorageService.clearAll();
     }
+
+    public isAdmin(): boolean {
+        if (this.localStorageService.get("admin") == "true") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
 
 angular.module(app.getModuleName()).service('userSvc', ['localStorageService', UserSvc]);

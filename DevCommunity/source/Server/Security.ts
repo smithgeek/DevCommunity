@@ -25,7 +25,7 @@ class Security{
                 var timeout = storedCode.timestamp + 10 * 60 * 1000;
                 if (verificationCode == storedCode.verificationCode && Date.now() <= timeout) {
                     var token = jwt.sign({ email: visitor.getEmail(), admin: visitor.isAdmin() }, this.jwtSecret);
-                    res.json({ token: token });
+                    res.json({ token: token, admin: visitor.isAdmin() });
                     this.clearVerificationCodes(visitor.getEmail());
                     var emailAddressString: string = visitor.getEmail();
                     var settings = new UserSettings(emailAddressString);

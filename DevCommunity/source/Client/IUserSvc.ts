@@ -4,6 +4,8 @@
     isLoggedIn(): boolean;
 
     logOut(): void;
+
+    isAdmin(): boolean;
 }
 
 export = IUserSvc;

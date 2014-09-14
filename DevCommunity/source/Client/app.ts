@@ -1,5 +1,7 @@
 ﻿///ts:import=SiteConfig
 import SiteConfig = require('./SiteConfig'); ///ts:import:generated
+///ts:import=IUserSvc
+import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 
 $('.nav a').on('click', function () {
     if ($(".navbar-toggle").css('display') != 'none') {
@@ -83,13 +85,17 @@ export function getModuleName(): string {
         $('#NavContact').addClass('active');
     });
 
-    app.controller('NavBarController', function ($scope, userSvc) {
+    app.controller('NavBarController', function ($scope, userSvc: IUserSvc) {
         $scope.logOut = function () {
             userSvc.logOut();
         };
 
         $scope.isLoggedIn = function () {
             return userSvc.isLoggedIn();
+        };
+
+        $scope.isAdmin = function () {
+            return userSvc.isAdmin();
         };
 
         setTimeout( () => {$('.login-nav').removeClass('login-nav') }, 1);

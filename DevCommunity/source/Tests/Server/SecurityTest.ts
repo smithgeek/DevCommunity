@@ -83,14 +83,15 @@ describe('SecurityTests', function () {
         identifyAllowedEmail('email@invalid.com');
     });
 
-    it("Verify", () => {
+    function verify(admin: boolean) {
         var clearCodeSpy = getSpy(userVerificationDb, 'remove');
         var verifyCodeSpy = getSpy(userVerificationDb, 'find');
         var addUserSpy = getSpy(userSettingsDb, 'insert');
-        security.verify(new WebsiteVisitor('email@domain.com', false), '8675309', response);
+        security.verify(new WebsiteVisitor('email@domain.com', admin), '8675309', response);
 
         assert(sendSpy.notCalled);
         assert(jsonSpy.calledOnce);
+        assert.equal(jsonSpy.getCall(0).args[0].admin, admin);
 
         assert(verifyCodeSpy.calledOnce);
         assert.equal(verifyCodeSpy.getCall(0).args[0].Condition.email, 'email@domain.com');
@@ -105,6 +106,14 @@ describe('SecurityTests', function () {
         assert.equal(addUserArg.email, 'email@domain.com');
         assert(addUserArg.NewMeetingEmailNotification);
         assert(addUserArg.NewStoryEmailNotification);
+    }
+
+    it("VerifyUser", () => {
+        verify(false);
+    });
+
+    it("VerifyAdmin", () => {
+        verify(true);
     });
 
     it("FailToVerify", () => {

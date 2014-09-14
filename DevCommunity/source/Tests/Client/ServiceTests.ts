@@ -52,6 +52,18 @@ describe("UserService", function () {
         getUserSvc(localStorage).logOut()
         expect(count).to.equal( 1);
     });
+
+    it("IsAdmin", () => {
+        expect(getUserSvc({ get: (k) => { return "true"; } }).isAdmin()).to.be(true);
+    });
+
+    it("IsNotAdmin", () => {
+        expect(getUserSvc({ get: (k) => { return "false"; } }).isAdmin()).to.be(false);
+    });
+
+    it("UnknownAdmin", () => {
+        expect(getUserSvc({ get: (k) => { return ""; } }).isAdmin()).to.be(false);
+    });
 });
 
 describe("Meeting", function () {

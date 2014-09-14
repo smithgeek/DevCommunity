@@ -5,6 +5,9 @@ import app = require('./app'); ///ts:import:generated
 
 class AdminController {
     constructor(private $scope: AdminControllerScope, private $http: ng.IHttpService) {
+        $('.navbar-nav li.active').removeClass('active');
+        $('#NavAdmin').addClass('active');
+
         this.$scope.emailAddress = "";
         this.$scope.errorMessage = "";
         this.$scope.successMessage = "";

@@ -50,6 +50,7 @@ describe("LoginController", function () {
         var mock = sinon.mock(localStorage);
         mock.expects("remove").once().withExactArgs('userToken');
         mock.expects("remove").once().withExactArgs('userEmail');
+        mock.expects("remove").once().withExactArgs('admin');
         var controller = getController();
         $httpBackend.expectPOST('/identify', $scope.user).respond(404, "fail");
         controller.submitEmail();
@@ -66,11 +67,12 @@ describe("LoginController", function () {
         var mock = sinon.mock(localStorage);
         mock.expects("set").once().withExactArgs('userToken', "1");
         mock.expects("set").once().withExactArgs('userEmail', $scope.user);
+        mock.expects("set").once().withExactArgs('admin', true);
 
         var mockLocation = sinon.mock(location);
         mockLocation.expects("reload").once();
 
-        $httpBackend.expectPOST('/verify', $scope.user).respond(200, { token: "1" } );
+        $httpBackend.expectPOST('/verify', $scope.user).respond(200, { token: "1", admin: true } );
         controller.submitVerification();
         $httpBackend.flush();
         expect($scope.step).to.be("Email");
@@ -84,6 +86,7 @@ describe("LoginController", function () {
         var mock = sinon.mock(localStorage);
         mock.expects("remove").once().withExactArgs('userToken');
         mock.expects("remove").once().withExactArgs('userEmail');
+        mock.expects("remove").once().withExactArgs('admin');
         var controller = getController();
         $httpBackend.expectPOST('/verify', $scope.user).respond(404);
         controller.submitVerification();
