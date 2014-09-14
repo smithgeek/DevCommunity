@@ -4,6 +4,8 @@ import UserSettingsControllerScope = require('./UserSettingsControllerScope'); /
 import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 ///ts:import=UserSettings
 import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class UserSettingsController {
     constructor(private $scope: UserSettingsControllerScope, private $http: ng.IHttpService, private userSvc: IUserSvc) {
@@ -15,8 +17,9 @@ class UserSettingsController {
         this.$scope.successMessage = "";
 
         this.$http.get('/api/restricted/GetUserSettings').success((data) => {
-            if (data != "" && data != null)
+            if (data != "" && data != null) {
                 this.$scope.settings = <UserSettings>data;
+            }
         });
     }
 
@@ -37,4 +40,6 @@ class UserSettingsController {
             });
     }
 }
+angular.module(app.getModuleName()).controller('UserSettingsController', ['$scope', '$http', 'userSvc', UserSettingsController]);
+
 export = UserSettingsController;

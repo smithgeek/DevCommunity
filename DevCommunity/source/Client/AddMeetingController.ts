@@ -10,6 +10,8 @@ import Meeting = require('./Meeting'); ///ts:import:generated
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 ///ts:import=Browser
 import Browser = require('./Impl/Browser'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class AddMeetingController {
     constructor(private $scope: IMeetingControllerScope, private $http: ng.IHttpService, private meetingSvc: IMeetingSvc, private userSvc: IUserSvc, private rtb: Browser.IRichTextEditor) {
@@ -47,5 +49,7 @@ class AddMeetingController {
             });
     }
 }
+
+angular.module(app.getModuleName()).controller('AddMeetingController', ['$scope', '$http', 'meetingSvc', 'userSvc', 'richTextService', AddMeetingController]);
 
 export = AddMeetingController;

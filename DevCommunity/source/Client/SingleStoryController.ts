@@ -1,5 +1,7 @@
 ﻿///ts:import=Story
 import Story = require('../Common/Story'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class SingleStoryController {
 
@@ -14,4 +16,7 @@ class SingleStoryController {
         });
     }
 }
+
+angular.module(app.getModuleName()).controller('SingleStoryController', ['$scope', '$http', '$routeParams', SingleStoryController]);
+
 export = SingleStoryController;

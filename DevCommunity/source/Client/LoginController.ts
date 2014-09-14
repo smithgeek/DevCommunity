@@ -2,6 +2,8 @@
 import ILoginControllerScope = require('./ILoginControllerScope'); ///ts:import:generated
 ///ts:import=Browser
 import Browser = require('./Impl/Browser'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class LoginController {
     constructor(private $scope: ILoginControllerScope, private $http, private localStorageService, private location: Browser.IDocumentLocation) {
@@ -46,4 +48,7 @@ class LoginController {
         this.$scope.step = 'Email';
     }
 }
+
+angular.module(app.getModuleName()).controller('LoginController', ['$scope', '$http', 'localStorageService', 'documentLocation', LoginController]);
+
 export = LoginController;

@@ -1,5 +1,7 @@
 ﻿///ts:import=IUserSvc
 import IUserSvc = require('./IUserSvc'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class UserSvc implements IUserSvc {
     constructor(private localStorageService) {
@@ -23,4 +25,7 @@ class UserSvc implements IUserSvc {
         this.localStorageService.clearAll();
     }
 }
+
+angular.module(app.getModuleName()).service('userSvc', ['localStorageService', UserSvc]);
+
 export = UserSvc;

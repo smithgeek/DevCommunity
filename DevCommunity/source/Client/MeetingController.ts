@@ -1,5 +1,7 @@
 ﻿///ts:import=MeetingData
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class MeetingController {
 
@@ -14,4 +16,7 @@ class MeetingController {
         });
     }
 }
+
+angular.module(app.getModuleName()).controller('MeetingController', ['$scope', '$http', '$routeParams', 'meetingSvc', MeetingController]);
+
 export = MeetingController;

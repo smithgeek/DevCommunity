@@ -2,6 +2,8 @@
 import IMeetingSvc = require('./IMeetingSvc'); ///ts:import:generated
 ///ts:import=MeetingData
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class PastMeetingsController {
     loggedIn: boolean;
@@ -30,4 +32,7 @@ class PastMeetingsController {
         });
     }
 }
+
+angular.module(app.getModuleName()).controller('PastMeetingsController', ['$scope', '$http', 'meetingSvc', PastMeetingsController]);
+
 export = PastMeetingsController;

@@ -8,6 +8,8 @@ import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 import Story = require('../Common/Story'); ///ts:import:generated
 ///ts:import=Browser
 import Browser = require('./Impl/Browser'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class StorySubmitController {
     constructor(private $scope: IStorySubmitControllerScope, private storySvc: IStorySvc, private $http: ng.IHttpService, private userSvc: IUserSvc, private rtb: Browser.IRichTextEditor) {
@@ -49,4 +51,7 @@ class StorySubmitController {
             });
     }
 }
+
+angular.module(app.getModuleName()).controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', 'richTextService', StorySubmitController]);
+
 export = StorySubmitController;

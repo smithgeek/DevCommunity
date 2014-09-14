@@ -17,7 +17,7 @@ class Meeting extends MeetingData {
     }
 
     public isUserAuthor(): boolean {
-        return this.userSvc.getUser() == this.email;
+        return this.email != "" && this.userSvc.getUser() == this.email;
     }
 
     public Vote(): void {

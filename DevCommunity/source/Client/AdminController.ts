@@ -1,5 +1,7 @@
 ﻿///ts:import=AdminControllerScope
 import AdminControllerScope = require('./AdminControllerScope'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class AdminController {
     constructor(private $scope: AdminControllerScope, private $http: ng.IHttpService) {
@@ -37,4 +39,7 @@ class AdminController {
             });
     }
 }
+
+angular.module(app.getModuleName()).controller('AdminController', ['$scope', '$http', AdminController]);
+
 export = AdminController;

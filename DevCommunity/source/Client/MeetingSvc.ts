@@ -6,6 +6,8 @@ import Meeting = require('./Meeting'); ///ts:import:generated
 import UserSvc = require('./UserSvc'); ///ts:import:generated
 ///ts:import=MeetingData
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class MeetingSvc implements IMeetingSvc {
     constructor(private userSvc: UserSvc, private $http, private $rootScope) {
@@ -27,4 +29,7 @@ class MeetingSvc implements IMeetingSvc {
         this.$rootScope.$broadcast('addMeeting');
     }
 }
+
+angular.module(app.getModuleName()).service('meetingSvc', ['userSvc', '$http', '$rootScope', MeetingSvc]);
+
 export = MeetingSvc;

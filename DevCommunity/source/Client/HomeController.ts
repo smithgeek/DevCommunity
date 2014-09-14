@@ -8,6 +8,8 @@ import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 import Meeting = require('./Meeting'); ///ts:import:generated
 ///ts:import=Browser
 import Browser = require('./Impl/Browser'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class HomeController {
     loggedIn: boolean;
@@ -83,4 +85,7 @@ class HomeController {
         }
     }
 }
+
+angular.module(app.getModuleName()).controller('HomeController', ['$scope', '$http', 'userSvc', 'meetingSvc', 'localStorageService', 'richTextService', HomeController]);
+
 export = HomeController;

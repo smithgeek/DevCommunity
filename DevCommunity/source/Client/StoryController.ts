@@ -6,6 +6,8 @@ import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 import IStorySvc = require('./IStorySvc'); ///ts:import:generated
 ///ts:import=Story
 import Story = require('../Common/Story'); ///ts:import:generated
+///ts:import=app
+import app = require('./app'); ///ts:import:generated
 
 class StoryController {
     constructor($scope: StoryControllerScope, $http: ng.IHttpService, private userSvc: IUserSvc, private storySvc: IStorySvc) {
@@ -55,4 +57,5 @@ class StoryController {
         return date.toLocaleDateString();
     }
 }
+angular.module(app.getModuleName()).controller('StoryController', ['$scope', '$http', 'userSvc', 'storySvc', StoryController]);
 export = StoryController;

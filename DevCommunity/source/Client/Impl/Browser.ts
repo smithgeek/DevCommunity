@@ -1,4 +1,6 @@
-﻿
+﻿///ts:import=app
+import app = require('../app'); ///ts:import:generated
+
 export interface IRichTextEditor {
     setText(text: string): void;
     getText(): string;
@@ -48,3 +50,6 @@ export class DocumentLocation implements IDocumentLocation {
         location.reload();
     }
 }
+
+angular.module(app.getModuleName()).service('richTextService', [CKEditorRichText]);
+angular.module(app.getModuleName()).service('documentLocation', [DocumentLocation]);
