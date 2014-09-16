@@ -15,7 +15,7 @@ class AdminController {
         this.$scope.tweetErrorMessage = "";
     }
 
-    public Submit(): void {
+    public AddUser(): void {
         this.$scope.successMessage = "";
         this.$scope.errorMessage = "";
         $('.settings-btn').prop('disabled', true);

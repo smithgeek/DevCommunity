@@ -1,0 +1,32 @@
+{
+    "contact": {
+        "email": "",
+        "name": ""
+
+    },
+    "nav": {
+        "glyph": "glyphicon-none",
+        "name": "Developer Community",
+        "showRandomTweets": false
+
+    },
+    "mail": {
+        "from": "",
+        "smtp": {
+            "host": ""
+        }
+    },
+    "server": {
+        "admin": "admin@admin.com",
+        "domain": "",
+        "jwtSecret": "MySuperSecret",
+        "port": 3000,
+        "restrictedLoginDomain": "",
+        "sendEmails": false,
+        "isServerConfigured": false
+    },
+    "disqus": {
+        "enabled": false,
+        "shortname": ""
+    } 
+}

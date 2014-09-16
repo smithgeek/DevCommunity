@@ -4,23 +4,139 @@ br
 .page-header
     h1 Admin
 if admin
-  div.admin(ng-controller="AdminController as controller")
-    h3 Add User
-    form
-      .form-group
-        input(type='text' ng-model='emailAddress') 
-      button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
-      span(style="margin-left: 20px; color: red") {{errorMessage}}
-      span(style="margin-left: 20px; color: green") {{successMessage}}
+  div
+    ul.nav.nav-tabs(role="tablist")
+      li.active
+        a(href='#ConfigTab' role="tab" data-toggle="tab") Site Config
+      li
+        a(href='#OtherTab' role="tab" data-toggle="tab") Data
 
-    hr
+    div.tab-content
+      div.tab-pane.active(id="ConfigTab")
+        form(ng-controller="SiteConfigController as controller")
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Contact Information
+            div.panel-body
+              p Who should people contact? The name will be displayed on the contact with a link using the given email address
+              .form-group
+                label Email address
+                input.form-control(type='text' ng-model='config.contact.email') 
+              .form-group
+                label Name
+                input.form-control(type='text' ng-model='config.contact.name') 
 
-    h3 Add Tweet
-    form
-      .form-group
-        input(type='text' ng-model='tweetEmbedCode')
-      button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.AddTweet()") Add Tweet
-      span(style="margin-left: 20px; color: red") {{tweetErrorMessage}}
-      span(style="margin-left: 20px; color: green") {{tweetSuccessMessage}}
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Site Navigation
+            div.panel-body
+              .form-group
+                label Site name, displayed in top bar.
+                input.form-control(type='text' ng-model='config.nav.name') 
+              .form-group
+                label Glyphicon 
+                  a(href='http://getbootstrap.com/components/') See available icons
+                input.form-control(type='text' ng-model='config.nav.glyph') 
+              .form-group
+                label Random Tweets
+                br
+                input(type="checkbox" ng-model="config.nav.showRandomTweets")
+                |  Show random tweets on main page
+          
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Email Configuration
+            div.panel-body
+              .form-group
+                label From address
+                input.form-control(type='text' ng-model='config.mail.from') 
+              .form-group
+                label From address
+                input.form-control(type='text' ng-model='config.mail.smtp.host' placeholder='smtp.gmail.com') 
+
+              div.panel-body
+                div.panel.panel-default
+                  div.panel-heading
+                    h4.panel-title SMTP Configuration
+                  div.panel-body
+                    .form-group
+                      label Secure Connection
+                      br
+                      input(type="checkbox" ng-model="smtp.secureConnection")
+                      |  Is a secure connection needed to send emails?
+                    .form-group(ng-enabled='smtp.secureConnection')
+                      label Port
+                      input.form-control(type='text' ng-model='smtp.port')
+                    .form-group(ng-enabled='smtp.secureConnection')
+                      label Username
+                      input.form-control(type='text' ng-model='smtp.username') 
+                    .form-group(ng-enabled='smtp.secureConnection')
+                      label Password
+                      input.form-control(type='text' ng-model='smtp.password') 
+
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Server
+            div.panel-body
+              .form-group
+                label Port
+                input.form-control(type='text' ng-model='config.server.port') 
+              .form-group
+                label Domain (mydomain.com)
+                input.form-control(type='text' ng-model='config.server.domain') 
+              .form-group
+                label Send Emails
+                br
+                input(type="checkbox" ng-model="config.server.sendEmails")
+                |  Is the server allowed to send emails?
+              .form-group
+                label Admin email address
+                input.form-control(type='text' ng-model='config.server.admin') 
+              .form-group
+                label JWT Secret
+                p Secret used in hashing web token, should be some random string
+                input.form-control(type='text' ng-model='config.server.jwtSecret') 
+              .form-group
+                label Restricted login domain (ex. @gmail.com)
+                input.form-control(type='text' ng-model='config.server.restrictedLoginDomain') 
+
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Disqus Comments
+            div.panel-body
+              .form-group
+                label Enabled
+                br
+                input(type="checkbox" ng-model="config.disqus.enabled")
+                |  Should comments be enabled?
+              .form-group
+                label Disqus shortname, found in Disqus control panel.
+                input.form-control(type='text' ng-model='config.disqus.shortname') 
+
+          p Changes to the configuration require the server to restart.  If it is configured to do so it will restart automatically, otherwise a manual restart will be required before changes take affect.
+            | If using the default "npm start" the server should automatically restart.
+          button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit
+          span(style="margin-left: 20px; color: red") {{ErrorMessage}}
+          span(style="margin-left: 20px; color: green") {{SuccessMessage}}
+
+      div.tab-pane(id="OtherTab")
+        div.admin(ng-controller="AdminController as controller")
+          h3 Add User
+          form
+            .form-group
+              input(type='text' ng-model='emailAddress') 
+            button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.AddUser()") Submit
+            span(style="margin-left: 20px; color: red") {{errorMessage}}
+            span(style="margin-left: 20px; color: green") {{successMessage}}
+
+          hr
+
+          h3 Add Tweet
+          form
+            .form-group
+              input(type='text' ng-model='tweetEmbedCode')
+            button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.AddTweet()") Add Tweet
+            span(style="margin-left: 20px; color: red") {{tweetErrorMessage}}
+            span(style="margin-left: 20px; color: green") {{tweetSuccessMessage}}
 else
   p You must log in with an administrator account to access this page.

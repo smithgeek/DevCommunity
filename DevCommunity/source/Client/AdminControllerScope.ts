@@ -1,4 +1,5 @@
-﻿interface AdminControllerScope extends ng.IScope {
+﻿
+interface AdminControllerScope extends ng.IScope {
     emailAddress: string;
     errorMessage: string;
     successMessage: string;

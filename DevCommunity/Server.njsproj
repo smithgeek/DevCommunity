@@ -125,6 +125,8 @@
     <TypeScriptCompile Include="source\Client\PastMeetingsController.ts" />
     <TypeScriptCompile Include="source\Client\SingleStoryController.ts" />
     <TypeScriptCompile Include="source\Client\SiteConfig.ts" />
+    <TypeScriptCompile Include="source\Client\SiteConfigController.ts" />
+    <TypeScriptCompile Include="source\Client\SiteConfigControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\StoryControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\StorySubmitController.ts" />
     <TypeScriptCompile Include="source\Client\StorySvc.ts" />
@@ -132,6 +134,7 @@
     <TypeScriptCompile Include="source\Client\UserSettingsControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\UserSvc.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
+    <TypeScriptCompile Include="source\Common\Site.ts" />
     <TypeScriptCompile Include="source\Common\Story.ts" />
     <TypeScriptCompile Include="source\Client\StoryController.ts" />
     <TypeScriptCompile Include="source\Common\UserSettings.ts" />
@@ -144,10 +147,12 @@
     <TypeScriptCompile Include="source\Server\NeDb.ts" />
     <TypeScriptCompile Include="source\Server\PublicApi.ts" />
     <TypeScriptCompile Include="source\Server\Query.ts" />
+    <TypeScriptCompile Include="source\Server\RestartWriter.ts" />
     <TypeScriptCompile Include="source\Server\RestrictedApi.ts" />
     <TypeScriptCompile Include="source\Server\routes\partials.ts" />
     <TypeScriptCompile Include="source\Server\Security.ts" />
     <TypeScriptCompile Include="source\Server\server.ts" />
+    <TypeScriptCompile Include="source\Server\SmtpConverter.ts" />
     <TypeScriptCompile Include="source\Server\Twitter.ts" />
     <TypeScriptCompile Include="source\Server\UserSettingsRepository.ts" />
     <TypeScriptCompile Include="source\Server\Visitor.ts" />
@@ -162,6 +167,7 @@
     <TypeScriptCompile Include="source\Tests\Client\RouteConfigTests.ts" />
     <TypeScriptCompile Include="source\Tests\Client\ServiceTests.ts" />
     <TypeScriptCompile Include="source\Tests\Client\SingleStoryControllerTests.ts" />
+    <TypeScriptCompile Include="source\Tests\Client\SiteConfigControllerTests.ts" />
     <TypeScriptCompile Include="source\Tests\Client\SiteConfigTests.ts" />
     <TypeScriptCompile Include="source\Tests\Client\StoryControllerTests.ts" />
     <TypeScriptCompile Include="source\Tests\Client\StorySubmitControllerTests.ts" />
@@ -170,6 +176,7 @@
     <TypeScriptCompile Include="source\Tests\Server\DevCommunityEmailerTests.ts" />
     <TypeScriptCompile Include="source\Tests\Server\RestrictedApiTests.ts" />
     <TypeScriptCompile Include="source\Tests\Server\SecurityTest.ts" />
+    <TypeScriptCompile Include="source\Tests\Server\SmtpConverterTests.ts" />
     <TypeScriptCompile Include="source\Tests\Server\TwitterTest.ts" />
     <TypeScriptCompile Include="source\Tests\Server\UserSettingsRepositoryTests.ts" />
     <TypeScriptCompile Include="source\Tests\Server\UserSettingsTests.ts" />

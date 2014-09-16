@@ -8,6 +8,8 @@ import DevCommunityEmailer = require('../../Server/DevCommunityEmailer'); ///ts:
 import Logger = require('../../Server/Logger'); ///ts:import:generated
 ///ts:import=WebsiteVisitor
 import WebsiteVisitor = require('../../Server/WebsiteVisitor'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../../Common/Site'); ///ts:import:generated
 
 import assert = require('assert');
 var sinon: SinonStatic = require('sinon');
@@ -32,7 +34,7 @@ describe('SecurityTests', function () {
         userVerificationDb = <Database>{ insert: function (q, callback) { callback(null, q); }, find: function (q, callback) { callback(null, [{ timestamp: Date.now(), verificationCode: 8675309}]); }, remove: function (q, o) { } };
         emailer = <DevCommunityEmailer>{ sendVerificationEmail: function (code: number, email: string) { } };
         logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
-        security = new Security("domain.com", "secret", userVerificationDb, userSettingsDb, emailer, logger);
+        security = new Security("domain.com", "secret", userVerificationDb, userSettingsDb, emailer, logger, <Site.Config>{ server: { isServerConfigured: true } });
     });
 
     afterEach(() => {
@@ -79,8 +81,17 @@ describe('SecurityTests', function () {
     });
 
     it("IdentifyNoDomainRestriction", () => {
-        security = new Security("", "secret", userVerificationDb, userSettingsDb, emailer, logger);
+        security = new Security("", "secret", userVerificationDb, userSettingsDb, emailer, logger, <Site.Config>{ server: { isServerConfigured: true } });
         identifyAllowedEmail('email@invalid.com');
+    });
+
+    it("IdentifyInitialSetup", () => {
+        var insertCodeSpy = getSpy(userVerificationDb, 'insert');
+        security = new Security("domain.com", "secret", userVerificationDb, userSettingsDb, emailer, logger, <Site.Config>{ server: { isServerConfigured: false } });
+        security.identify(new WebsiteVisitor('email@domain.com', true), response);
+
+        assert(insertCodeSpy.calledOnce);
+        assert.equal(insertCodeSpy.getCall(0).args[0].verificationCode, "");
     });
 
     function verify(admin: boolean) {

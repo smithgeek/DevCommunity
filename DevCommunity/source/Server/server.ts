@@ -31,17 +31,31 @@ import Api = require('./Api'); ///ts:import:generated
 import Security = require('./Security'); ///ts:import:generated
 ///ts:import=WebsiteVisitorFactory
 import WebsiteVisitorFactory = require('./WebsiteVisitorFactory'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../Common/Site'); ///ts:import:generated
+///ts:import=SmtpConverter
+import SmtpConverter = require('./SmtpConverter'); ///ts:import:generated
 
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var nodemailer:Nodemailer = require ('nodemailer'); // https://github.com/andris9/nodemailer
-var config = require('../../Config/config.js');
+
+var configFilePath = 'Config/config.json';
+var config: Site.Config = new Site.Config();
+
+if (fs.existsSync(configFilePath)) {
+    var input: any = fs.readFileSync(configFilePath);
+    config = JSON.parse(input);
+}
+else {
+    fs.writeFileSync(configFilePath, JSON.stringify(config));
+}
 
 var app = express();
 
 // all environments
 var rootPath: string = path.join(__dirname, '..');
-app.set('port', process.env.PORT || config.server.port);
+app.set('port', config.server.port.toString());
 app.set('views', path.join(rootPath, 'views'));
 app.set('view engine', 'jade');
 app.use('/api/restricted', expressJwt({ secret: config.server.jwtSecret }));
@@ -130,15 +144,18 @@ var storyDb: Database = new NeDb(path.join(DatabaseDir, 'stories.db.json'));
 var userSettingsDb: Database = new NeDb(path.join(DatabaseDir, 'user_settings.db.json'));
 
 var logger: Logger = new ConsoleAndFileLogger();
-var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, config.mail.smtp, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
+var smtpConverter: SmtpConverter = new SmtpConverter(config.mail.smtp);
+var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, smtpConverter, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
 
 var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger);
 var userSettingsRepo: UserSettingsRepository = new UserSettingsRepository(userSettingsDb, logger);
 var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger);
-var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger);
+var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger, config);
 var api: Api = new Api(publicApi, restrictedApi, security);
 
 var visitorFactory: WebsiteVisitorFactory = new WebsiteVisitorFactory(security, config.server.admin, logger);
+routes.setVisitorFactory(visitorFactory);
+
 userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
     if (err != null) {
         logger.log('User settings index error: ' + err.toString());
@@ -238,6 +255,19 @@ app.get('/api/GetRandomTweet', function (req, res) {
     api.public.getRandomTweet(res);
 });
 
+app.get('/api/restricted/GetSiteConfig', (req, res) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getSiteConfig(visitor, config, res);
+    });
+});
+
+app.post('/api/restricted/UpdateSiteConfig', (req, res) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.updateSiteConfig(visitor, req.body, configFilePath, res);
+    });
+});
+
+var port = app.get('port');
 http.createServer(app).listen(app.get('port'), function () {
     logger.log('Express server listening on port ' + app.get('port'));
 });

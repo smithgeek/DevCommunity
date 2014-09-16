@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                 outDir: "site",
                 options: {
                     module: 'commonjs',
-                    sourceMap: false,
+                    sourceMap: true,
                     removeComments: false
                 }
             },

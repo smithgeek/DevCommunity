@@ -39,7 +39,7 @@ describe("AdminController", function () {
         var address = "fake_address";
         $scope.emailAddress = address;
         $httpBackend.expectPOST('/api/restricted/AddUser', { user: address }).respond(200, "success");
-        controller.Submit();
+        controller.AddUser();
         $httpBackend.flush();
         expect($scope.successMessage).to.be("success");
         expect($scope.errorMessage).to.be("");
@@ -52,7 +52,7 @@ describe("AdminController", function () {
         var address = "fake_address";
         $scope.emailAddress = address;
         $httpBackend.expectPOST('/api/restricted/AddUser', { user: address }).respond(401, "fail");
-        controller.Submit();
+        controller.AddUser();
         $httpBackend.flush();
         expect($scope.successMessage).to.be("");
         expect($scope.errorMessage).to.be("fail");

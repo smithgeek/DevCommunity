@@ -18,6 +18,12 @@ import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
 import Story = require('../Common/Story'); ///ts:import:generated
 ///ts:import=MeetingData
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../Common/Site'); ///ts:import:generated
+///ts:import=RestartWriter
+import RestartWriter = require('./RestartWriter'); ///ts:import:generated
+
+import fs = require('fs');
 
 class RestrictedApi {
 
@@ -161,6 +167,33 @@ class RestrictedApi {
         this.userSettingsRepo.getMeetingScheduledSubscribers((users) => {
             this.emailer.sendMeetingScheduledEmail(message, meeting, users);
         });
+    }
+
+    public getSiteConfig(visitor: Visitor, config: Site.Config, res: HttpResponse): void {
+        if (visitor.isAdmin()) {
+            res.send(200, config);
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator get the site configuration.");
+        }
+    }
+
+    public updateSiteConfig(visitor: Visitor, config: Site.Config, configPath: string, res: HttpResponse): void {
+        if (visitor.isAdmin()) {
+            config.server.isServerConfigured = true;
+            fs.writeFile(configPath, JSON.stringify(config), (err) => {
+                if (err == null) {
+                    res.send(200, "Config Updated");
+                    RestartWriter.writeRestartFile("restart requested");
+                }
+                else {
+                    res.send(404, "Failure: " + err.message);
+                }
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator get the site configuration.");
+        }
     }
 }
 export = RestrictedApi;

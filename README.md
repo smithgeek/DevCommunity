@@ -29,12 +29,15 @@ All the files are output to the site directory where the other resources exist.
 
 Running
 ============
-The next thing you need to do is set up the configuration file.  A config-example.js file exists in the repo and you just need to rename that to config.js.  Then adjust all of the options to suit your needs.
+Now you are ready to run the server, the first thing you should do is set up the site configuration.
 
-Once you get through all that it should be ready to go and you can start the node server by going back to the command prompt and running
+1. First start the server
 ```javascript
 npm start
 ```
+
+2. Login to the site, the default admin account is "admin@admin.com" and a blank verification code.
+3. Now that you are logged in click on the admin tab and set up the site configuration as you wish.  Once the config is updated once verification codes will be required to log in.
 
 Running Tests
 ============

@@ -74,9 +74,10 @@ class DevCommunityEmailer {
     private sendMail(toEmailAddress: string, subject: string, body: string): void {
         if (this.allowSendMail) {
             this.mailer.sendEmail(toEmailAddress, subject, body);
+            this.logger.log("Emailing \"" + subject + "\" to " + toEmailAddress);
         }
         else {
-            this.logger.log("Emailing \"" + subject + "\" to " + toEmailAddress);
+            this.logger.log("Not Emailing \"" + subject + "\" to " + toEmailAddress);
         }
     }
 }

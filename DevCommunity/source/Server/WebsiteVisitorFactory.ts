@@ -11,7 +11,8 @@ class WebsiteVisitorFactory{
 
     public get(request, callback: (visitor: WebsiteVisitor) => void): void {
         this.security.decodeEmail(request, (email) => {
-            callback(new WebsiteVisitor(email, this.isAdmin(email)));
+            var visitor = new WebsiteVisitor(email, this.isAdmin(email));
+            callback(visitor);
         });
     }
 
@@ -20,7 +21,7 @@ class WebsiteVisitorFactory{
     }
 
     private isAdmin(email: string): boolean {
-        return this.adminEmail == email;
+        return this.adminEmail == '' || this.adminEmail == email;
     }
 }
 export = WebsiteVisitorFactory;

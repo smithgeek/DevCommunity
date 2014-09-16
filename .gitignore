@@ -29,6 +29,8 @@ DevCommunity/node_modules
 */TestResults/*
 
 config.js
+config.json
+restart.js
 *.js.map
 
 deployProd.bat

@@ -10,12 +10,14 @@ import Visitor = require('./Visitor'); ///ts:import:generated
 import HttpResponse = require('./HttpResponse'); ///ts:import:generated
 ///ts:import=UserSettings
 import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../Common/Site'); ///ts:import:generated
 
 var jwt = require('jsonwebtoken');
 
 class Security{
 
-    constructor(private restrictedDomain: string, private jwtSecret: string, private userVerificationDb: Database, private userSettingsDb: Database, private emailer: DevCommunityEmailer, private logger: Logger) {
+    constructor(private restrictedDomain: string, private jwtSecret: string, private userVerificationDb: Database, private userSettingsDb: Database, private emailer: DevCommunityEmailer, private logger: Logger, private config: Site.Config) {
     }
 
     public verify(visitor: Visitor, verificationCode: string, res: HttpResponse): void {
@@ -47,7 +49,10 @@ class Security{
         if (this.restrictedDomain == "" || email.indexOf(this.restrictedDomain) != -1) {
             this.clearVerificationCodes(email);
 
-            var verificationCode = this.generateVerificationCode();
+            var verificationCode: string = "";
+            if (this.config.server.isServerConfigured){
+                verificationCode = this.generateVerificationCode().toString();
+            }
             this.userVerificationDb.insert({ email: email, verificationCode: verificationCode, timestamp: Date.now() }, function (err, newDoc) { });
             this.emailer.sendVerificationEmail(verificationCode, email);
             this.logger.log("Verification code: " + verificationCode);

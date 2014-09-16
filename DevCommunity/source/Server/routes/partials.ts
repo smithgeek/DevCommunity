@@ -1,22 +1,36 @@
 ﻿///ts:import=Twitter
 import Twitter = require('../Twitter'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../../Common/Site'); ///ts:import:generated
+///ts:import=WebsiteVisitorFactory
+import WebsiteVisitorFactory = require('../WebsiteVisitorFactory'); ///ts:import:generated
 
 import express = require('express');
-var config;
+var config: Site.Config;
 var jwt = require('jsonwebtoken');
 var twitter: Twitter;
+var visitorFactory: WebsiteVisitorFactory;
 
 export function setTwitterInstance(t: Twitter) {
     twitter = t;
 }
 
-export function setConfig(c) {
+export function setConfig(c: Site.Config) {
     config = c;
 }
 
+export function setVisitorFactory(factory: WebsiteVisitorFactory) {
+    visitorFactory = factory;
+}
+
 function isAdmin(req): boolean {
-    if (req.headers.authorization)
-        return config.server.admin == jwt.decode(req.headers.authorization.substr(7)).email;
+    if (config.server.admin == "") {
+        return true;
+    }
+    if (req.headers.authorization) {
+        var visitor = visitorFactory.getByEmail(jwt.decode(req.headers.authorization.substr(7)).email);
+        return visitor.isAdmin();
+    }
     else
         return false;
 }
