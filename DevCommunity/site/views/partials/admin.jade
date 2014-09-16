@@ -11,9 +11,37 @@ if admin
       li
         a(href='#OtherTab' role="tab" data-toggle="tab") Data
 
+    br
+
     div.tab-content
       div.tab-pane.active(id="ConfigTab")
         form(ng-controller="SiteConfigController as controller")
+          div.panel.panel-default
+            div.panel-heading
+              h3.panel-title Server
+            div.panel-body
+              .form-group
+                label Admin email address
+                input.form-control(type='text' ng-model='config.server.admin') 
+              .form-group
+                label Port
+                input.form-control(type='text' ng-model='config.server.port') 
+              .form-group
+                label Domain (mydomain.com)
+                input.form-control(type='text' ng-model='config.server.domain') 
+              .form-group
+                label Send Emails
+                br
+                input(type="checkbox" ng-model="config.server.sendEmails")
+                |  Is the server allowed to send emails?
+              .form-group
+                label JWT Secret
+                p Secret used in hashing web token, should be some random string
+                input.form-control(type='text' ng-model='config.server.jwtSecret') 
+              .form-group
+                label Restricted login domain (ex. @gmail.com)
+                input.form-control(type='text' ng-model='config.server.restrictedLoginDomain') 
+
           div.panel.panel-default
             div.panel-heading
               h3.panel-title Contact Information
@@ -73,32 +101,6 @@ if admin
                     .form-group(ng-enabled='smtp.secureConnection')
                       label Password
                       input.form-control(type='text' ng-model='smtp.password') 
-
-          div.panel.panel-default
-            div.panel-heading
-              h3.panel-title Server
-            div.panel-body
-              .form-group
-                label Port
-                input.form-control(type='text' ng-model='config.server.port') 
-              .form-group
-                label Domain (mydomain.com)
-                input.form-control(type='text' ng-model='config.server.domain') 
-              .form-group
-                label Send Emails
-                br
-                input(type="checkbox" ng-model="config.server.sendEmails")
-                |  Is the server allowed to send emails?
-              .form-group
-                label Admin email address
-                input.form-control(type='text' ng-model='config.server.admin') 
-              .form-group
-                label JWT Secret
-                p Secret used in hashing web token, should be some random string
-                input.form-control(type='text' ng-model='config.server.jwtSecret') 
-              .form-group
-                label Restricted login domain (ex. @gmail.com)
-                input.form-control(type='text' ng-model='config.server.restrictedLoginDomain') 
 
           div.panel.panel-default
             div.panel-heading

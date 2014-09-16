@@ -37,7 +37,7 @@ npm start
 ```
 
 2. Login to the site, the default admin account is "admin@admin.com" and a blank verification code.
-3. Now that you are logged in click on the admin tab and set up the site configuration as you wish.  Once the config is updated once verification codes will be required to log in.
+3. Now that you are logged in click on the admin tab and set up the site configuration as you wish.  Once the config is updated verification codes will be required to log in.
 
 Running Tests
 ============

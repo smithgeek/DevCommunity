@@ -16,7 +16,6 @@ import Site = require('../Common/Site'); ///ts:import:generated
 var jwt = require('jsonwebtoken');
 
 class Security{
-
     constructor(private restrictedDomain: string, private jwtSecret: string, private userVerificationDb: Database, private userSettingsDb: Database, private emailer: DevCommunityEmailer, private logger: Logger, private config: Site.Config) {
     }
 
@@ -29,14 +28,16 @@ class Security{
                     var token = jwt.sign({ email: visitor.getEmail(), admin: visitor.isAdmin() }, this.jwtSecret);
                     res.json({ token: token, admin: visitor.isAdmin() });
                     this.clearVerificationCodes(visitor.getEmail());
-                    var emailAddressString: string = visitor.getEmail();
-                    var settings = new UserSettings(emailAddressString);
-                    this.userSettingsDb.insert(settings, (err, newDoc) => {
-                        if (err != null)
-                            this.logger.log("Could not add user " + emailAddressString);
-                        else
-                            this.logger.log("Added user settings for " + emailAddressString);
-                    });
+                    if (this.config.server.isServerConfigured) {
+                        var emailAddressString: string = visitor.getEmail();
+                        var settings = new UserSettings(emailAddressString);
+                        this.userSettingsDb.insert(settings, (err, newDoc) => {
+                            if (err != null)
+                                this.logger.log("Could not add user " + emailAddressString);
+                            else
+                                this.logger.log("Added user settings for " + emailAddressString);
+                        });
+                    }
                     return;
                 }
             }
@@ -82,10 +83,8 @@ class Security{
         return Math.floor(Math.random() * 900000) + 100000;
     }
 
-
     private clearVerificationCodes(email: string): void {
         this.userVerificationDb.remove({ Condition: { email: email }, Options: { multi: true } }, function (err, numRemoved) { });
     }
-
 }
 export = Security;

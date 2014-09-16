@@ -10,6 +10,8 @@ import Logger = require('../../Server/Logger'); ///ts:import:generated
 import WebsiteVisitor = require('../../Server/WebsiteVisitor'); ///ts:import:generated
 ///ts:import=Site
 import Site = require('../../Common/Site'); ///ts:import:generated
+///ts:import=NeDb
+import NeDb = require('../../Server/NeDb'); ///ts:import:generated
 
 import assert = require('assert');
 var sinon: SinonStatic = require('sinon');
@@ -30,7 +32,7 @@ describe('SecurityTests', function () {
         response = { send: sinon.spy(), json: sinon.spy() };
         sendSpy = response.send;
         jsonSpy = response.json;
-        userSettingsDb = <Database>{ insert: function (q, callback) { callback(null, q); } };
+        userSettingsDb = new NeDb('');// <Database>{ insert: function (q, callback) { callback(null, q); } };
         userVerificationDb = <Database>{ insert: function (q, callback) { callback(null, q); }, find: function (q, callback) { callback(null, [{ timestamp: Date.now(), verificationCode: 8675309}]); }, remove: function (q, o) { } };
         emailer = <DevCommunityEmailer>{ sendVerificationEmail: function (code: number, email: string) { } };
         logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
@@ -149,4 +151,14 @@ describe('SecurityTests', function () {
         assert(sendSpy.calledOnce);
         assert.equal(sendSpy.getCall(0).args[0], 401);
     });
+
+    it("VerifyInitialSetup", () => {
+        security = new Security("", "secret", userVerificationDb, userSettingsDb, emailer, logger, <Site.Config>{ server: { isServerConfigured: false } });
+        userSettingsDb.insert({ email: 'admin@admin.com', verificationCode: "", timestamp: Date.now() }, (err, d) => { });
+
+        var addUserSpy = getSpy(userSettingsDb, 'insert');
+        security.verify(new WebsiteVisitor('admin@admin.com', false), '', response);
+        assert(addUserSpy.notCalled);
+    });
+
 });
