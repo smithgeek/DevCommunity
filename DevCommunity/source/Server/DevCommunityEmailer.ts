@@ -54,7 +54,7 @@ class DevCommunityEmailer {
         var body = "";
         if (specialMessage != "") {
             body = "<b><u>Special Message:</u></b><br/>";
-            body += specialMessage + "<br/>";
+            body += specialMessage + "<br/><br/>";
         }
         body += "The voters have spoken and a new topic has been selected for " + meeting.date + ".<br/ >";
         body += "<a href='" + this.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
@@ -74,7 +74,6 @@ class DevCommunityEmailer {
     private sendMail(toEmailAddress: string, subject: string, body: string): void {
         if (this.allowSendMail) {
             this.mailer.sendEmail(toEmailAddress, subject, body);
-            this.logger.log("Emailing \"" + subject + "\" to " + toEmailAddress);
         }
         else {
             this.logger.log("Not Emailing \"" + subject + "\" to " + toEmailAddress);

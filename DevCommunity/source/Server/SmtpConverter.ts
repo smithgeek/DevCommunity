@@ -5,9 +5,10 @@ class SmtpConverter {
     private options: NodemailerSMTPTransportOptions;
 
     constructor(private smtpOptions: Site.SmtpOptions) {
-        this.options = { auth: {} };
+        this.options = {};
         this.options.host = smtpOptions.host;
         if (typeof smtpOptions.password != 'undefined' && smtpOptions.password != "") {
+            this.options.auth = {};
             this.options.auth.pass = smtpOptions.password;
             this.options.auth.user = smtpOptions.username;
         }

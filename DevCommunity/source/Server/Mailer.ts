@@ -22,7 +22,7 @@ class Mailer {
 
         smtpTransport.sendMail(message, (error) => {
             if (error) {
-                this.logger.log(error.message);
+                this.logger.log("Mail error: " + error.message);
             }
             else {
                 this.logger.log("Sent email to " + toEmailAddress + ": " + subject);

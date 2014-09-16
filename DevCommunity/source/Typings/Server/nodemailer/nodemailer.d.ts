@@ -90,7 +90,7 @@ interface NodemailerSMTPTransportOptions {
 	port?:             number;
 	secureConnection?: boolean;
 	name?:             string;
-	auth:              NodemailerAuthInterface;
+	auth?:             NodemailerAuthInterface;
 	ignoreTLS?:        boolean;
 	debug?:            boolean;
 	maxConnections?:   number;

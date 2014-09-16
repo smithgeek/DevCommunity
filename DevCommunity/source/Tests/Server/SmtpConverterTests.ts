@@ -15,11 +15,11 @@ describe("SmtpConverter", () => {
 
     // This test is necessary for backwards compatability
     it("ProvideOnlyHost", () => {
-        isEqual(getOptions({ host: host }), { host: host, auth: {} });
+        isEqual(getOptions({ host: host }), { host: host });
     });
 
     it("ProviderAndPort", () => {
-        isEqual(getOptions({ host: host, port: port }), { host: host, port: port, auth: {} });
+        isEqual(getOptions({ host: host, port: port }), { host: host, port: port });
     });
 
     it("ProvideEverything", () => {
@@ -29,13 +29,16 @@ describe("SmtpConverter", () => {
 
     it("ProvideEmptyString", () => {
         isEqual(getOptions({ host: host, port: '', secureConnection: false, username: '', password: '' }),
-            { host: host, auth: { } });
+            { host: host });
     });
 
     function isEqual(actual: NodemailerSMTPTransportOptions, expected) {
         assert.equal(actual.host, expected.host, "host");
-        assert.equal(actual.auth.pass, expected.auth.pass, 'password');
-        assert.equal(actual.auth.user, expected.auth.user, 'user');
+        assert.equal(typeof actual.auth, typeof expected.auth);
+        if(typeof actual.auth != 'undefined') {
+            assert.equal(actual.auth.pass, expected.auth.pass, 'password');
+            assert.equal(actual.auth.user, expected.auth.user, 'user');
+        }
         assert.equal(actual.secureConnection, expected.secureConnection, 'secure connection');
         assert.equal(actual.port, expected.port, 'port');
     }
