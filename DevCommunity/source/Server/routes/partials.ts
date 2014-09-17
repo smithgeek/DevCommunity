@@ -1,6 +1,4 @@
-﻿///ts:import=Twitter
-import Twitter = require('../Twitter'); ///ts:import:generated
-///ts:import=Site
+﻿///ts:import=Site
 import Site = require('../../Common/Site'); ///ts:import:generated
 ///ts:import=WebsiteVisitorFactory
 import WebsiteVisitorFactory = require('../WebsiteVisitorFactory'); ///ts:import:generated
@@ -8,12 +6,7 @@ import WebsiteVisitorFactory = require('../WebsiteVisitorFactory'); ///ts:import
 import express = require('express');
 var config: Site.Config;
 var jwt = require('jsonwebtoken');
-var twitter: Twitter;
 var visitorFactory: WebsiteVisitorFactory;
-
-export function setTwitterInstance(t: Twitter) {
-    twitter = t;
-}
 
 export function setConfig(c: Site.Config) {
     config = c;
@@ -40,19 +33,7 @@ export function index(req: express.Request, res: express.Response) {
 };
 
 export function home(req: express.Request, res: express.Response) {
-    if (config.nav.showRandomTweets) {
-        twitter.getRandomTweet(function (html) {
-            if (html == '') {
-                res.render('partials/home', { admin: isAdmin(req), showTweet: false, tweetHtml: '' });
-            }
-            else {
-                res.render('partials/home', { admin: isAdmin(req), showTweet: true, tweetHtml: html });
-            }
-        });
-    }
-    else {
-        res.render('partials/home', { admin: isAdmin(req), showTweet: false, tweetHtml: '' });
-    }
+    res.render('partials/home', { admin: isAdmin(req) });
 };
 
 export function about(req: express.Request, res: express.Response) {

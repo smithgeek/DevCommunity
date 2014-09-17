@@ -108,6 +108,7 @@
     <TypeScriptCompile Include="source\Client\AdminController.ts" />
     <TypeScriptCompile Include="source\Client\AdminControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\app.ts" />
+    <TypeScriptCompile Include="source\Client\HomeCarouselEditorController.ts" />
     <TypeScriptCompile Include="source\Client\HomeController.ts" />
     <TypeScriptCompile Include="source\Client\ILoginControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\IMeetingControllerScope.ts" />

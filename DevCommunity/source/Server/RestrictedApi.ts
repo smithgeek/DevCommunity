@@ -24,10 +24,12 @@ import Site = require('../Common/Site'); ///ts:import:generated
 import RestartWriter = require('./RestartWriter'); ///ts:import:generated
 
 import fs = require('fs');
+var jade = require('jade');
 
 class RestrictedApi {
 
-    constructor(private randomTweetsDb: Database, private twitter: Twitter, private userSettingsRepo: UserSettingsRepository, private storyDb: Database, private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger) {
+    constructor(private randomTweetsDb: Database, private twitter: Twitter, private userSettingsRepo: UserSettingsRepository, private storyDb: Database,
+        private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger) {
     }
 
     public addTweet(visitor: Visitor, twitterCode: string, res: HttpResponse): void {
@@ -193,6 +195,44 @@ class RestrictedApi {
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator get the site configuration.");
+        }
+    }
+
+    public getCarousel(visitor: Visitor, res: HttpResponse): void {
+        if (visitor.isAdmin()) {
+            fs.readFile('site/views/partials/HomeCarousel.jade', (err, buffer) => {
+                res.send(200, buffer.toString());
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to get the carousel.");
+        }
+    }
+
+    public renderJade(visitor: Visitor, jadeText: string, res: HttpResponse): void {
+        if (visitor.isAdmin()) {
+            fs.readFile('site/views/partials/HomeCarousel.jade', (err, buffer) => {
+                res.send(200, jade.render(jadeText));
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to render some jade.");
+        }
+    }
+
+    public saveHomeCarousel(visitor: Visitor, jadeText: string, res: HttpResponse): void {
+        if (visitor.isAdmin()) {
+            fs.writeFile('site/views/partials/HomeCarousel.jade', jadeText, {}, (err) => {
+                if (err == null) {
+                    res.send(200, "Carousel saved");
+                }
+                else {
+                    res.send(400, "Error: " + err.message);
+                }
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to get the carousel.");
         }
     }
 }

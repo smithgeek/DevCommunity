@@ -103,7 +103,7 @@ html, body {
     padding-top: 50px;
 }
 
-#info-carousel .meeting{
+#info-carousel .item{
     padding-left: 125px; 
     padding-right: 125px;
     margin-bottom: 30px;
@@ -130,7 +130,7 @@ html, body {
 }
 
 @media (max-width: 767px){
-    #info-carousel .meeting{
+    #info-carousel .item{
         padding-left: 20%; 
         padding-right: 20%;
     }

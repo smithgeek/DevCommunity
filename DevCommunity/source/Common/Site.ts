@@ -6,7 +6,6 @@ export interface Contact {
 export interface Nav {
     name: string
     glyph: string;
-    showRandomTweets: boolean;
 }
 
 export interface SmtpOptions {
@@ -41,7 +40,7 @@ export class Config {
     constructor() {
         this.contact = { email: "", name: "" };
 
-        this.nav = { glyph: "glyphicon-none", name: "Developer Community", showRandomTweets: false };
+        this.nav = { glyph: "glyphicon-none", name: "Developer Community" };
 
         this.mail = { from: "", smtp: { host: "" } };
 

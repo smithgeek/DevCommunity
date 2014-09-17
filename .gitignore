@@ -41,3 +41,5 @@ deployProd.bat
 //typescript cache
 */.tscache/*
 .baseDir.?s
+
+/DevCommunity/site/views/partials/HomeCarousel.jade

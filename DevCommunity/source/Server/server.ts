@@ -51,6 +51,16 @@ else {
     fs.writeFileSync(configFilePath, JSON.stringify(config));
 }
 
+var carouselPath: string = 'site/views/partials/HomeCarousel.jade';
+if(!fs.existsSync(carouselPath)) {
+    if (config.server.isServerConfigured) {
+        fs.writeFileSync(carouselPath, '.item.active\n  .row\n    .col-md-12\n      h3 Nothing to see here.\n');
+    }
+    else {
+        fs.writeFileSync(carouselPath, '.item.active\n  .row\n    .col-md-12\n      h3 Site needs configuration!\n      p.jumbotron-small-text(style="white-space:pre;")\n        | Login using "admin@admin.com"\n        | A blank verification code.');
+    }
+}
+
 var app = express();
 
 // all environments
@@ -109,7 +119,6 @@ var DatabaseDir: string = "Data/";
 var randomTweetsDb: Database = new NeDb(path.join(DatabaseDir, 'random_tweets.db.json'));
 var twitter: Twitter = new Twitter(randomTweetsDb);
 
-routes.setTwitterInstance(twitter);
 routes.setConfig(config);
 app.get('/', routes.index);
 app.get('/partials/home', routes.home);
@@ -264,6 +273,24 @@ app.get('/api/restricted/GetSiteConfig', (req, res) => {
 app.post('/api/restricted/UpdateSiteConfig', (req, res) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.updateSiteConfig(visitor, req.body, configFilePath, res);
+    });
+});
+
+app.get('/api/restricted/GetCarousel', (req, res) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getCarousel(visitor, res);
+    });
+});
+
+app.post('/api/restricted/RenderJade', (req, res) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.renderJade(visitor, req.body.jade, res);
+    });
+});
+
+app.post('/api/restricted/SaveCarousel', (req, res) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.saveHomeCarousel(visitor, req.body.jade, res);
     });
 });
 

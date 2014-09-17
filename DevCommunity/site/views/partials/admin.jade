@@ -10,6 +10,8 @@ if admin
         a(href='#ConfigTab' role="tab" data-toggle="tab") Site Config
       li
         a(href='#OtherTab' role="tab" data-toggle="tab") Data
+      li
+        a(href='#CarouselTab' role="tab" data-toggle="tab") Home Carousel
 
     br
 
@@ -65,11 +67,6 @@ if admin
                 label Glyphicon 
                   a(href='http://getbootstrap.com/components/') See available icons
                 input.form-control(type='text' ng-model='config.nav.glyph') 
-              .form-group
-                label Random Tweets
-                br
-                input(type="checkbox" ng-model="config.nav.showRandomTweets")
-                |  Show random tweets on main page
           
           div.panel.panel-default
             div.panel-heading
@@ -140,5 +137,47 @@ if admin
             button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.AddTweet()") Add Tweet
             span(style="margin-left: 20px; color: red") {{tweetErrorMessage}}
             span(style="margin-left: 20px; color: green") {{tweetSuccessMessage}}
+
+      div.tab-pane(id="CarouselTab")
+        div(ng-controller="HomeCarouselEditorController as controller")
+          p 
+            | Everything is in 
+            a(href='http://jade-lang.com/') Jade 
+            | format
+
+          form
+            .form-group
+              h3 Individual item
+              label This space is used for testing, to save you must update the Full Carousel below.
+              div.btn-toolbar
+                button.btn.btn-sm(ng-click="controller.insertTweet()") Twitter
+                button.btn.btn-sm(ng-click="controller.insertEmbeddedVideo()") Embedded Video
+                button.btn.btn-sm(ng-click="controller.insertText()") Text
+              br
+
+              textarea.form-control(rows=10 ng-model='itemJadeText')
+            button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.renderItemPreview()") Preview Item
+            h3 Individual Item Preview
+            .jumbotron
+              .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
+                .carousel-inner
+                  div(id="ItemCarouselPreview")
+
+            hr
+            .form-group
+              h3 Full Carousel
+              p Don't forget to add ".item" to only one item so that the first pane is selected correctly.
+              textarea.form-control(rows=25 ng-model='jadeText')
+            button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.renderPreview()") Preview
+            h3 Preview
+            .jumbotron
+              .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
+                .carousel-inner
+                  div(id="CarouselPreview")
+
+            button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.saveCarousel()") Save Carousel
+            span(style="margin-left: 20px; color: red") {{carouselErrorMessage}}
+            span(style="margin-left: 20px; color: green") {{carouselSuccessMessage}}
+
 else
   p You must log in with an administrator account to access this page.

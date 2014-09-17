@@ -11,6 +11,7 @@ $('.nav a').on('click', function () {
 
 class TweetController {
     constructor(private $http) {
+        this.getNewTweet();
     }
 
     public getNewTweet(): void {
