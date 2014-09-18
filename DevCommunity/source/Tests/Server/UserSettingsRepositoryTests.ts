@@ -75,20 +75,18 @@ describe("UserSettingsRepo", () => {
 
     it("NewMeetingScheduledNotificationDefaultsToTrueIfNewMeetingEmailNotificationIsTrue", (done) => {
         var settings: UserSettings = new UserSettings("email");
-        db.insert({ "email": "email", "NewMeetingEmailNotification": true, "NewStoryEmailNotification": true, "_id": "rtkr5eAAIDYR1Q8B" }, () => { });
+        db.insert({ "email": "email", "NewMeetingEmailNotification": true, "NewStoryEmailNotification": true }, () => { });
         repo.getUserSettings("email", (success: boolean, user: UserSettings) => {
             assert.equal(user.NewMeetingScheduledNotification, true);        
-            assert.equal(user._id, "rtkr5eAAIDYR1Q8B");    
             done();
         });
     });
 
     it("NewMeetingScheduledNotificationDefaultsToFalseIfNewMeetingEmailNotificationIsFalse", (done) => {
         var settings: UserSettings = new UserSettings("email");
-        db.insert({ "email": "email", "NewMeetingEmailNotification": false, "NewStoryEmailNotification": true, "_id": "rtkr5eAAIDYR1Q8B" }, () => { });
+        db.insert({ "email": "email", "NewMeetingEmailNotification": false, "NewStoryEmailNotification": true }, () => { });
         repo.getUserSettings("email", (success: boolean, user: UserSettings) => {
             assert.equal(user.NewMeetingScheduledNotification, false);
-            assert.equal(user._id, "rtkr5eAAIDYR1Q8B");
             done();
         });
     });
