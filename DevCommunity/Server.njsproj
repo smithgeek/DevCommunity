@@ -142,7 +142,6 @@
     <TypeScriptCompile Include="source\Server\Api.ts" />
     <TypeScriptCompile Include="source\Server\Database.ts" />
     <TypeScriptCompile Include="source\Server\DevCommunityEmailer.ts" />
-    <TypeScriptCompile Include="source\Server\HttpResponse.ts" />
     <TypeScriptCompile Include="source\Server\Logger.ts" />
     <TypeScriptCompile Include="source\Server\Mailer.ts" />
     <TypeScriptCompile Include="source\Server\NeDb.ts" />

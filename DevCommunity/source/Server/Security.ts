@@ -6,20 +6,19 @@ import DevCommunityEmailer = require('./DevCommunityEmailer'); ///ts:import:gene
 import Logger = require('./Logger'); ///ts:import:generated
 ///ts:import=Visitor
 import Visitor = require('./Visitor'); ///ts:import:generated
-///ts:import=HttpResponse
-import HttpResponse = require('./HttpResponse'); ///ts:import:generated
 ///ts:import=UserSettings
 import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
 ///ts:import=Site
 import Site = require('../Common/Site'); ///ts:import:generated
 
+import express = require('express');
 var jwt = require('jsonwebtoken');
 
 class Security{
     constructor(private restrictedDomain: string, private jwtSecret: string, private userVerificationDb: Database, private userSettingsDb: Database, private emailer: DevCommunityEmailer, private logger: Logger, private config: Site.Config) {
     }
 
-    public verify(visitor: Visitor, verificationCode: string, res: HttpResponse): void {
+    public verify(visitor: Visitor, verificationCode: string, res: express.Response): void {
         this.userVerificationDb.find({ Condition: { email: visitor.getEmail() } }, (err, docs) => {
             if (docs.length == 1) {
                 var storedCode = docs[0];
@@ -45,7 +44,7 @@ class Security{
         });
     }
 
-    public identify(visitor: Visitor, res: HttpResponse): void {
+    public identify(visitor: Visitor, res: express.Response): void {
         var email: string = visitor.getEmail();
         if (this.restrictedDomain == "" || email.indexOf(this.restrictedDomain) != -1) {
             this.clearVerificationCodes(email);

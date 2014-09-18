@@ -139,3 +139,13 @@ html, body {
 .admin input {
     width: 100%;
 }
+
+.panel-body-collapse {
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.readmore-panel{
+    width: 100%;
+    text-align: center;
+}

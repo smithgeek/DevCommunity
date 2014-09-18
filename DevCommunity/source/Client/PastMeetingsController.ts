@@ -20,15 +20,6 @@ class PastMeetingsController {
             for (var i = 0; i < data.length; ++i) {
                 $scope.meetings.push(meetingSvc.createMeeting(data[i]));
             }
-            
-            setTimeout(()=> {
-                $('.panel-body').readmore({
-                    maxHeight: 60,
-                    moreLink: '<a href="#" class="readmore-link">More</a>',
-                    lessLink: '<a href="#" class="readmore-link">Close</a>',
-                    speed: 500
-                });
-            }, 1);
         });
     }
 }

@@ -77,5 +77,8 @@ div(ng-controller='HomeController as controller')
                   span.glyphicon.glyphicon-cog
             a(href='#!/meeting/{{meeting._id}}')
               h3.panel-title {{meeting.description}}
-          .panel-body
+          div.panel-body.panel-body-collapse
             div(ng-bind-html="meeting.details")
+          div.readmore-panel
+            a.readmore-link.readmore-link-more(href='#' onclick="showMore(this);") More
+            a.readmore-link.readmore-link-less(href='#' onclick="showLess(this);" style="display: none;") Less

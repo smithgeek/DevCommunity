@@ -31,12 +31,6 @@ class HomeController {
             }
             
             setTimeout(()=> {
-                $('.panel-body').readmore({
-                    maxHeight: 60,
-                    moreLink: '<a href="#" class="readmore-link">More</a>',
-                    lessLink: '<a href="#" class="readmore-link">Close</a>',
-                    speed: 500
-                });
                 $(document).ready(()=> {
                     $('#info-carousel').carousel({ interval: 10000, pause: "hover" });
                     this.NormalizeCarouselHeights();

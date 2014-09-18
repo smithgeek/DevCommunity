@@ -8,8 +8,6 @@ import UserSettingsRepository = require('./UserSettingsRepository'); ///ts:impor
 import DevCommunityEmailer = require('./DevCommunityEmailer'); ///ts:import:generated
 ///ts:import=Visitor
 import Visitor = require('./Visitor'); ///ts:import:generated
-///ts:import=HttpResponse
-import HttpResponse = require('./HttpResponse'); ///ts:import:generated
 ///ts:import=Logger
 import Logger = require('./Logger'); ///ts:import:generated
 ///ts:import=UserSettings
@@ -23,6 +21,8 @@ import Site = require('../Common/Site'); ///ts:import:generated
 ///ts:import=RestartWriter
 import RestartWriter = require('./RestartWriter'); ///ts:import:generated
 
+import express = require('express');
+import util = require('util');
 import fs = require('fs');
 var jade = require('jade');
 
@@ -32,7 +32,7 @@ class RestrictedApi {
         private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger) {
     }
 
-    public addTweet(visitor: Visitor, twitterCode: string, res: HttpResponse): void {
+    public addTweet(visitor: Visitor, twitterCode: string, res: express.Response): void {
         if (visitor.isAdmin()) {
             var embedCode: string = twitterCode.replace(/"/g, "'");
 
@@ -51,7 +51,7 @@ class RestrictedApi {
         }
     }
 
-    public addUser(visitor: Visitor, newUser: string, res: HttpResponse): void {
+    public addUser(visitor: Visitor, newUser: string, res: express.Response): void {
         if (visitor.isAdmin()) {
             this.userSettingsRepo.addUser(new UserSettings(newUser), (succes) => {
                 if (succes)
@@ -65,7 +65,7 @@ class RestrictedApi {
         }
     }
 
-    public setUserSettings(visitor: Visitor, settings: UserSettings, res: HttpResponse ): void {
+    public setUserSettings(visitor: Visitor, settings: UserSettings, res: express.Response ): void {
         settings.email = visitor.getEmail();
         this.userSettingsRepo.updateUserSettings(settings.email, settings, (success) => {
             if (success)
@@ -75,7 +75,7 @@ class RestrictedApi {
         });
     }
 
-    public getUserSettings(visitor: Visitor, res: HttpResponse): void {
+    public getUserSettings(visitor: Visitor, res: express.Response): void {
         this.userSettingsRepo.getUserSettings(visitor.getEmail(), (success: boolean, settings: UserSettings) => {
             if (success)
                 res.send(200, settings);
@@ -84,7 +84,7 @@ class RestrictedApi {
         });
     }
 
-    public addStory(visitor: Visitor, story: Story, res: HttpResponse): void {
+    public addStory(visitor: Visitor, story: Story, res: express.Response): void {
         story.submittor = visitor.getEmail();
         story.timestamp = Date.now();
         if (story._id == null || story._id == "") {
@@ -99,15 +99,16 @@ class RestrictedApi {
         }
         else {
             this.storyDb.update({ Query: { _id: story._id, submittor: visitor.getEmail() }, Update: { $set: { description: story.description, title: story.title, url: story.url } }, Options: {} }, (err, numReplaced) => {
-                if (err != null || numReplaced < 1)
+                if (err != null || numReplaced < 1) {
                     res.send(404, "Could not update");
+                }
                 else
                     res.send(200, { action: "Updated", story: story });
             });
         }
     }
 
-    public vote(visitor: Visitor, meetingId: number, res: HttpResponse): void {
+    public vote(visitor: Visitor, meetingId: number, res: express.Response): void {
         this.meetingIdeasDb.find({ Condition: { _id: meetingId } }, (err, meetings: MeetingData[]) => {
             if (err == null) {
                 var meeting: MeetingData = meetings[0];
@@ -134,7 +135,7 @@ class RestrictedApi {
         });
     }
 
-    public addMeeting(visitor: Visitor, meeting: MeetingData, res: HttpResponse): void {
+    public addMeeting(visitor: Visitor, meeting: MeetingData, res: express.Response): void {
         meeting.email = visitor.getEmail();
         if (meeting._id == "") {
             this.meetingIdeasDb.insert(meeting, (err, newDoc: MeetingData) => {
@@ -171,7 +172,7 @@ class RestrictedApi {
         });
     }
 
-    public getSiteConfig(visitor: Visitor, config: Site.Config, res: HttpResponse): void {
+    public getSiteConfig(visitor: Visitor, config: Site.Config, res: express.Response): void {
         if (visitor.isAdmin()) {
             res.send(200, config);
         }
@@ -180,7 +181,7 @@ class RestrictedApi {
         }
     }
 
-    public updateSiteConfig(visitor: Visitor, config: Site.Config, configPath: string, res: HttpResponse): void {
+    public updateSiteConfig(visitor: Visitor, config: Site.Config, configPath: string, res: express.Response): void {
         if (visitor.isAdmin()) {
             config.server.isServerConfigured = true;
             fs.writeFile(configPath, JSON.stringify(config), (err) => {
@@ -198,7 +199,7 @@ class RestrictedApi {
         }
     }
 
-    public getCarousel(visitor: Visitor, res: HttpResponse): void {
+    public getCarousel(visitor: Visitor, res: express.Response): void {
         if (visitor.isAdmin()) {
             fs.readFile('site/views/partials/HomeCarousel.jade', (err, buffer) => {
                 res.send(200, buffer.toString());
@@ -209,7 +210,7 @@ class RestrictedApi {
         }
     }
 
-    public renderJade(visitor: Visitor, jadeText: string, res: HttpResponse): void {
+    public renderJade(visitor: Visitor, jadeText: string, res: express.Response): void {
         if (visitor.isAdmin()) {
             fs.readFile('site/views/partials/HomeCarousel.jade', (err, buffer) => {
                 res.send(200, jade.render(jadeText));
@@ -220,7 +221,7 @@ class RestrictedApi {
         }
     }
 
-    public saveHomeCarousel(visitor: Visitor, jadeText: string, res: HttpResponse): void {
+    public saveHomeCarousel(visitor: Visitor, jadeText: string, res: express.Response): void {
         if (visitor.isAdmin()) {
             fs.writeFile('site/views/partials/HomeCarousel.jade', jadeText, {}, (err) => {
                 if (err == null) {

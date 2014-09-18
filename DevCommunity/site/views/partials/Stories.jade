@@ -36,8 +36,12 @@ div(ng-controller='StoryController as controller')
             span.glyphicon.glyphicon-trash
         .panel-title 
           a(href='#!/story/{{story._id}}') {{story.title}}
-      .panel-body
+      div.panel-body.panel-body-collapse
         div(ng-bind-html="story.description")
         .story-details
           a(href="/api/url?url={{story.url}}") {{story.url}}
           div Last Modified: {{controller.getHumanTime(story)}}
+      div.readmore-panel
+        a.readmore-link.readmore-link-more(href='#' onclick="showMore(this);") More
+        a.readmore-link.readmore-link-less(href='#' onclick="showLess(this);" style="display: none;") Less
+

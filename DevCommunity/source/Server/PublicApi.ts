@@ -2,8 +2,6 @@
 import Twitter = require('./Twitter'); ///ts:import:generated
 ///ts:import=Database
 import Database = require('./Database'); ///ts:import:generated
-///ts:import=HttpResponse
-import HttpResponse = require('./HttpResponse'); ///ts:import:generated
 ///ts:import=Visitor
 import Visitor = require('./Visitor'); ///ts:import:generated
 ///ts:import=Story
@@ -13,11 +11,13 @@ import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 ///ts:import=Logger
 import Logger = require('./Logger'); ///ts:import:generated
 
+import express = require('express');
+
 class PublicApi {
     constructor(private twitter: Twitter, private storyDb: Database, private meetingIdeasDb: Database, private logger: Logger) {
     }
      
-    public getRandomTweet(res: HttpResponse): void{
+    public getRandomTweet(res: express.Response): void{
         this.twitter.getRandomTweet(function (html) {
             if (html == '') {
                 res.send(401, '');
@@ -28,7 +28,7 @@ class PublicApi {
         });
     }
 
-    public getStories(visitor: Visitor, res: HttpResponse): void {
+    public getStories(visitor: Visitor, res: express.Response): void {
         this.storyDb.find({ Condition: {}, Sort: { timestamp: -1 } }, (err, stories: Array<Story>) => {
             if (err == null) {
                 var sendStories: Array<Story> = new Array<Story>();
@@ -43,7 +43,7 @@ class PublicApi {
         });
     }
 
-    public redirectUrl(url: string, res: HttpResponse): string {
+    public redirectUrl(url: string, res: express.Response): string {
         var redirect: string = url;
         if (redirect.substr(0, 4) != 'http') {
             redirect = 'http://' + redirect;
@@ -52,7 +52,7 @@ class PublicApi {
         return redirect;
     }
 
-    public getStoryById(id: number, visitor: Visitor, res: HttpResponse): void {
+    public getStoryById(id: number, visitor: Visitor, res: express.Response): void {
         this.storyDb.find({ Condition: { _id: id } }, (err, stories) => {
             if (err == null) {
                 res.send(200, this.anonymizeStory(stories[0], visitor.getEmail()));
@@ -63,7 +63,7 @@ class PublicApi {
         });
     }
 
-    public getMeetingById(id: number, visitor: Visitor, res: HttpResponse): void {
+    public getMeetingById(id: number, visitor: Visitor, res: express.Response): void {
         this.meetingIdeasDb.find({ Condition: { _id: id } }, (err, meeting) => {
             if (err == null) {
                 res.send(200, this.anonymizeMeeting(meeting[0], visitor.getEmail()));
@@ -74,15 +74,15 @@ class PublicApi {
         });
     }
 
-    public getArhivedMeetings(visitor: Visitor, res: HttpResponse): void {
+    public getArhivedMeetings(visitor: Visitor, res: express.Response): void {
         this.getMeetings({ $and: [{ date: { $exists: true } }, { $not: { date: null } }] }, { date: -1 }, visitor, res);
     }
 
-    public getMeetingSuggestions(visitor: Visitor, res: HttpResponse): void {
+    public getMeetingSuggestions(visitor: Visitor, res: express.Response): void {
         this.getMeetings({ $or: [{ date: { $exists: false } }, { date: null }] }, { vote_count: -1 }, visitor, res);
     }
 
-    private getMeetings(condition, sort, visitor: Visitor, res: HttpResponse) {
+    private getMeetings(condition, sort, visitor: Visitor, res: express.Response) {
         this.meetingIdeasDb.find({ Condition: condition, Sort: sort }, (err, suggestions: MeetingData[]) => {
             if (err == null) {
                 suggestions.forEach((value: MeetingData, index: number, array: MeetingData[]) => {

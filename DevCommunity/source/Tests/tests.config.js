@@ -17,7 +17,7 @@ module.exports = function(config) {
     files: [
       'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
 	  'http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
-	  'site/public/dist/js/readmore.min.js',
+	  'site/public/dist/js/readmore.js',
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.js',
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-mocks.js',
 	  'http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-route.js',

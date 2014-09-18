@@ -171,15 +171,15 @@ userSettingsDb.addIndex({ fieldName: 'email', unique: true }, function (err) {
     }
 });
 
-app.post('/verify', function (req, res) {
+app.post('/verify', function (req: express.Request, res: express.Response) {
     api.security.verify(visitorFactory.getByEmail(req.body.email), req.body.verificationCode, res);
 });
 
-app.post('/identify', (req, res) => {
+app.post('/identify', (req: express.Request, res: express.Response) => {
     api.security.identify(visitorFactory.getByEmail(req.body.email), res);
 });
 
-app.post('/api/restricted/AddMeeting', function (req: any, res) {
+app.post('/api/restricted/AddMeeting', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.restricted.addMeeting(visitor, req.body.meeting, res);
         if (req.body.sendEmail) {
@@ -188,107 +188,107 @@ app.post('/api/restricted/AddMeeting', function (req: any, res) {
     });
 });
 
-app.get('/api/GetSuggestions', function (req, res) {
+app.get('/api/GetSuggestions', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getMeetingSuggestions(visitor, res);
     });
 });
 
-app.get('/api/GetArchivedMeetings', function (req, res) {
+app.get('/api/GetArchivedMeetings', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getArhivedMeetings(visitor, res);
     });
 });
 
-app.get('/api/GetMeetingById/:id', function (req, res) {
+app.get('/api/GetMeetingById/:id', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getMeetingById(req.params.id, visitor, res);
     });
 });
 
-app.get('/api/GetStoryById/:id', function (req, res) {
+app.get('/api/GetStoryById/:id', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getStoryById(req.params.id, visitor, res);
     });
 });
 
-app.get('/api/url', function (req, res) {
+app.get('/api/url', function (req: express.Request, res: express.Response) {
     var redirect: string = api.public.redirectUrl(req.query.url, res);
     logger.log(req.connection.remoteAddress + " is going to " + redirect);
 });
 
-app.post('/api/restricted/Vote', function (req, res) {
+app.post('/api/restricted/Vote', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.restricted.vote(visitor, req.body._id, res);
     });
 });
 
-app.get('/api/GetStories', function (req, res) {
+app.get('/api/GetStories', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getStories(visitor, res);
     });
 });
 
-app.post('/api/restricted/AddStory', function (req: any, res) {
-    visitorFactory.get(res, (visitor) => {
+app.post('/api/restricted/AddStory', function (req: express.Request, res: express.Response) {
+    visitorFactory.get(req, (visitor) => {
         api.restricted.addStory(visitor, req.body, res);
     });
 });
 
-app.get('/api/restricted/GetUserSettings', function (req, res) {
+app.get('/api/restricted/GetUserSettings', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         logger.log("Get user settings " + visitor.getEmail());
         api.restricted.getUserSettings(visitor, res);
     });
 });
 
-app.post('/api/restricted/SetUserSettings', function (req: any, res) {
+app.post('/api/restricted/SetUserSettings', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.restricted.setUserSettings(visitor, req.body, res);
     });
 });
 
-app.post('/api/restricted/AddUser', function (req: any, res) {
+app.post('/api/restricted/AddUser', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.restricted.addUser(visitor, req.body.user, res);
     });
 });
 
-app.post('/api/restricted/AddTweet', function (req: any, res) {
+app.post('/api/restricted/AddTweet', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.restricted.addTweet(visitor, req.body.embedCode, res);
     });
 });
 
-app.get('/api/GetRandomTweet', function (req, res) {
+app.get('/api/GetRandomTweet', function (req: express.Request, res: express.Response) {
     api.public.getRandomTweet(res);
 });
 
-app.get('/api/restricted/GetSiteConfig', (req, res) => {
+app.get('/api/restricted/GetSiteConfig', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.getSiteConfig(visitor, config, res);
     });
 });
 
-app.post('/api/restricted/UpdateSiteConfig', (req, res) => {
+app.post('/api/restricted/UpdateSiteConfig', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.updateSiteConfig(visitor, req.body, configFilePath, res);
     });
 });
 
-app.get('/api/restricted/GetCarousel', (req, res) => {
+app.get('/api/restricted/GetCarousel', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.getCarousel(visitor, res);
     });
 });
 
-app.post('/api/restricted/RenderJade', (req, res) => {
+app.post('/api/restricted/RenderJade', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.renderJade(visitor, req.body.jade, res);
     });
 });
 
-app.post('/api/restricted/SaveCarousel', (req, res) => {
+app.post('/api/restricted/SaveCarousel', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.saveHomeCarousel(visitor, req.body.jade, res);
     });

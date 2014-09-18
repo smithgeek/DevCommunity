@@ -7,14 +7,12 @@ div(ng-controller='PastMeetingsController as controller')
       .media-body
         .panel.panel-primary
           .panel-heading
-            //.pull-right
-              button.editable(ng-click='controller.EditMeeting(meeting)' ng-show="meeting.isUserAuthor()")
-                span.glyphicon.glyphicon-edit
-              if admin
-                button.editable(ng-click='controller.AdminEditMeeting(meeting)' ng-hide="meeting.isUserAuthor()")
-                  span.glyphicon.glyphicon-cog
             a(href='#!/meeting/{{meeting._id}}')
               h3.panel-title {{meeting.description}}
-          .panel-body
+          .panel-body.panel-body-collapse
             p Meeting date: {{meeting.date}}
             div(ng-bind-html="meeting.details")
+          div.readmore-panel
+            a.readmore-link.readmore-link-more(href='#' onclick="showMore(this);") More
+            a.readmore-link.readmore-link-less(href='#' onclick="showLess(this);" style="display: none;") Less
+
