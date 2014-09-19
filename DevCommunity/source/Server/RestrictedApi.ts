@@ -236,5 +236,32 @@ class RestrictedApi {
             res.send(401, "Who do you think you are?  You have to be an administrator to get the carousel.");
         }
     }
+
+    public getUsers(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.userSettingsRepo.getUsers((users: Array<UserSettings>) => {
+                res.send(200, users);
+            });
+        }
+        else {
+            res.send(401, []);
+        }
+    }
+
+    public deleteUser(visitor: Visitor, user: UserSettings, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.userSettingsRepo.deleteUser(user, (success: boolean) => {
+                if (success) {
+                    res.send(200, "Success");
+                }
+                else {
+                    res.send(404, "Failure");
+                }
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to delete users.");
+        }
+    }
 }
 export = RestrictedApi;

@@ -1,4 +1,6 @@
-﻿
+﻿///ts:import=UserSettings
+import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
+
 interface AdminControllerScope extends ng.IScope {
     emailAddress: string;
     errorMessage: string;
@@ -6,5 +8,9 @@ interface AdminControllerScope extends ng.IScope {
     tweetErrorMessage: string;
     tweetSuccessMessage: string;
     tweetEmbedCode: string;
+    users: Array<UserSettings>;
+    selectedUser: UserSettings;
+    deleteUserErrorMessage: string;
+    deleteUserSuccessMessage: string;
 }
 export = AdminControllerScope;

@@ -10,13 +10,14 @@ $('.nav a').on('click', function () {
 });
 
 class TweetController {
-    constructor(private $http) {
+    constructor(private $http, private $rootScope) {
         this.getNewTweet();
     }
 
     public getNewTweet(): void {
         this.$http.get('/api/GetRandomTweet').success((html) => {
             $('#tweetHolder').html(html);
+            this.$rootScope.$broadcast('tweetUpdated');
         });
     }
 }
@@ -74,7 +75,7 @@ export function getModuleName(): string {
     app.config(['localStorageServiceProvider', '$locationProvider', '$httpProvider', SiteConfig]);
     app.config(['$routeProvider', RouteConfig]);
 
-    app.controller('TweetController', ['$http', TweetController]);
+    app.controller('TweetController', ['$http', '$rootScope', TweetController]);
 
     app.controller('AboutController', function ($scope) {
         $('.navbar-nav li.active').removeClass('active');

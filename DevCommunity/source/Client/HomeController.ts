@@ -24,6 +24,11 @@ class HomeController {
         $scope.$on('meetingAdded', function (event, meeting) {
             $scope.meetings.push(meeting);
         });
+        $scope.$on('tweetUpdated', (event) => {
+            setTimeout(() => {
+                this.NormalizeCarouselHeights();
+            }, 1000);
+        });
 
         $http.get('/api/GetSuggestions').success((data: Array<MeetingData>) => {
             for (var i = 0; i < data.length; ++i) {
@@ -60,9 +65,10 @@ class HomeController {
         if (items.length) {
             function normalizeHeights() {
                 items.each(function () { //add heights to array
+                    $(this).css('min-height', 0 + 'px');
                     heights.push($(this).height());
                 });
-                tallest = Math.max.apply(null, heights) + 10; //cache largest value
+                tallest = Math.max.apply(null, heights); //cache largest value
                 items.each(function () {
                     $(this).css('min-height', tallest + 'px');
                 });

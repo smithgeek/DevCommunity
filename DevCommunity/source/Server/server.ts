@@ -294,6 +294,18 @@ app.post('/api/restricted/SaveCarousel', (req: express.Request, res: express.Res
     });
 });
 
+app.get('/api/restricted/GetUsers', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getUsers(visitor, res);
+    });
+});
+
+app.post('/api/restricted/DeleteUser', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.deleteUser(visitor, req.body.user, res);
+    });
+});
+
 var port = app.get('port');
 http.createServer(app).listen(app.get('port'), function () {
     logger.log('Express server listening on port ' + app.get('port'));

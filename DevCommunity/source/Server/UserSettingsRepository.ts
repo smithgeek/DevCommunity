@@ -62,5 +62,22 @@ class UserSettingsRepository{
                 callback(false);
         });
     }
+
+    public getUsers(callback: (users: Array<UserSettings>) => void): void {
+        this.db.find({ Condition: {} }, (err, settings: Array<UserSettings>) => {
+            if (err == null) {
+                callback(settings);
+            }
+            else {
+                callback([]);
+            }
+        });
+    }
+
+    public deleteUser(user: UserSettings, callback: (success: boolean) => void): void {
+        this.db.remove({ Condition: { _id: user._id }, Options: {} }, (err, count: number) => {
+            callback(err == null && count > 0);
+        });
+    }
 }
 export = UserSettingsRepository;
