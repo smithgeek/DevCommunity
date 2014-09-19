@@ -61,8 +61,6 @@ describe("UserSettingsRepo", () => {
         db.insert({ email: "email2", NewMeetingEmailNotification: false }, () => { });
         repo.getAdminEmailSubscribers((users: Array<UserSettings>) => {
             assert.equal(users.length, 2);
-            assert.equal(users[0].email, "email1");
-            assert.equal(users[1].email, "email2");
             done();
         });
     });

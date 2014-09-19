@@ -2,6 +2,11 @@ DevCommunity
 ============
 [![Build Status](https://travis-ci.org/brentosmith/DevCommunity.svg?branch=master)](https://travis-ci.org/brentosmith/DevCommunity)
 [![Coverage Status](https://img.shields.io/coveralls/brentosmith/DevCommunity.svg)](https://coveralls.io/r/brentosmith/DevCommunity?branch=master)
+
+About
+============
+This is just a simple website to help organize a developer community.  I created this when I started a developer group at my place of work.  It is meant to be run on an internal network because security is pretty lax. It provides a place where people can submit ideas on what they want the community to do and then everyone can vote.  There is also a place to submit stories that seem relevant to the community and the ability to add comments supported by Disqus.
+
 Prerequisites
 ============
 [Node](http://nodejs.org/) must be installed
