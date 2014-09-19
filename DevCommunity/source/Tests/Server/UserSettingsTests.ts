@@ -11,5 +11,16 @@ describe("UserSettings", function () {
         assert.equal(true, settings.NewMeetingEmailNotification, "NewMeetingEmail");
         assert.equal(true, settings.NewStoryEmailNotification, "NewStoryEmail");
         assert.equal(true, settings.NewMeetingScheduledNotification, "New Meeting Scheduled");
+        assert.equal(true, settings.AdminEmails, "Admin emails");
+    });
+
+    it("NonDefaultConstructed", () => {
+        var settings: UserSettings = new UserSettings("email", false, false, false, false, "id");
+        assert.equal("email", settings.email, "email");
+        assert.equal("id", settings._id, "_id");
+        assert.equal(false, settings.NewMeetingEmailNotification, "NewMeetingEmail");
+        assert.equal(false, settings.NewStoryEmailNotification, "NewStoryEmail");
+        assert.equal(false, settings.NewMeetingScheduledNotification, "New Meeting Scheduled");
+        assert.equal(false, settings.AdminEmails, "Admin emails");
     });
 });

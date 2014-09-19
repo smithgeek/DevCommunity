@@ -69,9 +69,9 @@ class RestrictedApi {
         settings.email = visitor.getEmail();
         this.userSettingsRepo.updateUserSettings(settings.email, settings, (success) => {
             if (success)
-                res.send(404, "Could not update");
-            else
                 res.send(200, { action: "Updated", settings: settings });
+            else
+                res.send(404, "Could not update");
         });
     }
 
@@ -166,10 +166,12 @@ class RestrictedApi {
         }
     }
 
-    public emailUsersMeetingScheduled(message: string, meeting: MeetingData): void {
-        this.userSettingsRepo.getMeetingScheduledSubscribers((users) => {
-            this.emailer.sendMeetingScheduledEmail(message, meeting, users);
-        });
+    public emailUsersMeetingScheduled(visitor: Visitor, message: string, meeting: MeetingData): void {
+        if (visitor.isAdmin()) {
+            this.userSettingsRepo.getMeetingScheduledSubscribers((users) => {
+                this.emailer.sendMeetingScheduledEmail(message, meeting, users);
+            });
+        }
     }
 
     public getSiteConfig(visitor: Visitor, config: Site.Config, res: express.Response): void {
@@ -261,6 +263,18 @@ class RestrictedApi {
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to delete users.");
+        }
+    }
+
+    public sendAdminEmail(visitor: Visitor, subject: string, body: string, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.userSettingsRepo.getAdminEmailSubscribers((users) => {
+                this.emailer.sendAdminEmail(subject, body, users);
+                res.send(200, "Success");
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to send an email.");
         }
     }
 }

@@ -23,6 +23,20 @@ class UserSettingsRepository{
         });
     }
 
+    public getAdminEmailSubscribers(callback: (users: Array<UserSettings>) => void): void {
+        this.db.find({
+            Condition: { $or: [{ AdminEmails: true }, { AdminEmails: { $exists: false } }] }
+        }, (err, results: Array<UserSettings>) => {
+            if (err == null) {
+                callback(results);
+            }
+            else {
+                this.logger.error("Error in UserSettingsRepo.getAdminEmailSubscribers " + err);
+                callback([]);
+            }
+        });
+    }
+
     public addUser(user: UserSettings, callback: (success: boolean) => void): void {
         this.db.insert(user, (err, newDoc) => {
             if (err != null) {
@@ -36,7 +50,7 @@ class UserSettingsRepository{
         this.db.find({ Condition: { email: email } }, function (err, settings: Array<UserSettings>) {
             if (err == null && settings.length > 0) {
                 var user: UserSettings = settings[0];
-                callback(true, new UserSettings(user.email, user.NewMeetingEmailNotification, user.NewStoryEmailNotification, user.NewMeetingScheduledNotification, user._id));
+                callback(true, new UserSettings(user.email, user.NewMeetingEmailNotification, user.NewStoryEmailNotification, user.NewMeetingScheduledNotification, user.AdminEmails, user._id));
             }
             else {
                 callback(false, null);
@@ -51,15 +65,16 @@ class UserSettingsRepository{
                 $set: {
                     NewMeetingEmailNotification: settings.NewMeetingEmailNotification,
                     NewStoryEmailNotification: settings.NewStoryEmailNotification,
-                    NewMeetingScheduledNotification: settings.NewMeetingScheduledNotification
+                    NewMeetingScheduledNotification: settings.NewMeetingScheduledNotification,
+                    AdminEmails: settings.AdminEmails
                 }
             },
             Options: { upsert: true }
         }, (err, numReplaced) => {
             if (err != null || numReplaced < 1)
-                callback(true);
-            else
                 callback(false);
+            else
+                callback(true);
         });
     }
 

@@ -44,6 +44,29 @@ describe("UserSettingsRepo", () => {
         });
     });
 
+    it("GetAdminEmailSubscribers", (done) => {
+        db.insert(new UserSettings("email1", true, true, true, true), () => { });
+        var email2 = new UserSettings("email2", true, true, true, false);
+        assert(!email2.AdminEmails);
+        db.insert(email2, () => { });
+        repo.getAdminEmailSubscribers((users: Array<UserSettings>) => {
+            assert.equal(users.length, 1);
+            assert.equal(users[0].email, "email1");
+            done();
+        });
+    });
+
+    it("GetAdminEmailSubscribersWithNoPreference", (done) => {
+        db.insert({ email: "email1", NewMeetingEmailNotification: true }, () => { });
+        db.insert({ email: "email2", NewMeetingEmailNotification: false }, () => { });
+        repo.getAdminEmailSubscribers((users: Array<UserSettings>) => {
+            assert.equal(users.length, 2);
+            assert.equal(users[0].email, "email1");
+            assert.equal(users[1].email, "email2");
+            done();
+        });
+    });
+
     it("AddUser", (done) => {
         var spy = sinon.spy(db, "insert");
         var user = new UserSettings();
@@ -56,7 +79,7 @@ describe("UserSettingsRepo", () => {
     });
 
     it("GetUserSettings", (done) => {
-        var settings: UserSettings = new UserSettings("email", true, false, true, "33fs");
+        var settings: UserSettings = new UserSettings("email", true, false, true, true, "33fs");
         db.insert(settings, () => { });
         repo.getUserSettings("email", (success: boolean, user: UserSettings) => {
             assert(success);
@@ -90,4 +113,23 @@ describe("UserSettingsRepo", () => {
             done();
         });
     });
+
+    it("AdminEmailDefaultsToTrueIfNewMeetingEmailNotificationIsTrue", (done) => {
+        var settings: UserSettings = new UserSettings("email");
+        db.insert({ "email": "email", "NewMeetingEmailNotification": true, "NewStoryEmailNotification": true }, () => { });
+        repo.getUserSettings("email", (success: boolean, user: UserSettings) => {
+            assert.equal(user.AdminEmails, true);
+            done();
+        });
+    });
+
+    it("AdminEmailDefaultsToFalseIfNewMeetingEmailNotificationIsFalse", (done) => {
+        var settings: UserSettings = new UserSettings("email");
+        db.insert({ "email": "email", "NewMeetingEmailNotification": false, "NewStoryEmailNotification": true }, () => { });
+        repo.getUserSettings("email", (success: boolean, user: UserSettings) => {
+            assert.equal(user.AdminEmails, false);
+            done();
+        });
+    });
+
 });

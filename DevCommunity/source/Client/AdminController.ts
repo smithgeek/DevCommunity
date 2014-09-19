@@ -18,6 +18,11 @@ class AdminController {
         this.$scope.deleteUserSuccessMessage = "";
         this.$scope.deleteUserErrorMessage = "";
         this.$scope.selectedUser = null;
+        this.$scope.emailSubject = "Developer Community";
+        this.$scope.emailBody = "";
+        this.$scope.sendEmailErrorMessage = "";
+        this.$scope.sendEmailSuccessMessage = "";
+
         this.getUsers();
     }
 
@@ -67,6 +72,23 @@ class AdminController {
 
     public IsUserSelected(): boolean {
         return this.$scope.selectedUser != null;
+    }
+
+    public SendEmail(): void {
+        this.$scope.sendEmailErrorMessage = "";
+        this.$scope.sendEmailSuccessMessage = "";
+        $('.settings-btn').prop('disabled', true);
+        this.$http.post('/api/restricted/sendAdminEmail', { subject: this.$scope.emailSubject, body: this.$scope.emailBody })
+            .success((data: string) => {
+                $('.settings-btn').prop('disabled', false);
+                this.$scope.sendEmailSuccessMessage = "Sent email";
+                this.$scope.emailSubject = "Developer Community";
+                this.$scope.emailBody = "";
+            })
+            .error((data: string) => {
+                $('.settings-btn').prop('disabled', false);
+                this.$scope.sendEmailErrorMessage = "Failed to send email";
+            });
     }
 
     private getUsers(): void {

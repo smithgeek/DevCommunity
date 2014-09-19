@@ -62,6 +62,11 @@ class DevCommunityEmailer {
         this.sendMailToUsers(users, subject, body);
     }
 
+    public sendAdminEmail(subject: string, body: string, users: Array<UserSettings>) {
+        body += "<br/><br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
+        this.sendMailToUsers(users, subject, body);
+    }
+
     private sendMailToUsers(users: Array<UserSettings>, subject: string, body: string): void {
         var bccAddresses: string = "";
         for (var i = 0; i < users.length; i++) {

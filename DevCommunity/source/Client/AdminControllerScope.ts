@@ -12,5 +12,9 @@ interface AdminControllerScope extends ng.IScope {
     selectedUser: UserSettings;
     deleteUserErrorMessage: string;
     deleteUserSuccessMessage: string;
+    emailSubject: string;
+    emailBody: string;
+    sendEmailErrorMessage: string;
+    sendEmailSuccessMessage: string;
 }
 export = AdminControllerScope;

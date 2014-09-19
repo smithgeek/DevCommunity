@@ -183,7 +183,7 @@ app.post('/api/restricted/AddMeeting', function (req: express.Request, res: expr
     visitorFactory.get(req, (visitor) => {
         api.restricted.addMeeting(visitor, req.body.meeting, res);
         if (req.body.sendEmail) {
-            api.restricted.emailUsersMeetingScheduled(req.body.message, req.body.meeting);
+            api.restricted.emailUsersMeetingScheduled(visitor, req.body.message, req.body.meeting);
         }
     });
 });
@@ -303,6 +303,12 @@ app.get('/api/restricted/GetUsers', (req: express.Request, res: express.Response
 app.post('/api/restricted/DeleteUser', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.deleteUser(visitor, req.body.user, res);
+    });
+});
+
+app.post('/api/restricted/sendAdminEmail', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.sendAdminEmail(visitor, req.body.subject, req.body.body, res);
     });
 });
 

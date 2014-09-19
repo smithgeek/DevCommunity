@@ -41,6 +41,6 @@ describe("RestrictedApiTests", () => {
             done();
         };
         
-        api.emailUsersMeetingScheduled(message, meeting);
+        api.emailUsersMeetingScheduled({ getEmail: () => { return ""; }, isAdmin: () => { return true; } }, message, meeting);
     });
 });
