@@ -114,6 +114,7 @@
     <TypeScriptCompile Include="source\Client\IMeetingControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\IMeetingSvc.ts" />
     <TypeScriptCompile Include="source\Client\Impl\Browser.ts" />
+    <TypeScriptCompile Include="source\Client\Impl\ConfirmationDirective.ts" />
     <TypeScriptCompile Include="source\Client\Impl\DisqusDirective.ts" />
     <TypeScriptCompile Include="source\Client\IStorySubmitControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\IStorySvc.ts" />

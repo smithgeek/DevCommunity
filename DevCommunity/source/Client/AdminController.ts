@@ -57,6 +57,7 @@ class AdminController {
                 $('.settings-btn').prop('disabled', false);
                 this.$scope.deleteUserSuccessMessage = data;
                 this.getUsers();
+                this.$scope.selectedUser = null;
             })
             .error((data: string) => {
                 $('.settings-btn').prop('disabled', false);
