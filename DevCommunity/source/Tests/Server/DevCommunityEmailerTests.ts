@@ -25,7 +25,7 @@ describe('DevCommunityEmailerTests', function () {
         beforeEach(function () {
             fakeSettings = [{ email: 'email1' }, { email: 'email2' }];
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
-            mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
+            mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { }, verbose: function (message: string) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", true, logger);
             spy = sinon.spy(mailer, "sendEmail");
@@ -40,36 +40,38 @@ describe('DevCommunityEmailerTests', function () {
             assert(spy.calledOnce, "Called " + spy.callCount + " times");
             var args: Array<string> = mailer.sendEmail.getCall(0).args;
             assert.equal(args[0], "fake_email@domain.com");
-            assert.ok(args[1], "should not be null");
-            assert(args[2].indexOf("8675309") != -1, args[2]);
+            assert.ok(args[2], "should not be null");
+            assert(args[3].indexOf("8675309") != -1, args[3]);
         });
 
         it("SendNewMeetingTopicEmails", () => {
             var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null };
             emailer.sendNewMeetingTopicEmails(meeting);
-            assert(spy.calledTwice, "Called " + spy.callCount + " times");
+            assert(spy.calledOnce, "Called " + spy.callCount + " times");
+            var args: Array<string> = mailer.sendEmail.getCall(0).args;
+            assert.equal(args[0], "");
             for (var i = 0; i < 2; ++i) {
-                var args: Array<string> = mailer.sendEmail.getCall(i).args;
-                assert.equal(args[0], fakeSettings[i].email);
-                assert.ok(args[1], "should not be null");
-                assert(args[2].indexOf(meeting._id) != -1, args[2]);
-                assert(args[2].indexOf(meeting.description) != -1, args[2]);
-                assert(args[2].indexOf(meeting.details) != -1, args[2]);
+                assert(args[1].indexOf(fakeSettings[i].email) != -1, args[1]);
             }
+            assert.ok(args[2], "should not be null");
+            assert(args[3].indexOf(meeting._id) != -1, args[3]);
+            assert(args[3].indexOf(meeting.description) != -1, args[3]);
+            assert(args[3].indexOf(meeting.details) != -1, args[3]);
         });
 
         it("SendNewStoryEmails", () => {
             var story: Story = { submittor: '', title: 'title', description: 'description', url: '', _id: 'id', timestamp: 0 };
             emailer.sendNewStoryEmails(story);
-            assert(spy.calledTwice, "Called " + spy.callCount + " times");
+            assert(spy.calledOnce, "Called " + spy.callCount + " times");
+            var args: Array<string> = mailer.sendEmail.getCall(0).args;
+            assert.equal(args[0], "");
             for (var i = 0; i < 2; ++i) {
-                var args: Array<string> = mailer.sendEmail.getCall(i).args;
-                assert.equal(args[0], fakeSettings[i].email);
-                assert.ok(args[1], "should not be null");
-                assert(args[2].indexOf(story._id) != -1, args[2]);
-                assert(args[2].indexOf(story.description) != -1, args[2]);
-                assert(args[2].indexOf(story.title) != -1, args[2]);
+                assert(args[1].indexOf(fakeSettings[i].email) != -1, args[1]);
             }
+            assert.ok(args[2], "should not be null");
+            assert(args[3].indexOf(story._id) != -1, args[3]);
+            assert(args[3].indexOf(story.description) != -1, args[3]);
+            assert(args[3].indexOf(story.title) != -1, args[3]);
         });
     });
 
@@ -79,7 +81,7 @@ describe('DevCommunityEmailerTests', function () {
         beforeEach(function () {
             fakeSettings = [{ email: 'email1' }, { email: 'email2' }];
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
-            mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
+            mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", false, logger);
             sinon.spy(mailer, "sendEmail");
@@ -115,7 +117,7 @@ describe('DevCommunityEmailerTests', function () {
         beforeEach(function () {
             fakeSettings = [{ email: 'email1' }, { email: 'email2' }];
             userSettingsDb = <Database>{ find: function (q, callback) { callback('error', fakeSettings); } };
-            mailer = <Mailer>{ sendEmail: function (to: string, subject: string, body: string) { } };
+            mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { } };
             emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", false, logger);
             sinon.spy(mailer, "sendEmail");

@@ -20,7 +20,10 @@ describe("AdminController", function () {
     });
 
     function getController(): AdminController {
-        return new AdminController($scope, $http);
+        $httpBackend.expectGET('/api/restricted/GetUsers').respond(200, []);
+        var controller = new AdminController($scope, $http);
+        $httpBackend.flush();
+        return controller;
     }
 
     it("DefaultConstructed", function () {

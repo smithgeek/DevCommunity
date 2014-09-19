@@ -18,7 +18,7 @@ class DevCommunityEmailer {
     public sendVerificationEmail(verificationCode, emailAddress) {
         var subject: string = "Developer Community: Verification Code";
         var body: string = "Someone has attempted to log into the developer community website with this email address.  If you did not do this no action is required. To finish logging in enter the verification code. <br/><br/>Verification Code: " + verificationCode;
-        this.sendMail(emailAddress, subject, body );
+        this.sendMail(emailAddress, "", subject, body );
     }
 
     public sendNewMeetingTopicEmails(meeting: MeetingData) {
@@ -63,17 +63,19 @@ class DevCommunityEmailer {
     }
 
     private sendMailToUsers(users: Array<UserSettings>, subject: string, body: string): void {
+        var bccAddresses: string = "";
         for (var i = 0; i < users.length; i++) {
-            this.sendMail(users[i].email, subject, body);
+            bccAddresses += users[i].email + ",";
         }
+        this.sendMail("", bccAddresses, subject, body);
         if (!this.allowSendMail) {
             this.logger.verbose(body);
         }
     }
 
-    private sendMail(toEmailAddress: string, subject: string, body: string): void {
+    private sendMail(toEmailAddress: string, bccAddresses: string, subject: string, body: string): void {
         if (this.allowSendMail) {
-            this.mailer.sendEmail(toEmailAddress, subject, body);
+            this.mailer.sendEmail(toEmailAddress, bccAddresses, subject, body);
         }
         else {
             this.logger.log("Not Emailing \"" + subject + "\" to " + toEmailAddress);

@@ -10,12 +10,13 @@ class Mailer {
     constructor(private fromEmail: string, private smtpOptions: SmtpConverter, private logger: Logger) {
     }
 
-    public sendEmail(toEmailAddress: string, subject: string, body: string) {
+    public sendEmail(toEmailAddress: string, bccAddresses: string, subject: string, body: string) {
         var smtpTransport: Transport = nodemailer.createTransport("SMTP", this.smtpOptions.getNodemailerSmtpOptions());
 
         var message: MailComposer = {
             from: this.fromEmail,
             to: toEmailAddress,
+            bcc: bccAddresses,
             subject: subject,
             html: body
         };
@@ -25,7 +26,7 @@ class Mailer {
                 this.logger.log("Mail error: " + error.message);
             }
             else {
-                this.logger.log("Sent email to " + toEmailAddress + ": " + subject);
+                this.logger.log("Sent email to " + toEmailAddress + " bcc: " + bccAddresses + ": " + subject);
             }
             smtpTransport.close();
         });
