@@ -6,7 +6,8 @@ html(lang='en')
     meta(name='description', content='')
     meta(name='author', content='')
     meta(name="mobile-web-app-capable" content="yes")
-    link(rel='shortcut icon', href='#{pathToAssets}/assets/ico/favicon.png')
+    link(rel='shortcut icon' href='#{pathToAssets}/assets/ico/favicon.ico')
+    link(rel='icon' sizes='192x192' href='#{pathToAssets}/assets/ico/devcommunity.png')
     title #{config.name}
     // Bootstrap core CSS
     link(href='#{pathToAssets}/dist/css/bootstrap.min.css', rel='stylesheet')
@@ -49,7 +50,7 @@ html(lang='en')
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='#') 
+            a.navbar-brand(href='#')
               span(class="glyphicon #{config.glyph}")
               span  #{config.name}
           .navbar-collapse.collapse
@@ -79,21 +80,21 @@ html(lang='en')
 
   div(id="footer")
     div.container
-      .text-muted 
-        p Built using 
+      .text-muted
+        p Built using
           a(href="https://angularjs.org/") angular
-          | , 
+          | ,
           a(href="http://jquery.com/") jquery
-          | , 
+          | ,
           a(href="http://getbootstrap.com/") bootstrap
-          | , and 
+          | , and
           a(href="http://glyphicons.com/") glyphicons
           | .
 
     // /container
     //
        Bootstrap core JavaScript
-    //================================================== 
+    //==================================================
     // Placed at the end of the document so the pages load faster
     script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
