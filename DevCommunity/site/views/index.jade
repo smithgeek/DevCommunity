@@ -72,8 +72,8 @@ html(lang='en')
               li(id='NavUserSettings')
                 a(href='#!/UserSettings' ng-show="isLoggedIn()") Settings
               li
-                a(href="javascript:;" ng-click='logOut()' style='color: white' ng-show="isLoggedIn()") Logout
-                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' style='color: white' ng-show="!isLoggedIn()") Login
+                a(href="javascript:;" ng-click='logOut()' ng-show="isLoggedIn()") Logout
+                a(href="javascript:;" data-toggle='modal' data-target='#LoginModal' ng-show="!isLoggedIn()") Login
       .container.theme-showcase
         ng-view
 
