@@ -16,3 +16,7 @@ interface ReadmoreOptions {
     beforeToggle?: any;
     afterToggle?: any;
 }
+
+interface JQuery {
+    timeago(): JQuery;
+}

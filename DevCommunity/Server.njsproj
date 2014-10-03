@@ -56,6 +56,7 @@
     <Content Include="site\views\partials\About.jade" />
     <Content Include="site\views\partials\admin.jade" />
     <Content Include="site\views\partials\Brainstorming.jade" />
+    <Content Include="site\views\partials\commentNgTemplate.jade" />
     <Content Include="site\views\partials\Contact.jade" />
     <Content Include="site\views\partials\Error.jade" />
     <Content Include="site\views\partials\home.jade" />
@@ -135,6 +136,9 @@
     <TypeScriptCompile Include="source\Client\UserSettingsController.ts" />
     <TypeScriptCompile Include="source\Client\UserSettingsControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\UserSvc.ts" />
+    <TypeScriptCompile Include="source\Common\CommentGroup.ts" />
+    <TypeScriptCompile Include="source\Common\Comments.ts" />
+    <TypeScriptCompile Include="source\Common\IdToCommentMap.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
     <TypeScriptCompile Include="source\Common\Site.ts" />
     <TypeScriptCompile Include="source\Common\Story.ts" />

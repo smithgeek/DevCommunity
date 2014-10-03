@@ -71,3 +71,11 @@ export function story(req: express.Request, res: express.Response) {
 export function admin(req: express.Request, res: express.Response) {
     res.render('partials/admin', { admin: isAdmin(req) });
 };
+
+export function commentSystem(req: express.Request, res: express.Response) {
+    res.render('partials/CommentSystem');
+}
+
+export function comment(req: express.Request, res: express.Response) {
+    res.render('partials/Comment');
+}

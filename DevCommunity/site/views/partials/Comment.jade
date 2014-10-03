@@ -1,0 +1,18 @@
+﻿div(style="margin-left: {{comment.hierarchy * 50}}px")
+  div
+    span.author {{ comment.author }} 
+    span.less-important  - 
+    time.timeago.less-important(datetime="{{comment.time.toISOString()}}")
+    div.data {{ comment.data }}
+    div.less-important
+      ul.horizontal-list
+        //li 
+          button.link-button.link-button-hoverable
+            span.glyphicon.glyphicon-chevron-up
+        //li 
+          button.link-button.link-button-hoverable 
+            span.glyphicon.glyphicon-chevron-down
+        li
+          button.link-button.link-button-hoverable Edit
+        li
+          button.link-button.link-button-hoverable Reply

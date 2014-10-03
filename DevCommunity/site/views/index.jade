@@ -11,16 +11,9 @@ html(lang='en')
     title #{config.name}
     // Bootstrap core CSS
     link(href='#{pathToAssets}/dist/css/bootstrap.min.css', rel='stylesheet')
-    // Bootstrap theme
-    //link(href='#{pathToAssets}/dist/css/bootstrap-theme.min.css', rel='stylesheet')
-    // Custom styles for this template
-    //link(href='#{pathToSelectedTemplateWithinBootstrap}/theme.css', rel='stylesheet')
     link(href='#{pathToAssets}/assets/css/theme.css', rel='stylesheet')
     link(href='#{pathToAssets}/dist/css/datepicker.css', rel='stylesheet')
-    // HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
-    //if lt IE 9
-      script(src='#{pathToAssets}/assets/js/html5shiv.js')
-      script(src='#{pathToAssets}/assets/js/respond.min.js')
+      
   body(ng-app='devCommunity')
     div(id='wrap')
       .modal.fade(id='LoginModal' aria-hidden='true' role='dialog' ng-controller='LoginController as controller')
@@ -83,11 +76,11 @@ html(lang='en')
       .text-muted
         p Built using
           a(href="https://angularjs.org/") angular
-          | ,
+          | , 
           a(href="http://jquery.com/") jquery
-          | ,
+          | , 
           a(href="http://getbootstrap.com/") bootstrap
-          | , and
+          | , and 
           a(href="http://glyphicons.com/") glyphicons
           | .
 
@@ -107,3 +100,4 @@ html(lang='en')
     script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular-sanitize.js')
     script(src='#{pathToAssets}/dist/js/angular-local-storage.min.js')
     script(src='#{pathToAssets}/assets/js/main.js')
+    script(src='#{pathToAssets}/dist/js/jquery.timeago.js')

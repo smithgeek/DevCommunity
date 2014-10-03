@@ -131,6 +131,8 @@ app.get('/partials/UserSettings', routes.UserSettings);
 app.get('/partials/meeting', routes.meeting);
 app.get('/partials/story', routes.story);
 app.get('/partials/admin', routes.admin);
+app.get('/partials/CommentSystem.html', routes.commentSystem);
+app.get('/partials/Comment.html', routes.comment);
 
 class ConsoleAndFileLogger implements Logger {
     log(message: string): void {

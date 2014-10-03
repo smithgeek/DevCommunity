@@ -4,7 +4,6 @@ br
 div.hidden(ng-controller='MeetingController as controller')
   .page-header
     h1 {{meeting.description}}
-
   div
     .media
       .pull-left(ng-show="meeting.date == null")
@@ -24,3 +23,5 @@ div.hidden(ng-controller='MeetingController as controller')
             p Meeting date: {{meeting.date}}
     if disqus.enabled
       dir-disqus(disqus-shortname="#{disqus.shortname}" disqus-title="{{meeting.description}}" disqus-identifier="meeting/{{meeting._id}}", disqus-url="http://g/pnddevcommunity/#!/meeting/{{meeting._id}}" ready-to-bind="{{ contentLoaded }}")
+    else
+      my-comments(comment-id="meeting-{{meeting._id}}")

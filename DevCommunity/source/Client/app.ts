@@ -59,6 +59,12 @@ export class RouteConfig {
             templateUrl: 'partials/admin',
             controller: 'AdminController'
         }).
+        when("/partials/CommentSystem.html", {
+            templateUrl: 'partials/CommentSystem.html'
+        }).
+        when("/partials/Comment.html", {
+            templateUrl: 'partials/Comment.html'
+        }).
         otherwise({
             redirectTo: '/'
         });

@@ -18,3 +18,5 @@ div(ng-controller='SingleStoryController as controller')
         div Last Modified: {{controller.getHumanTime(story)}}
   if disqus.enabled
     dir-disqus(disqus-shortname="#{disqus.shortname}" disqus-title="{{story.title}}" disqus-identifier="story/{{story._id}}", disqus-url="http://g/pnddevcommunity/#!/story/{{story._id}}" ready-to-bind="{{ contentLoaded }}")
+  else
+    div(ng-include="'commentGroup.htm'")

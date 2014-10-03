@@ -149,3 +149,71 @@ html, body {
     width: 100%;
     text-align: center;
 }
+
+.form-control-top {
+    border-radius: 4px 4px 0px 0px;
+}
+
+.form-control-middle {
+    border-radius: 0px 0px 0px 0px;
+}
+
+.form-control-bottom {
+    border-radius: 0px 0px 4px 4px;
+}
+
+.resize-vertical {
+    resize: vertical;
+}
+
+.link-button {
+    background:none!important;
+    border:none; 
+    padding:0!important;
+    cursor:pointer;
+}
+
+.link-button-hoverable:hover{
+    text-decoration:underline;
+}
+
+#Comments {
+    color: black;
+}
+
+#Comments .less-important {
+    color: rgba(0, 39, 59, 0.35);
+    font-weight: 500;
+    font-size: 13px;
+    font-family: "Helvetica Neue",arial,sans-serif;
+}
+
+#Comments .footer .glyphicon {
+    font-size: 10px;
+}
+
+#Comments .author {
+    color: #3399F3;
+}
+
+#Comments .data {
+    padding: 10px 0px 10px 0px;
+}
+
+.horizontal-list {
+    padding-left: 0px;
+}
+
+.horizontal-list li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+.subscribed {
+    color: #8FC847;
+}
+
+.unsubscribed .glyphicon-ok {
+    display: none;
+}

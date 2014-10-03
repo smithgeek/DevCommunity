@@ -15,6 +15,6 @@ import app = require('../app'); ///ts:import:generated
                     }
                 });
             }
-        }
-}]);
+        };
+    }]);
 })();
