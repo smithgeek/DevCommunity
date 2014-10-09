@@ -56,7 +56,8 @@
     <Content Include="site\views\partials\About.jade" />
     <Content Include="site\views\partials\admin.jade" />
     <Content Include="site\views\partials\Brainstorming.jade" />
-    <Content Include="site\views\partials\commentNgTemplate.jade" />
+    <Content Include="site\views\partials\Comment.jade" />
+    <Content Include="site\views\partials\CommentSystem.jade" />
     <Content Include="site\views\partials\Contact.jade" />
     <Content Include="site\views\partials\Error.jade" />
     <Content Include="site\views\partials\home.jade" />
@@ -109,6 +110,8 @@
     <TypeScriptCompile Include="source\Client\AdminController.ts" />
     <TypeScriptCompile Include="source\Client\AdminControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\app.ts" />
+    <TypeScriptCompile Include="source\Client\CommentController.ts" />
+    <TypeScriptCompile Include="source\Client\CommentControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\HomeCarouselEditorController.ts" />
     <TypeScriptCompile Include="source\Client\HomeController.ts" />
     <TypeScriptCompile Include="source\Client\ILoginControllerScope.ts" />
@@ -117,6 +120,7 @@
     <TypeScriptCompile Include="source\Client\Impl\Browser.ts" />
     <TypeScriptCompile Include="source\Client\Impl\ConfirmationDirective.ts" />
     <TypeScriptCompile Include="source\Client\Impl\DisqusDirective.ts" />
+    <TypeScriptCompile Include="source\Client\Impl\MyCommentsDirective.ts" />
     <TypeScriptCompile Include="source\Client\IStorySubmitControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\IStorySvc.ts" />
     <TypeScriptCompile Include="source\Client\IUserSvc.ts" />
@@ -137,7 +141,7 @@
     <TypeScriptCompile Include="source\Client\UserSettingsControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\UserSvc.ts" />
     <TypeScriptCompile Include="source\Common\CommentGroup.ts" />
-    <TypeScriptCompile Include="source\Common\Comments.ts" />
+    <TypeScriptCompile Include="source\Common\CommentData.ts" />
     <TypeScriptCompile Include="source\Common\IdToCommentMap.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
     <TypeScriptCompile Include="source\Common\Site.ts" />
