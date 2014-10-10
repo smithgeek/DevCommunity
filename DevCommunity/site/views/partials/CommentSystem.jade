@@ -5,9 +5,9 @@ div(ng-controller='CommentController as controller' id='Comments')
     textarea.form-control.form-control-top.resize-vertical(placeholder="Join the discussion...")
     .input-group
       span.input-group-addon.form-control-bottom
-        input(type="checkbox" id="AnonymousComment")
+        input(type="checkbox" id="AnonymousComment" ng-model="isAnonymous" ng-change="controller.updateAuthor()")
         span  Anonymous
-      input.form-control(type="text" readOnly="true")
+      input.form-control(type="text" readOnly="true" ng-model="author")
       span.input-group-btn.form-control-bottom
         button.btn.btn-default.form-control-bottom(type="button") Post
 
@@ -16,8 +16,10 @@ div(ng-controller='CommentController as controller' id='Comments')
     my-comment(ng-repeat="comment in commentGroup.comments")
   hr
   div.less-important
-    div(ng-class="{true: 'subscribed', false: 'unsubscribed'}[isSubscribed]")
+    div.pull-left(ng-class="{true: 'subscribed', false: 'unsubscribed'}[isSubscribed]")
       button.link-button(ng-click="controller.toggleSubscribe()")
         span.glyphicon.glyphicon-envelope
         span  Subscribe 
         span.glyphicon.glyphicon-ok
+    div.pull-right
+      a(href='#!/UserSettings') Subscribe to All

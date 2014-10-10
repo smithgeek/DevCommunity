@@ -188,6 +188,13 @@ html, body {
     font-family: "Helvetica Neue",arial,sans-serif;
 }
 
+#Comments .less-important a {
+    color: rgba(0, 39, 59, 0.35);
+    font-weight: 500;
+    font-size: 13px;
+    font-family: "Helvetica Neue",arial,sans-serif;
+}
+
 #Comments .footer .glyphicon {
     font-size: 10px;
 }
