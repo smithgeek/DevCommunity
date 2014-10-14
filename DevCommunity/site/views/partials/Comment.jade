@@ -16,3 +16,13 @@
           button.link-button.link-button-hoverable Edit
         li
           button.link-button.link-button-hoverable Reply
+    div
+      form
+        textarea.form-control.form-control-top.resize-vertical(placeholder="Post a reply...")
+        .input-group
+          span.input-group-addon.form-control-bottom
+            input(type="checkbox" id="AnonymousComment" ng-model="isAnonymous")
+            span  Anonymous
+          input.form-control(type="text" readOnly="true" ng-model="author")
+          span.input-group-btn.form-control-bottom
+            button.btn.btn-default.form-control-bottom(type="button") Reply

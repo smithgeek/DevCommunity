@@ -24,12 +24,27 @@ import app = require('../app'); ///ts:import:generated
             return {
                 restrict: 'E',
                 templateUrl: 'partials/Comment.html',
+                transclude: true,
                 link: function (scope, element, attrs) {
                     element.append($compile('<my-comment ng-repeat="comment in comment.replies" />')(scope));
                     var timeagoify = function () {
                         $("time.timeago").timeago();
                     };
                     timer(timeagoify, 0);
+                }
+            };
+        }]);
+
+    appModule.directive('myCommentForm', [
+        '$compile', '$timeout', function ($compile, timer) {
+            return {
+                restrict: 'E',
+                templateUrl: 'partials/CommentForm.html',
+                replace: 'true',
+                scope: {
+                    placeholder: '@placeholder',
+                    user: '=user',
+                    button: '@button'
                 }
             };
         }]);

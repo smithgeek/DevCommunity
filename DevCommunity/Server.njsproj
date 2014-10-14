@@ -57,6 +57,7 @@
     <Content Include="site\views\partials\admin.jade" />
     <Content Include="site\views\partials\Brainstorming.jade" />
     <Content Include="site\views\partials\Comment.jade" />
+    <Content Include="site\views\partials\CommentForm.jade" />
     <Content Include="site\views\partials\CommentSystem.jade" />
     <Content Include="site\views\partials\Contact.jade" />
     <Content Include="site\views\partials\Error.jade" />

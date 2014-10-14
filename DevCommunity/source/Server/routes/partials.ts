@@ -79,3 +79,7 @@ export function commentSystem(req: express.Request, res: express.Response) {
 export function comment(req: express.Request, res: express.Response) {
     res.render('partials/Comment');
 }
+
+export function commentForm(req: express.Request, res: express.Response) {
+    res.render('partials/CommentForm');
+}

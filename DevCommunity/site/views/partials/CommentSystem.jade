@@ -1,19 +1,19 @@
 ﻿hr
 h3 Comments
 div(ng-controller='CommentController as controller' id='Comments')
+  my-comment-form(placeholder="Join the discussion...", user="author", button="Post")
   form
     textarea.form-control.form-control-top.resize-vertical(placeholder="Join the discussion...")
-    .input-group
-      span.input-group-addon.form-control-bottom
+    div.form-control-bottom.form-control-footer
+      span.input-group-addon.form-control-bottom(style="width: 100%; text-align: left")
         input(type="checkbox" id="AnonymousComment" ng-model="isAnonymous" ng-change="controller.updateAuthor()")
         span  Anonymous
-      input.form-control(type="text" readOnly="true" ng-model="author")
       span.input-group-btn.form-control-bottom
         button.btn.btn-default.form-control-bottom(type="button") Post
 
   br
   div(ng-if="commentGroup.comments")
-    my-comment(ng-repeat="comment in commentGroup.comments")
+    my-comment(ng-repeat="comment in commentGroup.comments" author="author" isAnonymous="isAnonymous")
   hr
   div.less-important
     div.pull-left(ng-class="{true: 'subscribed', false: 'unsubscribed'}[isSubscribed]")
