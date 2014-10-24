@@ -10,13 +10,29 @@ import Story = require('../Common/Story'); ///ts:import:generated
 import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 ///ts:import=Logger
 import Logger = require('./Logger'); ///ts:import:generated
+///ts:import=CommentTransports
+import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
+///ts:import=CommentRepository
+import CommentRepository = require('./CommentRepository'); ///ts:import:generated
 
 import express = require('express');
 
 class PublicApi {
-    constructor(private twitter: Twitter, private storyDb: Database, private meetingIdeasDb: Database, private logger: Logger) {
+    constructor(private twitter: Twitter, private storyDb: Database, private meetingIdeasDb: Database, private logger: Logger,
+        private commentRepository: CommentRepository) {
     }
-     
+
+    public getComments(visitor: Visitor, data: CommentTransports.Get, res: express.Response) {
+        this.commentRepository.getComments(data, (success, comments) => {
+            if (success) {
+                res.send(200, comments);
+            }
+            else {
+                res.send(404, null);
+            }
+        });
+    }
+
     public getRandomTweet(res: express.Response): void{
         this.twitter.getRandomTweet(function (html) {
             if (html == '') {

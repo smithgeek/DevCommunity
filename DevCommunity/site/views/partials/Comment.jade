@@ -3,26 +3,13 @@
     span.author {{ comment.author }} 
     span.less-important  - 
     time.timeago.less-important(datetime="{{comment.time.toISOString()}}")
-    div.data {{ comment.data }}
-    div.less-important
+    div.data(id="comment-readonly-{{comment.id}}") {{ comment.data }}
+    my-comment-form.hideCommentForm(placeholder="", user="author", button="Post", id="comment-edit-{{comment.id}}" comment="comment", mode="edit")
+    div.less-important(ng-show="controller.isLoggedIn()")
       ul.horizontal-list
-        //li 
-          button.link-button.link-button-hoverable
-            span.glyphicon.glyphicon-chevron-up
-        //li 
-          button.link-button.link-button-hoverable 
-            span.glyphicon.glyphicon-chevron-down
+        li( ng-show="author === {{comment.author}}" )
+          my-comment-edit(comment-id="{{comment.id}}")
         li
-          button.link-button.link-button-hoverable Edit
-        li
-          button.link-button.link-button-hoverable Reply
-    div
-      form
-        textarea.form-control.form-control-top.resize-vertical(placeholder="Post a reply...")
-        .input-group
-          span.input-group-addon.form-control-bottom
-            input(type="checkbox" id="AnonymousComment" ng-model="isAnonymous")
-            span  Anonymous
-          input.form-control(type="text" readOnly="true" ng-model="author")
-          span.input-group-btn.form-control-bottom
-            button.btn.btn-default.form-control-bottom(type="button") Reply
+          my-comment-reply(comment-id="{{comment.id}}" )
+    div(style="margin-left: {{comment.hierarchy + 1 * 50}}px")
+      my-comment-form.hideCommentForm(placeholder="Post a reply", user="author", button="Post", id="comment-reply-{{comment.id}}" comment="comment")

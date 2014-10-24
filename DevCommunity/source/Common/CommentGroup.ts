@@ -2,7 +2,7 @@
 import CommentData = require('./CommentData'); ///ts:import:generated
 
 interface CommentGroup {
-    dataId: string;
+    groupId: string;
     subscribers: Array<string>;
     comments: Array<CommentData>
 }

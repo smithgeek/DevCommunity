@@ -35,6 +35,10 @@ import WebsiteVisitorFactory = require('./WebsiteVisitorFactory'); ///ts:import:
 import Site = require('../Common/Site'); ///ts:import:generated
 ///ts:import=SmtpConverter
 import SmtpConverter = require('./SmtpConverter'); ///ts:import:generated
+///ts:import=CommentTransports
+import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
+///ts:import=CommentRepository
+import CommentRepository = require('./CommentRepository'); ///ts:import:generated
 
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
@@ -154,14 +158,16 @@ var meetingIdeasDb: Database = new NeDb(path.join(DatabaseDir, 'meeting_ideas.db
 var userVerificationDb: Database = new NeDb(path.join(DatabaseDir, 'user_verification.db.json'));
 var storyDb: Database = new NeDb(path.join(DatabaseDir, 'stories.db.json'));
 var userSettingsDb: Database = new NeDb(path.join(DatabaseDir, 'user_settings.db.json'));
+var commentsDb: Database = new NeDb(path.join(DatabaseDir, 'comments.db.json'));
 
 var logger: Logger = new ConsoleAndFileLogger();
 var smtpConverter: SmtpConverter = new SmtpConverter(config.mail.smtp);
 var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, smtpConverter, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
+var commentRepo: CommentRepository = new CommentRepository(commentsDb, logger);
 
-var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger);
+var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger, commentRepo);
 var userSettingsRepo: UserSettingsRepository = new UserSettingsRepository(userSettingsDb, logger);
-var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger);
+var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger, commentRepo);
 var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger, config);
 var api: Api = new Api(publicApi, restrictedApi, security);
 
@@ -315,7 +321,39 @@ app.post('/api/restricted/sendAdminEmail', (req: express.Request, res: express.R
     });
 });
 
-var port = app.get('port');
+app.get('/api/GetComments/:id', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        var input: CommentTransports.Get = {
+            GroupId: req.params.id
+        };
+        api.public.getComments(visitor, input, res);
+    });
+});
+
+app.post('/api/restricted/PostComment', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.postComment(visitor, <CommentTransports.Post>req.body, res);
+    });
+});
+
+app.post('/api/restricted/EditComment', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.editComment(visitor, <CommentTransports.Post>req.body, res);
+    });
+});
+
+app.post('/api/restricted/PostCommentReply', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.postCommentReply(visitor, <CommentTransports.PostReply>req.body, res);
+    });
+});
+
+app.post('/api/restricted/ChangeSubscription', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.changeSubscription(visitor, <CommentTransports.Subscription>req.body, res);
+    });
+});
+
 http.createServer(app).listen(app.get('port'), function () {
     logger.log('Express server listening on port ' + app.get('port'));
 });

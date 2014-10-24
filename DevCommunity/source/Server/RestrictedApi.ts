@@ -20,6 +20,10 @@ import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 import Site = require('../Common/Site'); ///ts:import:generated
 ///ts:import=RestartWriter
 import RestartWriter = require('./RestartWriter'); ///ts:import:generated
+///ts:import=CommentTransports
+import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
+///ts:import=CommentRepository
+import CommentRepository = require('./CommentRepository'); ///ts:import:generated
 
 import express = require('express');
 import util = require('util');
@@ -29,7 +33,44 @@ var jade = require('jade');
 class RestrictedApi {
 
     constructor(private randomTweetsDb: Database, private twitter: Twitter, private userSettingsRepo: UserSettingsRepository, private storyDb: Database,
-        private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger) {
+        private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger,
+        private commentRepository: CommentRepository) {
+    }
+
+    public postComment(visitor: Visitor, data: CommentTransports.Post, res: express.Response): void {
+        this.commentRepository.postComment(visitor, data, (success) => {
+            if (success) {
+                res.send(200, "Success");
+            }
+            else {
+                res.send(404, "Failure");
+            }
+        });
+    }
+
+    public postCommentReply(visitor: Visitor, data: CommentTransports.PostReply, res: express.Response) {
+        this.commentRepository.postCommentReply(visitor, data, (success) => {
+            if (success) {
+                res.send(200, "Success");
+            }
+            else {
+                res.send(404, "Failure");
+            }
+        });
+    }
+
+    public editComment(visitor: Visitor, data: CommentTransports.Post, res: express.Response) {
+        this.commentRepository.editComment(visitor, data, (success) => {
+            if (success) {
+                res.send(200, "Success");
+            }
+            else {
+                res.send(404, "Failure");
+            }
+        });
+    }
+
+    public changeSubscription(visitor: Visitor, data: CommentTransports.Subscription, res: express.Response) {
     }
 
     public addTweet(visitor: Visitor, twitterCode: string, res: express.Response): void {

@@ -1,11 +1,11 @@
 ﻿div
   form
-    textarea.form-control.form-control-top.resize-vertical(placeholder="{{placeholder}}")
+    textarea.form-control.form-control-top.resize-vertical(placeholder="{{placeholder}}" ng-model="data")
     div.form-control-bottom.form-control-footer
       span.input-group-addon.form-control-bottom(style="width: 100%; text-align: left")
-        input(type="radio" name="AuthorType" value="User" checked="checked") 
+        input(type="radio" name="AuthorType" value="{{user}}" ng-model="SelectedAuthor") 
         span(style="margin-right: 25px")  {{user}}
-        input(type="radio" name="AuthorType" value="Anonymous") 
+        input(type="radio" name="AuthorType" value="Guest" ng-model="SelectedAuthor") 
         span  Anonymous 
       span.input-group-btn.form-control-bottom
-        button.btn.btn-default.form-control-bottom(type="button") {{button}}
+        button.btn.btn-default.form-control-bottom(type="button" ng-click="post()") {{button}}

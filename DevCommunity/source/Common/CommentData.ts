@@ -6,6 +6,6 @@
     votesDown: Array<string>;
     data: string;
     id: string;
-    hierarchy: Number;
+    hierarchy: number;
 }
 export = CommentData;

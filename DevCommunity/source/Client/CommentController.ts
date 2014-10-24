@@ -6,49 +6,24 @@ import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 import CommentControllerScope = require('./CommentControllerScope'); ///ts:import:generated
 ///ts:import=CommentData
 import CommentData = require('../Common/CommentData'); ///ts:import:generated
+///ts:import=CommentGroup
+import CommentGroup = require('../Common/CommentGroup'); ///ts:import:generated
+///ts:import=CommentTransports
+import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
 
 class CommentController {
-    constructor(private $scope: CommentControllerScope, private $http, private userSvc: IUserSvc) {
+    constructor(private $scope: CommentControllerScope, private $http: ng.IHttpService, private userSvc: IUserSvc) {
         this.$scope.isSubscribed = true;
-        this.$scope.commentGroup = { dataId: '', subscribers: [], comments: null };
-        this.$scope.isAnonymous = false;
-        this.updateAuthor();
+        this.$scope.author = this.userSvc.getUser();
+        this.$scope.$on('postComment', (event, d: CommentData) => this.postComment(d));
+        this.$scope.$on('postReply', (event, d: CommentData, parentId: string) => this.postReply(d, parentId));
+        this.$scope.$on('editComment', (event, d: CommentData) => this.editComment(d));
         this.$scope.$watch('commentId', (value) => {
             if (value) {
-                //$http.get('/api/GetComments/' + $scope.commentId).success((data: CommentGroup) => {
-                //});
-                var c: CommentData = {
-                    time: new Date(Date.now()),
-                    author: "brent",
-                    replies: [],
-                    votesUp: [],
-                    votesDown: [],
-                    data: "some comment stuff",
-                    id: "1",
-                    hierarchy: 0
-                };
-                var d: CommentData = {
-                    time: new Date(Date.now()),
-                    author: "brent",
-                    replies: [],
-                    votesUp: [],
-                    votesDown: [],
-                    data: "some more comment stuff",
-                    id: "2",
-                    hierarchy: 1
-                };
-                var e: CommentData = {
-                    time: new Date(Date.now()),
-                    author: "brent",
-                    replies: [],
-                    votesUp: [],
-                    votesDown: [],
-                    data: "even more comment stuff",
-                    id: "3",
-                    hierarchy: 0
-                };
-                c.replies.push(d);
-                this.$scope.commentGroup = { dataId: this.$scope.commentId, subscribers: [], comments: [c, e] };
+                $http.get('/api/GetComments/' + $scope.commentId)
+                    .success((data: CommentGroup) => {
+                        this.$scope.commentGroup = data;
+                    });
             }
         });
     }
@@ -57,13 +32,31 @@ class CommentController {
         this.$scope.isSubscribed = !this.$scope.isSubscribed;
     }
 
-    public updateAuthor(): void {
-        if (this.$scope.isAnonymous) {
-            this.$scope.author = "Anonymous";
-        }
-        else {
-            this.$scope.author = this.userSvc.getUser();
-        }
+    public isLoggedIn(): boolean {
+        return this.userSvc.isLoggedIn();
+    }
+
+    public postComment(data: CommentData): void {
+        this.$scope.commentGroup.comments.push(data);
+        this.$http.post('/api/restricted/PostComment', <CommentTransports.Post>{
+            GroupId: this.$scope.commentGroup.groupId,
+            NewComment: data
+        });
+    }
+
+    public postReply(data: CommentData, parentId: string): void {
+        this.$http.post('/api/restricted/PostComment', <CommentTransports.PostReply>{
+            GroupId: this.$scope.commentGroup.groupId,
+            NewComment: data,
+            ParentId: parentId
+        });
+    }
+
+    public editComment(data: CommentData): void {
+        this.$http.post('/api/restricted/PostComment', <CommentTransports.Post>{
+            GroupId: this.$scope.commentGroup.groupId,
+            NewComment: data
+        });
     }
 }
 

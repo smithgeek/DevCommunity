@@ -229,3 +229,7 @@ html, body {
 .unsubscribed .glyphicon-ok {
     display: none;
 }
+
+.hideCommentForm {
+    display: none;
+}
