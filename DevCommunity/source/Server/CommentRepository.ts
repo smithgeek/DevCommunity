@@ -1,18 +1,22 @@
 ///ts:import=Database
 import Database = require('./Database'); ///ts:import:generated
+///ts:import=DevCommunityEmailer
+import DevCommunityEmailer = require('./DevCommunityEmailer'); ///ts:import:generated
 ///ts:import=Logger
 import Logger = require('./Logger'); ///ts:import:generated
 ///ts:import=CommentData
 import CommentData = require('../Common/CommentData'); ///ts:import:generated
 ///ts:import=CommentGroup
 import CommentGroup = require('../Common/CommentGroup'); ///ts:import:generated
+///ts:import=CommentSubscriber
+import CommentSubscriber = require('../Common/CommentSubscriber'); ///ts:import:generated
 ///ts:import=CommentTransports
 import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
 ///ts:import=Visitor
 import Visitor = require('./Visitor'); ///ts:import:generated
 
 class CommentRepository{
-    constructor(private db: Database, private logger: Logger) {
+    constructor(private db: Database, private logger: Logger, private emailer: DevCommunityEmailer) {
     }
 
     public getComments(input: CommentTransports.Get, callback: (success: boolean, comments: CommentGroup) => void): void {
@@ -21,7 +25,9 @@ class CommentRepository{
                 callback(success, group);
             }
             else {
-                callback(true, { comments: [], groupId: input.GroupId, subscribers: [] });
+                this.addNewCommentGroup(input.GroupId, null, (success) => {
+                    callback(true, { comments: [], groupId: input.GroupId, subscribers: [], visitors: [] });
+                });
             }
         });
     }
@@ -37,11 +43,11 @@ class CommentRepository{
             if (success) {
                 input.NewComment.time = new Date(Date.now());
                 this.addNewComment(group, input.NewComment, callback);
+                this.emailNewComment(group, input.NewComment, visitor);
             }
             else {
                 this.addNewCommentGroup(input.GroupId, input.NewComment, callback);
             }
-
         });
     }
 
@@ -77,6 +83,7 @@ class CommentRepository{
             if (success) {
                 input.NewComment.time = new Date(Date.now());
                 comment.replies.push(input.NewComment);
+                this.emailNewComment(group, input.NewComment, visitor);
                 this.updateCommentGroup(group, callback);
             }
             else {
@@ -84,7 +91,54 @@ class CommentRepository{
                 callback(false);
             }
         });
+    }
 
+    public visitComment(visitor: Visitor, input: CommentTransports.VisitComment, callback: (subscribed: boolean) => void): void {
+        this.findGroup(input.GroupId, (success, group) => {
+            var subscribed = false;
+            if (success) {
+                var email = visitor.getEmail();
+                var hasVisited = group.visitors.indexOf(email) != -1;
+                if (hasVisited) {
+                    var subscriber = CommentTransports.findSubscriber(group, email);
+                    if (subscriber) {
+                        if (subscriber.newCommentSinceLastVisit) {
+                            subscriber.newCommentSinceLastVisit = false;
+                            this.updateCommentGroup(group, () => { });
+                        }
+                        subscribed = true;
+                    }
+                }
+                else {
+                    group.visitors.push(email);
+                    group.subscribers.push({ newCommentSinceLastVisit: false, visitor: email });
+                    this.updateCommentGroup(group, () => { });
+                    subscribed = true;
+                }
+            }
+            callback(subscribed);
+        });
+    }
+
+    public updateSubscription(visitor: Visitor, data: CommentTransports.Subscription): void {
+        this.findGroup(data.GroupId, (success, group) => {
+            var index = -1;
+            var email = visitor.getEmail();
+            for (var i = 0; i < group.subscribers.length; ++i) {
+                if (group.subscribers[i].visitor == email) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1 && !data.Subscribe) {
+                group.subscribers.splice(index, 1);
+                this.updateCommentGroup(group, () => { });
+            }
+            else if (index == -1 && data.Subscribe) {
+                group.subscribers.push({ newCommentSinceLastVisit: false, visitor: email });
+                this.updateCommentGroup(group, () => { });
+            }
+        });
     }
 
     private findGroup(groupId: string, callback: (success: boolean, group: CommentGroup) => void): void {
@@ -150,7 +204,8 @@ class CommentRepository{
             Update: {
                 groupId: group.groupId,
                 subscribers: group.subscribers,
-                comments: group.comments
+                comments: group.comments,
+                visitors: group.visitors
             },
             Options: { upsert: false }
         }, (err, numReplaced) => {
@@ -167,9 +222,12 @@ class CommentRepository{
         var group: CommentGroup = {
             groupId: groupId,
             subscribers: [],
-            comments: []
+            comments: [],
+            visitors: []
         };
-        group.comments.push(comment);
+        if (comment != null) {
+            group.comments.push(comment);
+        }
         this.db.insert(group, (err, numInserted) => {
             if (err != null) {
                 this.logger.log(err);
@@ -179,6 +237,21 @@ class CommentRepository{
                 callback(true);
             }
         });
+    }
+
+    private emailNewComment(group: CommentGroup, comment: CommentData, visitor: Visitor): void {
+        var emailTo = [];
+        for (var i = 0; i < group.subscribers.length; ++i) {
+            if (!group.subscribers[i].newCommentSinceLastVisit && group.subscribers[i].visitor != comment.author) {
+                emailTo.push(group.subscribers[i].visitor);
+                group.subscribers[i].newCommentSinceLastVisit = true;
+            }
+        }
+        if (emailTo.length > 0) {
+            this.updateCommentGroup(group, () => { });
+            var url = group.groupId.replace("-", "/");
+            this.emailer.sendCommentEmail(emailTo, url, comment.data, comment.author);
+        }
     }
 }
 export = CommentRepository;

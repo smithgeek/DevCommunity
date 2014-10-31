@@ -144,6 +144,7 @@
     <TypeScriptCompile Include="source\Client\UserSvc.ts" />
     <TypeScriptCompile Include="source\Common\CommentGroup.ts" />
     <TypeScriptCompile Include="source\Common\CommentData.ts" />
+    <TypeScriptCompile Include="source\Common\CommentSubscriber.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
     <TypeScriptCompile Include="source\Common\Site.ts" />
     <TypeScriptCompile Include="source\Common\Story.ts" />

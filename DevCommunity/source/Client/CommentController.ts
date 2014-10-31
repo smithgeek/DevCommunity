@@ -13,7 +13,7 @@ import CommentTransports = require('../Common/CommentTransports'); ///ts:import:
 
 class CommentController {
     constructor(private $scope: CommentControllerScope, private $http: ng.IHttpService, private userSvc: IUserSvc) {
-        this.$scope.isSubscribed = true;
+        this.$scope.isSubscribed = false;
         this.$scope.author = this.userSvc.getUser();
         this.$scope.$on('postComment', (event, d: CommentData) => this.postComment(d));
         this.$scope.$on('postReply', (event, d: CommentData, parentId: string) => this.postReply(d, parentId));
@@ -27,6 +27,10 @@ class CommentController {
     
     public toggleSubscribe(): void {
         this.$scope.isSubscribed = !this.$scope.isSubscribed;
+        this.$http.post('/api/restricted/ChangeSubscription', <CommentTransports.Subscription>{
+            GroupId: this.$scope.commentGroup.groupId,
+            Subscribe: this.$scope.isSubscribed
+        });
     }
 
     public isLoggedIn(): boolean {
@@ -65,6 +69,20 @@ class CommentController {
         this.$http.get('/api/GetComments/' + this.$scope.commentId)
             .success((data: CommentGroup) => {
                 this.$scope.commentGroup = data;
+                if (CommentTransports.findSubscriber(data, this.userSvc.getUser())) {
+                    this.$scope.isSubscribed = true;
+                }
+                else {
+                    if (data.visitors.indexOf(this.userSvc.getUser()) == -1) {
+                        this.$scope.isSubscribed = true;
+                    }
+                    else {
+                        this.$scope.isSubscribed = false;
+                    }
+                }
+                this.$http.post('/api/restricted/VisitComment', <CommentTransports.VisitComment>{
+                    GroupId: this.$scope.commentGroup.groupId
+                });
             });
     }
 }

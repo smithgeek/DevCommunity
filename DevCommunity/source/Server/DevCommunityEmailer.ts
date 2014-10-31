@@ -67,6 +67,32 @@ class DevCommunityEmailer {
         this.sendMailToUsers(users, subject, body);
     }
 
+    public sendCommentEmail(users: Array<string>, url: string, commentText: string, commentFrom: string): void {
+        var subject = "Developer Community: New Comment Posted";
+        var body = "";
+        body += "Comment by " + commentFrom + "<br/><br/>";
+        if (commentText.length > 200) {
+            body += commentText.substr(0, 200) + " ...";
+        }
+        else {
+            body += commentText;
+        }
+        body += "<br/><br/>View full comment or reply on <a href='" + this.domain + "/#!/" + url + "'>site</a>.";
+        body += "<br/><br/><br/><br/>To <a href='" + this.domain + "/#!/" + url + "'>unsubscribe</a>, click the subscription button below all of the comments.";
+        this.sendMailToAddresses(users, subject, body);
+    }
+
+    private sendMailToAddresses(users: Array<string>, subject: string, body: string): void {
+        var bccAddresses: string = "";
+        for (var i = 0; i < users.length; i++) {
+            bccAddresses += users[i] + ",";
+        }
+        this.sendMail("", bccAddresses, subject, body);
+        if (!this.allowSendMail) {
+            this.logger.verbose(body);
+        }
+    }
+
     private sendMailToUsers(users: Array<UserSettings>, subject: string, body: string): void {
         var bccAddresses: string = "";
         for (var i = 0; i < users.length; i++) {

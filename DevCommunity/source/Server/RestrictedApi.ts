@@ -71,6 +71,14 @@ class RestrictedApi {
     }
 
     public changeSubscription(visitor: Visitor, data: CommentTransports.Subscription, res: express.Response) {
+        this.commentRepository.updateSubscription(visitor, data);
+        res.send(200);
+    }
+
+    public visitComment(visitor: Visitor, data: CommentTransports.VisitComment, res: express.Response) {
+        this.commentRepository.visitComment(visitor, data, (subscribed) => {
+            res.send(200, subscribed);
+        });
     }
 
     public addTweet(visitor: Visitor, twitterCode: string, res: express.Response): void {

@@ -163,7 +163,7 @@ var commentsDb: Database = new NeDb(path.join(DatabaseDir, 'comments.db.json'));
 var logger: Logger = new ConsoleAndFileLogger();
 var smtpConverter: SmtpConverter = new SmtpConverter(config.mail.smtp);
 var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, smtpConverter, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
-var commentRepo: CommentRepository = new CommentRepository(commentsDb, logger);
+var commentRepo: CommentRepository = new CommentRepository(commentsDb, logger, emailer);
 
 var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger, commentRepo);
 var userSettingsRepo: UserSettingsRepository = new UserSettingsRepository(userSettingsDb, logger);
@@ -351,6 +351,12 @@ app.post('/api/restricted/PostCommentReply', (req: express.Request, res: express
 app.post('/api/restricted/ChangeSubscription', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.changeSubscription(visitor, <CommentTransports.Subscription>req.body, res);
+    });
+});
+
+app.post('/api/restricted/VisitComment', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.visitComment(visitor, <CommentTransports.VisitComment>req.body, res);
     });
 });
 
