@@ -68,6 +68,7 @@
     <Content Include="site\views\partials\Stories.jade" />
     <Content Include="site\views\partials\story.jade" />
     <Content Include="site\views\partials\UserSettings.jade" />
+    <Content Include="source\Server\CommentRepository.ts" />
     <Content Include="source\Tests\Client\.gitignore" />
     <Content Include="source\Tests\Server\.gitignore" />
   </ItemGroup>
@@ -143,11 +144,11 @@
     <TypeScriptCompile Include="source\Client\UserSvc.ts" />
     <TypeScriptCompile Include="source\Common\CommentGroup.ts" />
     <TypeScriptCompile Include="source\Common\CommentData.ts" />
-    <TypeScriptCompile Include="source\Common\IdToCommentMap.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
     <TypeScriptCompile Include="source\Common\Site.ts" />
     <TypeScriptCompile Include="source\Common\Story.ts" />
     <TypeScriptCompile Include="source\Client\StoryController.ts" />
+    <TypeScriptCompile Include="source\Common\CommentTransports.ts" />
     <TypeScriptCompile Include="source\Common\UserSettings.ts" />
     <TypeScriptCompile Include="source\Server\Api.ts" />
     <TypeScriptCompile Include="source\Server\Database.ts" />

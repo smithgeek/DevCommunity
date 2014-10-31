@@ -20,10 +20,7 @@ class CommentController {
         this.$scope.$on('editComment', (event, d: CommentData) => this.editComment(d));
         this.$scope.$watch('commentId', (value) => {
             if (value) {
-                $http.get('/api/GetComments/' + $scope.commentId)
-                    .success((data: CommentGroup) => {
-                        this.$scope.commentGroup = data;
-                    });
+                this.getComments();
             }
         });
     }
@@ -37,15 +34,20 @@ class CommentController {
     }
 
     public postComment(data: CommentData): void {
+        var needsRefresh = this.$scope.commentGroup.comments.length == 0;
         this.$scope.commentGroup.comments.push(data);
         this.$http.post('/api/restricted/PostComment', <CommentTransports.Post>{
             GroupId: this.$scope.commentGroup.groupId,
             NewComment: data
+        }).success(() => {
+            if (needsRefresh) {
+                this.getComments();
+            }
         });
     }
 
     public postReply(data: CommentData, parentId: string): void {
-        this.$http.post('/api/restricted/PostComment', <CommentTransports.PostReply>{
+        this.$http.post('/api/restricted/PostCommentReply', <CommentTransports.PostReply>{
             GroupId: this.$scope.commentGroup.groupId,
             NewComment: data,
             ParentId: parentId
@@ -53,10 +55,17 @@ class CommentController {
     }
 
     public editComment(data: CommentData): void {
-        this.$http.post('/api/restricted/PostComment', <CommentTransports.Post>{
+        this.$http.post('/api/restricted/EditComment', <CommentTransports.Post>{
             GroupId: this.$scope.commentGroup.groupId,
             NewComment: data
         });
+    }
+
+    private getComments(): void {
+        this.$http.get('/api/GetComments/' + this.$scope.commentId)
+            .success((data: CommentGroup) => {
+                this.$scope.commentGroup = data;
+            });
     }
 }
 

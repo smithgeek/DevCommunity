@@ -2,12 +2,12 @@
   div
     span.author {{ comment.author }} 
     span.less-important  - 
-    time.timeago.less-important(datetime="{{comment.time.toISOString()}}")
+    time.timeago.less-important(datetime="{{comment.time}}")
     div.data(id="comment-readonly-{{comment.id}}") {{ comment.data }}
     my-comment-form.hideCommentForm(placeholder="", user="author", button="Post", id="comment-edit-{{comment.id}}" comment="comment", mode="edit")
     div.less-important(ng-show="controller.isLoggedIn()")
       ul.horizontal-list
-        li( ng-show="author === {{comment.author}}" )
+        li( ng-show="author === '{{comment.author}}'" )
           my-comment-edit(comment-id="{{comment.id}}")
         li
           my-comment-reply(comment-id="{{comment.id}}" )

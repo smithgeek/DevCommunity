@@ -103,8 +103,9 @@ class CommentRepository{
     private findComment(groupId: string, commentId: string, callback: (success: boolean, comment: CommentData, group: CommentGroup) => void): void {
         this.findGroup(groupId, (success, group) => {
             if (success) {
-                var comment: CommentData = this.findNestedComment(group.comments, commentId);
-                callback(comment != null, comment, group);
+                this.findNestedComment(group.comments, commentId, (comment: CommentData) => {
+                    callback(comment != null, comment, group);
+                });
             }
             else {
                 callback(false, null, null);
@@ -112,17 +113,26 @@ class CommentRepository{
         });
     }
 
-    private findNestedComment(comments: Array<CommentData>, id: string): CommentData {
-        if (comments.length == 0)
-            return null;
+    private findNestedComment(comments: Array<CommentData>, id: string, callback: (comment: CommentData) => void): CommentData {
+        if (comments.length == 0) {
+            callback(null);
+            return;
+        }
+
+        var breakLoop = false;
         comments.forEach((comment) => {
+            if (breakLoop) return;
             if (comment.id == id) {
-                return comment;
+                callback(comment);
+                breakLoop = true;
+                return;
             }
             else {
-                var nestedComment = this.findNestedComment(comment.replies, id);
+                var nestedComment = this.findNestedComment(comment.replies, id, callback);
                 if (nestedComment) {
-                    return nestedComment;
+                breakLoop = true;
+                    callback(nestedComment);
+                    return;
                 }
             }
             return null;

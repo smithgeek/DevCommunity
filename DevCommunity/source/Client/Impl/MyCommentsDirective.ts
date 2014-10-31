@@ -85,10 +85,10 @@ import CommentData = require('../../Common/CommentData'); ///ts:import:generated
                                 votesUp: []
                             }
                             if ($scope.mode == 'edit') {
-                                $rootScope.$broadcast('editComment', data);
                                 parentComment.data = data.data;
                                 parentComment.time = data.time;
                                 parentComment.author = data.author;
+                                $rootScope.$broadcast('editComment', parentComment);
                                 $("#comment-edit-" + parentComment.id).toggleClass("hideCommentForm");
                                 $("#comment-readonly-" + parentComment.id).toggleClass("hideCommentForm");
                             }
