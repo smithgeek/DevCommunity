@@ -3,7 +3,8 @@
     span.author {{ comment.author }} 
     span.less-important  - 
     time.timeago.less-important(datetime="{{comment.time}}")
-    div.data(id="comment-readonly-{{comment.id}}") {{ comment.data }}
+    div.data(id="comment-readonly-{{comment.id}}")
+      pre.custompre {{ comment.data }}
     my-comment-form.hideCommentForm(placeholder="", user="author", button="Post", id="comment-edit-{{comment.id}}" comment="comment", mode="edit")
     div.less-important(ng-show="controller.isLoggedIn()")
       ul.horizontal-list
