@@ -2,10 +2,14 @@
   form
     textarea.form-control.form-control-top.resize-vertical(placeholder="{{placeholder}}" ng-model="data")
     div.form-control-bottom.form-control-footer
-      span.input-group-addon.form-control-bottom(style="width: 100%; text-align: left")
-        input(type="radio" name="AuthorType" value="{{user}}" ng-model="SelectedAuthor") 
-        span(style="margin-right: 25px")  {{user}}
-        input(type="radio" name="AuthorType" value="Guest" ng-model="SelectedAuthor") 
-        span  Anonymous 
-      span.input-group-btn.form-control-bottom
-        button.btn.btn-default.form-control-bottom(type="button" ng-click="post()") {{button}}
+      div.input-group-addon.form-control-bottom(style="width: 100%; text-align: left")
+        div.container-fluid
+          div.row
+            div.col-md-4
+              input(type="radio" name="AuthorType" value="{{user}}" ng-model="SelectedAuthor") 
+              span {{user}}
+            div.col-md-4
+              input(type="radio" name="AuthorType" value="Guest" ng-model="SelectedAuthor") 
+              span Anonymous 
+      div.input-group-btn.form-control-bottom-btn
+        button.btn-lg.btn-default.form-control-bottom-btn(type="button" ng-click="post()") {{button}}

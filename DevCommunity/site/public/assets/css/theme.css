@@ -162,6 +162,10 @@ html, body {
     border-radius: 0px 0px 4px 4px;
 }
 
+.form-control-bottom-btn {
+    border-radius: 0px 0px 4px 0px;
+}
+
 .form-control-footer {
     width: 100%;
     text-align: left;
