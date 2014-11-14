@@ -43,3 +43,4 @@ deployProd.bat
 .baseDir.?s
 
 /DevCommunity/site/views/partials/HomeCarousel.jade
+/DevCommunity/Data/PrizeRegistration.json
