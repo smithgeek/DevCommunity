@@ -58,15 +58,15 @@ class PrizeManager {
         }
     }
 
-    public pickWinner(prize: string): string {
+    public pickWinner(prize: string): PrizeTransport.WinnerResponse {
         var eligble: Array<string> = [];
         for (var i = 0; i < this.Registration.Entries.length; ++i) {
             if (this.Registration.Entries[i].PrizeId.indexOf(prize) != -1) {
                 eligble.push(this.Registration.Entries[i].Email);
             }
         }
-        var index = Math.floor((Math.random() * (eligble.length + 1)));
-        return eligble[index];
+        var index = Math.floor((Math.random() * (eligble.length)));
+        return { Winner: eligble[index], Prize: prize };
     }
 
     public saveWinner(email: string, prize: string): void {

@@ -3,6 +3,7 @@ import SiteConfig = require('./SiteConfig'); ///ts:import:generated
 ///ts:import=IUserSvc
 import IUserSvc = require('./IUserSvc'); ///ts:import:generated
 
+
 $('.nav a').on('click', function () {
     if ($(".navbar-toggle").css('display') != 'none') {
         $(".navbar-toggle").trigger("click");
@@ -68,6 +69,9 @@ export class RouteConfig {
         when("/register", {
             templateUrl: 'partials/Register'
         }).
+        when("/winner", {
+            templateUrl: 'partials/Winner'
+        }).
         otherwise({
             redirectTo: '/'
         });
@@ -132,4 +136,28 @@ export function getModuleName(): string {
             }
         };
     }]);
+
+    app.factory('socket', function ($rootScope) {
+        var socket = io.connect();
+        return {
+            on: function (eventName, callback) {
+                socket.on(eventName, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        callback.apply(socket, args);
+                    });
+                });
+            },
+            emit: function (eventName, data, callback) {
+                socket.emit(eventName, data, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        if (callback) {
+                            callback.apply(socket, args);
+                        }
+                    });
+                })
+            }
+        };
+    });
 })();

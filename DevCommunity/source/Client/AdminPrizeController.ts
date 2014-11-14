@@ -6,7 +6,7 @@ import PrizeTransport = require('../Common/PrizeTransport'); ///ts:import:genera
 import AdminPrizeControllerScope = require('./AdminPrizeControllerScope'); ///ts:import:generated
 
 class AdminPrizeController {
-    constructor(private $scope: AdminPrizeControllerScope, private $http: ng.IHttpService) {
+    constructor(private $scope: AdminPrizeControllerScope, private $http: ng.IHttpService, socket) {
         this.$scope.registrationOpen = false;
         this.$scope.haveEntries = false;
         this.$scope.hasSelection = false;
@@ -16,12 +16,14 @@ class AdminPrizeController {
         this.$scope.selectedPrize = "";
         this.$scope.entries = [];
         this.$scope.pastWinners = [];
+        this.$scope.newEntries = 0;
 
         this.$http.get('/api/IsPrizeRegistrationOpen').success((data: PrizeTransport.IsRegistrationOpen) => {
             this.$scope.registrationOpen = data.Open;
         });
         this.refreshEntries();
         this.refreshPastWinners();
+        socket.on('Prize:NewEntry', () => { this.$scope.newEntries++; });
     }
 
     public OpenRegistration(): void {
@@ -29,6 +31,7 @@ class AdminPrizeController {
         this.$http.post('/api/restricted/OpenRegistration', {})
             .success(() => {
                 this.$scope.registrationOpen = true;
+                this.refreshEntries();
             }).error(() => {
                 this.$scope.errorMessage = "Could not open registration.";
             });
@@ -97,6 +100,7 @@ class AdminPrizeController {
         this.$http.get('/api/restricted/GetPrizeEntries').success((data: PrizeTransport.GetEntriesResponse) => {
             this.$scope.entries = data.Entries;
             this.$scope.haveEntries = this.$scope.entries.length > 0;
+            this.$scope.newEntries = 0;
         });
     }
 
@@ -108,7 +112,7 @@ class AdminPrizeController {
 
 }
 
-angular.module(app.getModuleName()).controller('AdminPrizeController', ['$scope', '$http', AdminPrizeController]);
+angular.module(app.getModuleName()).controller('AdminPrizeController', ['$scope', '$http', 'socket', AdminPrizeController]);
 
 export = AdminPrizeController;
 

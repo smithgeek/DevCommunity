@@ -1,0 +1,19 @@
+﻿br
+br
+br
+div(ng-controller="WinnerController as controller")
+  .page-header
+    div(ng-show="RegistrationOpen")
+      h1 Register at 
+      h1 #{url}/win
+    div(ng-hide="RegistrationOpen")
+      h1 Registration is now closed
+
+  br
+  br
+  br
+  br
+  br
+  div.center(ng-show="hasWinner")
+    h1 {{Prize}} WINNER:
+    h1 {{Person}}

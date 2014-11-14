@@ -91,3 +91,10 @@ export function comment(req: express.Request, res: express.Response) {
 export function commentForm(req: express.Request, res: express.Response) {
     res.render('partials/CommentForm');
 }
+
+export function winnerRedirect(req: express.Request, res: express.Response) {
+    res.redirect('#!/winner');
+};
+export function winner(req: express.Request, res: express.Response) {
+    res.render('partials/Winner', { url: config.server.domain });
+}

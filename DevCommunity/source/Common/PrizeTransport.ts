@@ -17,6 +17,7 @@ export interface PickWinner {
 
 export interface WinnerResponse {
     Winner: string;
+    Prize: string;
 }
 
 export interface SaveWinner {

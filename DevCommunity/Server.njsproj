@@ -72,6 +72,8 @@
     <Content Include="source\Server\CommentRepository.ts" />
     <Content Include="source\Tests\Client\.gitignore" />
     <Content Include="source\Tests\Server\.gitignore" />
+    <Content Include="source\Typings\Client\socket.io-client\socket.io-client.d.ts" />
+    <Content Include="source\Typings\Server\socket.io\socket.io.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="site\" />
@@ -98,6 +100,7 @@
     <Folder Include="source\Typings\Client\datepicker\" />
     <Folder Include="source\Typings\Client\expect.js\" />
     <Folder Include="source\Typings\Client\jquery\" />
+    <Folder Include="source\Typings\Client\socket.io-client\" />
     <Folder Include="source\Typings\Common\" />
     <Folder Include="source\Typings\Server\" />
     <Folder Include="source\Typings\Server\express\" />
@@ -107,6 +110,7 @@
     <Folder Include="source\Typings\Client\readmore\" />
     <Folder Include="source\Typings\Common\sinon\" />
     <Folder Include="source\Typings\Client\stylus\" />
+    <Folder Include="source\Typings\Server\socket.io\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="source\Client\AddMeetingController.ts" />

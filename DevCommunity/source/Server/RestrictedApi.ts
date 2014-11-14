@@ -331,39 +331,44 @@ class RestrictedApi {
         }
     }
 
-    public openPrizeRegistration(visitor: Visitor, res: express.Response): void {
+    public openPrizeRegistration(visitor: Visitor, res: express.Response, io): void {
         if (visitor.isAdmin()) {
             this.prizeManager.openRegistration();
             res.send(200, "Registration Opened.");
+            io.emit("Prize:RegistrationOpened");
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
         }
     }
 
-    public closePrizeRegistration(visitor: Visitor, res: express.Response): void {
+    public closePrizeRegistration(visitor: Visitor, res: express.Response, io): void {
         if (visitor.isAdmin()) {
             this.prizeManager.closeRegistration();
             res.send(200, "Registration closed.");
+            io.emit("Prize:RegistrationClosed");
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
         }
     }
 
-    public pickWinner(visitor: Visitor, prize: string, res: express.Response): void {
+    public pickWinner(visitor: Visitor, prize: string, res: express.Response, io): void {
         if (visitor.isAdmin()) {
-            res.send( 200, <PrizeTransport.WinnerResponse>{ Winner: this.prizeManager.pickWinner(prize) });
+            var winner = this.prizeManager.pickWinner(prize);
+            res.send(200, winner);
+            io.emit('Prize:WinnerSelected', winner);
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
         }
     }
 
-    public saveWinner(visitor: Visitor, email: string, prize: string, res: express.Response): void {
+    public saveWinner(visitor: Visitor, email: string, prize: string, res: express.Response, io): void {
         if (visitor.isAdmin()) {
             this.prizeManager.saveWinner(email, prize);
             res.send(200, "Winner saved.");
+            io.emit('Prize:WinnerSaved');
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to do that.");

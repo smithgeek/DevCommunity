@@ -13,6 +13,7 @@ interface AdminPrizeControllerScope extends ng.IScope {
 
     entries: Array<PrizeTransport.Entry>;
     pastWinners: Array<string>;
+    newEntries: number;
 }
 
 export = AdminPrizeControllerScope;

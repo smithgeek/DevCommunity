@@ -229,6 +229,7 @@ if admin
           h3 Entries
             button.editable(ng-click='controller.refreshEntries()')
               span.glyphicon.glyphicon-refresh
+            span(style="margin-left: 20px; color: green") {{newEntries}} new entries
           div(ng-repeat='entry in entries')
             p {{entry.Email}} - {{entry.PrizeId}}
           h3 Past Winners

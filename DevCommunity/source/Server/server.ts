@@ -4,7 +4,7 @@
 
 import express = require('express');
 import routes = require('./routes/partials');
-import http = require('http');
+
 import path = require('path');
 import fs = require('fs');
 ///ts:import=Database
@@ -47,6 +47,7 @@ import PrizeTransport = require('../Common/PrizeTransport'); ///ts:import:genera
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var nodemailer:Nodemailer = require ('nodemailer'); // https://github.com/andris9/nodemailer
+var io;
 
 var configFilePath = 'Config/config.json';
 var config: Site.Config = new Site.Config();
@@ -133,6 +134,8 @@ app.get('/partials/home', routes.home);
 app.get('/partials/about', routes.about);
 app.get('/partials/register', routes.register);
 app.get('/win', routes.win);
+app.get('/winner', routes.winnerRedirect);
+app.get('/partials/winner', routes.winner);
 app.get('/partials/contact', routes.contact);
 app.get('/partials/brainstorming', routes.brainstorming);
 app.get('/partials/pastMeetings', routes.pastMeetings);
@@ -371,6 +374,9 @@ app.post('/api/RegisterForPrizes', (req: express.Request, res: express.Response)
     var data: PrizeTransport.Register = req.body;
     prizeManager.register(data.Email, data.Prizes, (success, msg) => {
         res.send(success ? 200 : 404, <PrizeTransport.RegisterReply>{ Message: msg });
+        if (success) {
+            io.emit('Prize:NewEntry', {});
+        }
     });
 });
 
@@ -380,27 +386,27 @@ app.get('/api/IsPrizeRegistrationOpen', (req: express.Request, res: express.Resp
 
 app.post('/api/restricted/OpenRegistration', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
-        api.restricted.openPrizeRegistration(visitor, res);
+        api.restricted.openPrizeRegistration(visitor, res, io);
     });
 });
 
 app.post('/api/restricted/CloseRegistration', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
-        api.restricted.closePrizeRegistration(visitor, res);
+        api.restricted.closePrizeRegistration(visitor, res, io);
     });
 });
 
 app.post('/api/restricted/PickWinner', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         var data: PrizeTransport.PickWinner = req.body;
-        api.restricted.pickWinner(visitor, data.Prize, res);
+        api.restricted.pickWinner(visitor, data.Prize, res, io);
     });
 });
 
 app.post('/api/restricted/SaveWinner', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         var data: PrizeTransport.SaveWinner = req.body;
-        api.restricted.saveWinner(visitor, data.Email, data.Prize, res);
+        api.restricted.saveWinner(visitor, data.Email, data.Prize, res, io);
     });
 });
 
@@ -416,6 +422,16 @@ app.get('/api/restricted/GetPastWinners', (req: express.Request, res: express.Re
     });
 });
 
-http.createServer(app).listen(app.get('port'), function () {
+var http = require('http').Server(app);
+io = require('socket.io')(http);
+
+io.on('connection', (socket) => {
+    logger.log('a user connected');
+    socket.on('disconnect', () => {
+        logger.log('user disconnected');
+    });
+});
+
+http.listen(app.get('port'), function () {
     logger.log('Express server listening on port ' + app.get('port'));
 });

@@ -252,3 +252,7 @@ html, body {
         border: 1px solid #bbb;
     }
 }
+
+.center {
+    text-align: center;
+}
