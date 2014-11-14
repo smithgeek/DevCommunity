@@ -20,3 +20,12 @@ interface ReadmoreOptions {
 interface JQuery {
     timeago(): JQuery;
 }
+
+interface QRCodeObj {
+    makeCode(value: string);
+}
+
+interface qrcodeFactory {
+    new (id: string, options?: any): QRCodeObj;
+}
+declare var QRCode: qrcodeFactory;

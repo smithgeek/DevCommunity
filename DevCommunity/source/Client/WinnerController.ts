@@ -33,6 +33,9 @@ class WinnerController {
 
         this.$http.get('/api/IsPrizeRegistrationOpen').success((data: PrizeTransport.IsRegistrationOpen) => {
             this.$scope.RegistrationOpen = data.Open;
+            var url = $("#qrCode").attr("data");
+            var qrCode = new QRCode("qrCode", { width: 512, height: 512 });
+            qrCode.makeCode(url);
         });
     }
 

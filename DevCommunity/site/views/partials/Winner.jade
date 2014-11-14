@@ -9,11 +9,15 @@ div(ng-controller="WinnerController as controller")
     div(ng-hide="RegistrationOpen")
       h1 Registration is now closed
 
-  br
-  br
-  br
-  br
-  br
-  div.center(ng-show="hasWinner")
-    h1 {{Prize}} WINNER:
-    h1 {{Person}}
+  div(ng-show="RegistrationOpen")
+    div(id="qrCode" data="#{url}/win")
+    
+  div(ng-hide="RegistrationOpen")
+    br
+    br
+    br
+    br
+    br
+    div.center(ng-show="hasWinner")
+      h1 {{Prize}} WINNER:
+      h1 {{Person}}
