@@ -40,6 +40,14 @@ export function about(req: express.Request, res: express.Response) {
   res.render('partials/about');
 };
 
+export function win(req: express.Request, res: express.Response) {
+    res.redirect('#!/register');
+};
+
+export function register(req: express.Request, res: express.Response) {
+    res.render('partials/register');
+};
+
 export function contact(req: express.Request, res: express.Response) {
   res.render('partials/contact', { contact: config.contact });
 };

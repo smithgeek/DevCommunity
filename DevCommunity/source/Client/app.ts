@@ -65,6 +65,9 @@ export class RouteConfig {
         when("/partials/Comment.html", {
             templateUrl: 'partials/Comment.html'
         }).
+        when("/register", {
+            templateUrl: 'partials/Register'
+        }).
         otherwise({
             redirectTo: '/'
         });

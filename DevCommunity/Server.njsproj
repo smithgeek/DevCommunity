@@ -65,6 +65,7 @@
     <Content Include="site\views\partials\HomeCarousel.jade" />
     <Content Include="site\views\partials\meeting.jade" />
     <Content Include="site\views\partials\PastMeetings.jade" />
+    <Content Include="site\views\partials\Register.jade" />
     <Content Include="site\views\partials\Stories.jade" />
     <Content Include="site\views\partials\story.jade" />
     <Content Include="site\views\partials\UserSettings.jade" />
@@ -132,6 +133,7 @@
     <TypeScriptCompile Include="source\Client\MeetingController.ts" />
     <TypeScriptCompile Include="source\Client\MeetingSvc.ts" />
     <TypeScriptCompile Include="source\Client\PastMeetingsController.ts" />
+    <TypeScriptCompile Include="source\Client\RegisterController.ts" />
     <TypeScriptCompile Include="source\Client\SingleStoryController.ts" />
     <TypeScriptCompile Include="source\Client\SiteConfig.ts" />
     <TypeScriptCompile Include="source\Client\SiteConfigController.ts" />

@@ -1,0 +1,12 @@
+﻿br
+br
+br
+.page-header
+    h1 Register
+p Only register if you are interested in receiving a free month from pluralsight.  To be eligible you must be present and have an account on the developer community website.  A person is not eligible to win if they have won in the past 2 weeks.
+
+form(ng-controller="RegisterController as controller")
+  .form-group
+    label Email Address
+    input.form-control(type='text' ng-model='email') 
+  button.btn.btn-lg.btn-success(ng-click="controller.Submit()") Submit

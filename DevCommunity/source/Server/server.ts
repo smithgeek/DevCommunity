@@ -127,6 +127,8 @@ routes.setConfig(config);
 app.get('/', routes.index);
 app.get('/partials/home', routes.home);
 app.get('/partials/about', routes.about);
+app.get('/partials/register', routes.register);
+app.get('/win', routes.win);
 app.get('/partials/contact', routes.contact);
 app.get('/partials/brainstorming', routes.brainstorming);
 app.get('/partials/pastMeetings', routes.pastMeetings);
