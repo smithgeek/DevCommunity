@@ -39,6 +39,10 @@ import SmtpConverter = require('./SmtpConverter'); ///ts:import:generated
 import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
 ///ts:import=CommentRepository
 import CommentRepository = require('./CommentRepository'); ///ts:import:generated
+///ts:import=PrizeManager
+import PrizeManager = require('./PrizeManager'); ///ts:import:generated
+///ts:import=PrizeTransport
+import PrizeTransport = require('../Common/PrizeTransport'); ///ts:import:generated
 
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
@@ -169,7 +173,8 @@ var commentRepo: CommentRepository = new CommentRepository(commentsDb, logger, e
 
 var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger, commentRepo);
 var userSettingsRepo: UserSettingsRepository = new UserSettingsRepository(userSettingsDb, logger);
-var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger, commentRepo);
+var prizeManager: PrizeManager = new PrizeManager(userSettingsRepo);
+var restrictedApi: RestrictedApi = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger, commentRepo, prizeManager);
 var security: Security = new Security(config.server.restrictedLoginDomain, config.server.jwtSecret, userVerificationDb, userSettingsDb, emailer, logger, config);
 var api: Api = new Api(publicApi, restrictedApi, security);
 
@@ -359,6 +364,55 @@ app.post('/api/restricted/ChangeSubscription', (req: express.Request, res: expre
 app.post('/api/restricted/VisitComment', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.visitComment(visitor, <CommentTransports.VisitComment>req.body, res);
+    });
+});
+
+app.post('/api/RegisterForPrizes', (req: express.Request, res: express.Response) => {
+    var data: PrizeTransport.Register = req.body;
+    prizeManager.register(data.Email, data.Prizes, (success, msg) => {
+        res.send(success ? 200 : 404, <PrizeTransport.RegisterReply>{ Message: msg });
+    });
+});
+
+app.get('/api/IsPrizeRegistrationOpen', (req: express.Request, res: express.Response) => {
+    res.send(200, <PrizeTransport.IsRegistrationOpen>{ Open: prizeManager.isRegistrationOpen() });
+});
+
+app.post('/api/restricted/OpenRegistration', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.openPrizeRegistration(visitor, res);
+    });
+});
+
+app.post('/api/restricted/CloseRegistration', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.closePrizeRegistration(visitor, res);
+    });
+});
+
+app.post('/api/restricted/PickWinner', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        var data: PrizeTransport.PickWinner = req.body;
+        api.restricted.pickWinner(visitor, data.Prize, res);
+    });
+});
+
+app.post('/api/restricted/SaveWinner', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        var data: PrizeTransport.SaveWinner = req.body;
+        api.restricted.saveWinner(visitor, data.Email, data.Prize, res);
+    });
+});
+
+app.get('/api/restricted/GetPrizeEntries', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getPrizeEntries(visitor, res);
+    });
+});
+
+app.get('/api/restricted/GetPastWinners', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getPastWinners(visitor, res);
     });
 });
 

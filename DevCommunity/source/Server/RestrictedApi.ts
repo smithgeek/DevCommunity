@@ -24,6 +24,10 @@ import RestartWriter = require('./RestartWriter'); ///ts:import:generated
 import CommentTransports = require('../Common/CommentTransports'); ///ts:import:generated
 ///ts:import=CommentRepository
 import CommentRepository = require('./CommentRepository'); ///ts:import:generated
+///ts:import=PrizeManager
+import PrizeManager = require('./PrizeManager'); ///ts:import:generated
+///ts:import=PrizeTransport
+import PrizeTransport = require('../Common/PrizeTransport'); ///ts:import:generated
 
 import express = require('express');
 import util = require('util');
@@ -34,7 +38,7 @@ class RestrictedApi {
 
     constructor(private randomTweetsDb: Database, private twitter: Twitter, private userSettingsRepo: UserSettingsRepository, private storyDb: Database,
         private meetingIdeasDb: Database, private emailer: DevCommunityEmailer, private logger: Logger,
-        private commentRepository: CommentRepository) {
+        private commentRepository: CommentRepository, private prizeManager: PrizeManager) {
     }
 
     public postComment(visitor: Visitor, data: CommentTransports.Post, res: express.Response): void {
@@ -326,5 +330,63 @@ class RestrictedApi {
             res.send(401, "Who do you think you are?  You have to be an administrator to send an email.");
         }
     }
+
+    public openPrizeRegistration(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.prizeManager.openRegistration();
+            res.send(200, "Registration Opened.");
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
+    public closePrizeRegistration(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.prizeManager.closeRegistration();
+            res.send(200, "Registration closed.");
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
+    public pickWinner(visitor: Visitor, prize: string, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            res.send( 200, <PrizeTransport.WinnerResponse>{ Winner: this.prizeManager.pickWinner(prize) });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
+    public saveWinner(visitor: Visitor, email: string, prize: string, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.prizeManager.saveWinner(email, prize);
+            res.send(200, "Winner saved.");
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
+    public getPrizeEntries(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            res.send(200, <PrizeTransport.GetEntriesResponse>{ Entries: this.prizeManager.getEntries() });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
+    public getPastWinners(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            res.send(200, <PrizeTransport.GetPastWinnersResponse>{ Winners: this.prizeManager.getPastWinners() });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
 }
 export = RestrictedApi;

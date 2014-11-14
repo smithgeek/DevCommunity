@@ -112,6 +112,8 @@
     <TypeScriptCompile Include="source\Client\AddMeetingController.ts" />
     <TypeScriptCompile Include="source\Client\AdminController.ts" />
     <TypeScriptCompile Include="source\Client\AdminControllerScope.ts" />
+    <TypeScriptCompile Include="source\Client\AdminPrizeController.ts" />
+    <TypeScriptCompile Include="source\Client\AdminPrizeControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\app.ts" />
     <TypeScriptCompile Include="source\Client\CommentController.ts" />
     <TypeScriptCompile Include="source\Client\CommentControllerScope.ts" />
@@ -134,6 +136,7 @@
     <TypeScriptCompile Include="source\Client\MeetingSvc.ts" />
     <TypeScriptCompile Include="source\Client\PastMeetingsController.ts" />
     <TypeScriptCompile Include="source\Client\RegisterController.ts" />
+    <TypeScriptCompile Include="source\Client\RegisterControllerScope.ts" />
     <TypeScriptCompile Include="source\Client\SingleStoryController.ts" />
     <TypeScriptCompile Include="source\Client\SiteConfig.ts" />
     <TypeScriptCompile Include="source\Client\SiteConfigController.ts" />
@@ -148,6 +151,7 @@
     <TypeScriptCompile Include="source\Common\CommentData.ts" />
     <TypeScriptCompile Include="source\Common\CommentSubscriber.ts" />
     <TypeScriptCompile Include="source\Common\MeetingData.ts" />
+    <TypeScriptCompile Include="source\Common\PrizeTransport.ts" />
     <TypeScriptCompile Include="source\Common\Site.ts" />
     <TypeScriptCompile Include="source\Common\Story.ts" />
     <TypeScriptCompile Include="source\Client\StoryController.ts" />
@@ -159,6 +163,7 @@
     <TypeScriptCompile Include="source\Server\Logger.ts" />
     <TypeScriptCompile Include="source\Server\Mailer.ts" />
     <TypeScriptCompile Include="source\Server\NeDb.ts" />
+    <TypeScriptCompile Include="source\Server\PrizeManager.ts" />
     <TypeScriptCompile Include="source\Server\PublicApi.ts" />
     <TypeScriptCompile Include="source\Server\Query.ts" />
     <TypeScriptCompile Include="source\Server\RestartWriter.ts" />

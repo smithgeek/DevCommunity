@@ -14,6 +14,8 @@ import Twitter = require('../../Server/Twitter'); ///ts:import:generated
 import UserSettings = require('../../Common/UserSettings'); ///ts:import:generated
 ///ts:import=CommentRepository
 import CommentRepository = require('../../Server/CommentRepository'); ///ts:import:generated
+///ts:import=PrizeManager
+import PrizeManager = require('../../Server/PrizeManager'); ///ts:import:generated
 
 import assert = require('assert');
 
@@ -26,12 +28,13 @@ describe("RestrictedApiTests", () => {
     var emailer: DevCommunityEmailer;
     var logger: Logger;
     var twitter: Twitter;
-    var commentRepo: CommentRepository
+    var commentRepo: CommentRepository;
+    var prizeManager: PrizeManager;
 
     beforeEach(() => {
         userSettingsRepo = <UserSettingsRepository>{};
         emailer = <DevCommunityEmailer>{};
-        api = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger, commentRepo);
+        api = new RestrictedApi(randomTweetsDb, twitter, userSettingsRepo, storyDb, meetingIdeasDb, emailer, logger, commentRepo, prizeManager);
     });
 
     it("SendMeetingScheduledToSubscribedUsers", (done) => {

@@ -12,7 +12,8 @@ if admin
         a(href='#OtherTab' role="tab" data-toggle="tab") Data
       li
         a(href='#CarouselTab' role="tab" data-toggle="tab") Home Carousel
-
+      li
+        a(href='#PrizeTab' role="tab" data-toggle="tab") Prizes
     br
 
     div.tab-content
@@ -202,6 +203,37 @@ if admin
             button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.saveCarousel()") Save Carousel
             span(style="margin-left: 20px; color: red") {{carouselErrorMessage}}
             span(style="margin-left: 20px; color: green") {{carouselSuccessMessage}}
+
+      div.tab-pane(id="PrizeTab")
+        div(ng-controller="AdminPrizeController as controller")
+          span(style="margin-left: 20px; color: red") {{errorMessage}}
+          span(style="margin-left: 20px; color: green") {{successMessage}}
+
+          h3 Registration
+          button.btn.btn-lg.btn-default.settings-btn(ng-click="controller.OpenRegistration()" ng-show="!registrationOpen") Open
+          span   
+          button.btn.btn-lg.btn-default.settings-btn(ng-click="controller.CloseRegistration()" ng-show="registrationOpen") Close
+          br
+          div(ng-show="!registrationOpen")
+            h3 Pick Winner
+            button.btn.btn-lg.btn-default.settings-btn(ng-click="controller.PickPluralsightWinner()" ng-disabled="!haveEntries") Pluralsight
+            span   
+            button.btn.btn-lg.btn-default.settings-btn(ng-click="controller.PickEBookWinner()" ng-disabled="!haveEntries") eBook
+            br
+            h3 Selection
+            p(ng-show="hasSelection") {{selectedUser}} won {{selectedPrize}}
+            button.btn.btn-lg.btn-default.settings-btn(ng-click="controller.SaveWinner()" ng-disabled="!hasSelection") Save
+
+          br
+          br
+          h3 Entries
+            button.editable(ng-click='controller.refreshEntries()')
+              span.glyphicon.glyphicon-refresh
+          div(ng-repeat='entry in entries')
+            p {{entry.Email}} - {{entry.PrizeId}}
+          h3 Past Winners
+          div(ng-repeat='winner in pastWinners')
+            p {{winner}}
 
 else
   p You must log in with an administrator account to access this page.

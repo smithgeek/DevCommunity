@@ -238,9 +238,17 @@ html, body {
     display: none;
 }
 
-.custompre {
-    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    background: none;
-    border: none;
+.hidePrize {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    input[type=checkbox] {
+        width: 44px;
+        height: 44px;
+        -webkit-border-radius: 22px;
+        -moz-border-radius: 22px;
+        border-radius: 22px;
+        border: 1px solid #bbb;
+    }
 }

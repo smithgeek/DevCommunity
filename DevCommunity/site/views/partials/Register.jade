@@ -2,11 +2,23 @@
 br
 br
 .page-header
-    h1 Register
-p Only register if you are interested in receiving a free month from pluralsight.  To be eligible you must be present and have an account on the developer community website.  A person is not eligible to win if they have won in the past 2 weeks.
+    h1 Prize Registration
 
-form(ng-controller="RegisterController as controller")
-  .form-group
-    label Email Address
-    input.form-control(type='text' ng-model='email') 
-  button.btn.btn-lg.btn-success(ng-click="controller.Submit()") Submit
+div(id="PrizeRegistration").hidePrize
+  p To be eligible you must be present and have an account on the developer community website.  A person is not eligible to win if they won at the last meeting.
+  form(ng-controller="RegisterController as controller")
+    .form-group
+      input.form-control(type='email' ng-model='email' placeholder='Email Address') 
+    .form-group
+      input(type='checkbox' ng-model='pluralsight') 
+      span  Free month of pluralsight
+      br
+      input(type='checkbox' ng-model='ebook') 
+      span  Free eBook from either Microsoft Press or O'Reilly
+
+    button.btn.btn-lg.btn-success(ng-click="controller.Submit()") Register
+    span(style="margin-left: 20px; color: red") {{errorMessage}}
+    span(style="margin-left: 20px; color: green") {{successMessage}}
+
+div(id="PrizeRegistrationClosed").hidePrize
+  p Registration is currently closed.
