@@ -24,6 +24,10 @@ class AdminPrizeController {
         this.refreshEntries();
         this.refreshPastWinners();
         socket.on('Prize:NewEntry', () => { this.$scope.newEntries++; });
+
+        this.$scope.$on("$destroy", () => {
+            socket.close();
+        });
     }
 
     public OpenRegistration(): void {

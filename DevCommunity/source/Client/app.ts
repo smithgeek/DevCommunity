@@ -157,6 +157,9 @@ export function getModuleName(): string {
                         }
                     });
                 })
+            },
+            close: function () {
+                socket.close();
             }
         };
     });

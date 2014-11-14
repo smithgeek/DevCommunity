@@ -37,6 +37,10 @@ class WinnerController {
             var qrCode = new QRCode("qrCode", { width: 512, height: 512 });
             qrCode.makeCode(url);
         });
+
+        this.$scope.$on("$destroy", () => {
+            socket.close();
+        });
     }
 
 }

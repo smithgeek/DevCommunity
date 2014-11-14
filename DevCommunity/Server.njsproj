@@ -72,8 +72,10 @@
     <Content Include="source\Server\CommentRepository.ts" />
     <Content Include="source\Tests\Client\.gitignore" />
     <Content Include="source\Tests\Server\.gitignore" />
-    <Content Include="source\Typings\Client\socket.io-client\socket.io-client.d.ts" />
-    <Content Include="source\Typings\Server\socket.io\socket.io.d.ts" />
+    <TypeScriptCompile Include="source\Client\WinnerController.ts" />
+    <TypeScriptCompile Include="source\Client\WinnerControllerScope.ts" />
+    <TypeScriptCompile Include="source\Typings\Client\socket.io-client\socket.io-client.d.ts" />
+    <TypeScriptCompile Include="source\Typings\Server\socket.io\socket.io.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="site\" />
