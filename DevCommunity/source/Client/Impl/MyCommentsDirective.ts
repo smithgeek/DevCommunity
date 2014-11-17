@@ -53,6 +53,7 @@ import CommentData = require('../../Common/CommentData'); ///ts:import:generated
                 controller: [
                     '$scope', '$rootScope', function ($scope, $rootScope) {
                         var parentComment: CommentData = $scope.comment;
+                        $scope.preview = false;
                         if (parentComment && $scope.mode == 'edit') {
                             $scope.data = parentComment.data;
                         }
@@ -70,6 +71,10 @@ import CommentData = require('../../Common/CommentData'); ///ts:import:generated
                                 hash |= 0;
                             }
                             return hash;
+                        };
+
+                        $scope.togglePreview = () => {
+                            $scope.preview = !$scope.preview;
                         };
 
                         $scope.post = () => {

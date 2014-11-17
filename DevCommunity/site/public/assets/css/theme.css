@@ -256,3 +256,8 @@ html, body {
 .center {
     text-align: center;
 }
+
+.commentPreview {
+    background-color: lightgray;
+    padding: 10px;
+}
