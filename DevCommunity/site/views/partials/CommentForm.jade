@@ -1,6 +1,7 @@
 ﻿div
   form
     a(href="" ng-click="togglePreview()") {{preview ? 'Hide Preview' : 'Show Preview'}}
+    span  - Comments are rendered as html.
     div.commentPreview.form-control-top(ng-bind-html="data" ng-class="preview ? '' : 'hideCommentForm'")
     textarea.form-control.form-control-top.resize-vertical(placeholder="{{placeholder}}" ng-model="data" ng-class="preview ? 'hideCommentForm' : ''")
     div.form-control-bottom.form-control-footer

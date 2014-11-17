@@ -12,5 +12,5 @@ div(ng-controller='CommentController as controller' id='Comments')
     div.pull-left(ng-class="{true: 'subscribed', false: 'unsubscribed'}[isSubscribed]")
       button.link-button(ng-click="controller.toggleSubscribe()")
         span.glyphicon.glyphicon-envelope
-        span  Subscribe 
+        span  {{isSubscribed ? 'Subscribed' : 'Subscribe'}} 
         span.glyphicon.glyphicon-ok
