@@ -76,15 +76,21 @@ class PrizeManager {
     }
 
     public openRegistration(): void {
-        this.Registration.Entries = [];
         this.Registration.Open = true;
         this.save();
     }
 
     public closeRegistration(): void {
         this.Registration.Open = false;
-        this.Registration.PastWinners = [];
         this.save();
+    }
+
+    public clearPast(): void {
+        this.Registration.PastWinners = [];
+    }
+
+    public clearEntries(): void {
+        this.Registration.Entries = [];
     }
 
     public isRegistrationOpen(): boolean {

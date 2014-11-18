@@ -69,6 +69,9 @@ export class RouteConfig {
         when("/register", {
             templateUrl: 'partials/Register'
         }).
+        when("/win", {
+            redirectTo: '/register'
+        }).
         when("/winner", {
             templateUrl: 'partials/Winner'
         }).
