@@ -25,6 +25,10 @@ export interface SaveWinner {
     Email: string;
 }
 
+export interface ClearPastWinner {
+    Email: string;
+}
+
 export interface Entry {
     Email: string;
     PrizeId: string;

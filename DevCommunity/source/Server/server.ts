@@ -410,6 +410,19 @@ app.post('/api/restricted/SaveWinner', (req: express.Request, res: express.Respo
     });
 });
 
+app.post('/api/restricted/ClearPastWinner', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        var data: PrizeTransport.ClearPastWinner = req.body;
+        api.restricted.clearPastWinner(visitor, data.Email, res);
+    });
+});
+
+app.post('/api/restricted/ClearPrizeEntries', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.clearPrizeEntries(visitor, res);
+    });
+});
+
 app.get('/api/restricted/GetPrizeEntries', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.getPrizeEntries(visitor, res);

@@ -375,6 +375,16 @@ class RestrictedApi {
         }
     }
 
+    public clearPastWinner(visitor: Visitor, email: string, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.prizeManager.clearPast(email);
+            res.send(200, "Past winner cleared.");
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
+
     public getPrizeEntries(visitor: Visitor, res: express.Response): void {
         if (visitor.isAdmin()) {
             res.send(200, <PrizeTransport.GetEntriesResponse>{ Entries: this.prizeManager.getEntries() });
@@ -393,5 +403,14 @@ class RestrictedApi {
         }
     }
 
+    public clearPrizeEntries(visitor: Visitor, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            this.prizeManager.clearEntries();
+            res.send(200, "Cleared entries");
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to do that.");
+        }
+    }
 }
 export = RestrictedApi;

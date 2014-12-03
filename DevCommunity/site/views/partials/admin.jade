@@ -232,9 +232,12 @@ if admin
             span(style="margin-left: 20px; color: green") {{newEntries}} new entries
           div(ng-repeat='entry in entries')
             p {{entry.Email}} - {{entry.PrizeId}}
+          button.btn.btn-lg.btn-default.settings-btn(ng-really-message="Do you really want to clear all entries?" ng-really-click="controller.ClearEntries()" ng-disabled="!haveEntries" ng-show="!registrationOpen") Clear Entries
           h3 Past Winners
           div(ng-repeat='winner in pastWinners')
             p {{winner}}
+              button.editable(ng-really-click='controller.RemovePastWinner(winner)' ng-really-message="Clear {{winner}} from past winners list?")
+                span.glyphicon.glyphicon-remove
 
 else
   p You must log in with an administrator account to access this page.

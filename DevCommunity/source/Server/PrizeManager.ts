@@ -85,12 +85,14 @@ class PrizeManager {
         this.save();
     }
 
-    public clearPast(): void {
-        this.Registration.PastWinners = [];
+    public clearPast(email: string): void {
+        this.Registration.PastWinners.splice(this.Registration.PastWinners.indexOf(email), 1);
+        this.save();
     }
 
     public clearEntries(): void {
         this.Registration.Entries = [];
+        this.save();
     }
 
     public isRegistrationOpen(): boolean {

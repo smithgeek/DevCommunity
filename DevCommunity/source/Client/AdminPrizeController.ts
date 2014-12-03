@@ -89,6 +89,28 @@ class AdminPrizeController {
             });
     }
 
+    public ClearEntries(): void {
+        this.clearMsg();
+        this.$http.post('/api/restricted/ClearPrizeEntries', {})
+            .success((data: string) => {
+                this.$scope.successMessage = data;
+                this.refreshEntries();
+            }).error((data: string) => {
+                this.$scope.errorMessage = data;
+            });
+    }
+
+    public RemovePastWinner(email: string): void {
+        this.clearMsg();
+        this.$http.post('/api/restricted/ClearPastWinner', <PrizeTransport.ClearPastWinner>{ Email: email })
+            .success((data: string) => {
+                this.$scope.successMessage = data;
+                this.refreshPastWinners();
+            }).error((data: string) => {
+                this.$scope.errorMessage = data;
+            });
+    }
+
     private clearMsg(): void {
         this.$scope.errorMessage = "";
         this.$scope.successMessage = "";
