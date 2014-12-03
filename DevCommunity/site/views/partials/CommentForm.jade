@@ -1,18 +1,18 @@
 ﻿div
   form
-    a(href="" ng-click="togglePreview()") {{preview ? 'Hide Preview' : 'Show Preview'}}
-    span  - Comments are rendered as html.
     div.commentPreview.form-control-top(ng-bind-html="data" ng-class="preview ? '' : 'hideCommentForm'")
     textarea.form-control.form-control-top.resize-vertical(placeholder="{{placeholder}}" ng-model="data" ng-class="preview ? 'hideCommentForm' : ''")
     div.form-control-bottom.form-control-footer
       div.input-group-addon.form-control-bottom(style="width: 100%; text-align: left")
-        div.container-fluid
-          div.row
-            div.col-md-4
-              input(type="radio" name="AuthorType" value="{{user}}" ng-model="SelectedAuthor") 
-              span {{user}}
-            div.col-md-4
-              input(type="radio" name="AuthorType" value="Guest" ng-model="SelectedAuthor") 
-              span Anonymous 
+        button.editable(ng-click='togglePreview()' title="Toggle preview" style="margin-left: -10px")
+          span.glyphicon.glyphicon-th-list
+        div.btn-group
+          button.btn.btn-sm.btn-primary.drodown-toggle(type="button" data-toggle="dropdown" aria-expanded="false" style="margin-left: 10px;") Post as {{SelectedAuthor == 'Guest' ? 'Guest' : 'User'}} 
+            span.caret
+          ul.dropdown-menu(role="menu")
+            li
+              a(href="#" ng-click="setAuthor(user)") {{user}}
+            li
+              a(href="#" ng-click="setAuthor('Guest')") Guest
       div.input-group-btn.form-control-bottom-btn
         button.btn-lg.btn-default.form-control-bottom-btn(type="button" ng-click="post()") {{button}}

@@ -77,6 +77,10 @@ import CommentData = require('../../Common/CommentData'); ///ts:import:generated
                             $scope.preview = !$scope.preview;
                         };
 
+                        $scope.setAuthor = (author) => {
+                            $scope.SelectedAuthor = author;
+                        };
+
                         $scope.post = () => {
                             var now = Date.now();
                             var data: CommentData = {

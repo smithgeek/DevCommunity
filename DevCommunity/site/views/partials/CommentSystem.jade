@@ -1,7 +1,7 @@
 ﻿hr
 h3 Comments
 div(ng-controller='CommentController as controller' id='Comments')
-  my-comment-form(placeholder="Join the discussion...", user="author", button="Post" ng-show="controller.isLoggedIn()")
+  my-comment-form(placeholder="Join the discussion... Comments are rendered as html", user="author", button="Post" ng-show="controller.isLoggedIn()")
   p(ng-hide="controller.isLoggedIn()") Log in to leave a comment.
 
   br
