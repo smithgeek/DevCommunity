@@ -21,6 +21,10 @@ class PastMeetingsController {
                 $scope.meetings.push(meetingSvc.createMeeting(data[i]));
             }
         });
+
+        $scope.sortMeeting = (mtg: any) => {
+            return Date.parse(mtg.date);
+        }
     }
 }
 

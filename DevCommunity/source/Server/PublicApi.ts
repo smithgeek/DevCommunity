@@ -91,11 +91,11 @@ class PublicApi {
     }
 
     public getArhivedMeetings(visitor: Visitor, res: express.Response): void {
-        this.getMeetings({ $and: [{ date: { $exists: true } }, { $not: { date: null } }] }, { date: -1 }, visitor, res);
+        this.getMeetings({ $and: [{ date: { $exists: true } }, { $not: { date: null } }] }, {}, visitor, res);
     }
 
     public getMeetingSuggestions(visitor: Visitor, res: express.Response): void {
-        this.getMeetings({ $or: [{ date: { $exists: false } }, { date: null }] }, { vote_count: -1 }, visitor, res);
+        this.getMeetings({ $or: [{ date: { $exists: false } }, { date: null }] }, {}, visitor, res);
     }
 
     private getMeetings(condition, sort, visitor: Visitor, res: express.Response) {

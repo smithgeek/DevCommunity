@@ -53,7 +53,7 @@ div(ng-controller='HomeController as controller')
         span.glyphicon.glyphicon-plus
         span   Add
 
-  div(ng-repeat='meeting in meetings')
+  div(ng-repeat='meeting in meetings | orderBy: "-vote_count"')
     .media
       .pull-left
         button.btn.btn-success.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.Vote()' ng-hide="meeting.HasUserVoted()")

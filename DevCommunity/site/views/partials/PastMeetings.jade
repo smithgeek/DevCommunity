@@ -2,7 +2,7 @@
 br
 br
 div(ng-controller='PastMeetingsController as controller')
-  div(ng-repeat='meeting in meetings')
+  div(ng-repeat='meeting in meetings | orderBy : sortMeeting : true')
     .media
       .media-body
         .panel.panel-primary
