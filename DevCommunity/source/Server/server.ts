@@ -135,6 +135,7 @@ app.get('/partials/about', routes.about);
 app.get('/partials/register', routes.register);
 app.get('/win', routes.win);
 app.get('/winner', routes.winnerRedirect);
+app.get('/static', routes.staticAssets);
 app.get('/partials/winner', routes.winner);
 app.get('/partials/contact', routes.contact);
 app.get('/partials/brainstorming', routes.brainstorming);
@@ -310,6 +311,18 @@ app.post('/api/restricted/RenderJade', (req: express.Request, res: express.Respo
 app.post('/api/restricted/SaveCarousel', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.saveHomeCarousel(visitor, req.body.jade, res);
+    });
+});
+
+app.post('/api/restricted/RenderNewsletter', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.renderNewsletter(visitor, config, req.body.newsletter, res);
+    });
+});
+
+app.post('/api/restricted/SendNewsletter', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.sendNewsletter(visitor, req.body.newsletter, res);
     });
 });
 

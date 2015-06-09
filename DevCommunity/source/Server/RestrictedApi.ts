@@ -28,6 +28,8 @@ import CommentRepository = require('./CommentRepository'); ///ts:import:generate
 import PrizeManager = require('./PrizeManager'); ///ts:import:generated
 ///ts:import=PrizeTransport
 import PrizeTransport = require('../Common/PrizeTransport'); ///ts:import:generated
+///ts:import=NewsletterTransport
+import NewsletterTransport = require('../Common/NewsletterTransport'); ///ts:import:generated
 
 import express = require('express');
 import util = require('util');
@@ -289,6 +291,34 @@ class RestrictedApi {
         }
         else {
             res.send(401, "Who do you think you are?  You have to be an administrator to get the carousel.");
+        }
+    }
+
+    public renderNewsletter(visitor: Visitor, config: Site.Config, req: NewsletterTransport.Get, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            fs.readFile('site/views/partials/NewsLetter_template.jade', (err, buffer) => {
+                req.server = config.server.domain;
+                var html = jade.render(buffer, req);
+                fs.writeFile('site/public/assets/newsletter/' + req.file_name + '.html', html);
+                res.send(200, html);
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to render a newsletter.");
+        }
+    }
+
+    public sendNewsletter(visitor: Visitor, req: NewsletterTransport.Get, res: express.Response): void {
+        if (visitor.isAdmin()) {
+            fs.readFile('site/public/assets/newsletter/' + req.file_name + '.html', (err, buffer) => {
+                this.userSettingsRepo.getNewsletterSubscribers((users: Array<UserSettings>) => {
+                    this.emailer.sendNewsletter(buffer.toString(), users);
+                    res.send(200);
+                });
+            });
+        }
+        else {
+            res.send(401, "Who do you think you are?  You have to be an administrator to send a newsletter.");
         }
     }
 

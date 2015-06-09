@@ -18,6 +18,9 @@ div(ng-controller="UserSettingsController as controller")
         input(type='checkbox' ng-model='settings.NewMeetingScheduledNotification') 
         span  Receive email when a new meeting topic has been selected and scheduled.
       .form-group
+        input(type='checkbox' ng-model='settings.NewsletterEmails') 
+        span  Receive newsletter emails.
+      .form-group
         input(type='checkbox' ng-model='settings.AdminEmails') 
         span  Receive any other types of emails from administrator.
       button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Submit

@@ -50,7 +50,7 @@ class UserSettingsRepository{
         this.db.find({ Condition: { email: email } }, function (err, settings: Array<UserSettings>) {
             if (err == null && settings.length > 0) {
                 var user: UserSettings = settings[0];
-                callback(true, new UserSettings(user.email, user.NewMeetingEmailNotification, user.NewStoryEmailNotification, user.NewMeetingScheduledNotification, user.AdminEmails, user._id));
+                callback(true, new UserSettings(user.email, user.NewMeetingEmailNotification, user.NewStoryEmailNotification, user.NewMeetingScheduledNotification, user.AdminEmails, user._id, user.NewsletterEmails));
             }
             else {
                 callback(false, null);
@@ -66,7 +66,8 @@ class UserSettingsRepository{
                     NewMeetingEmailNotification: settings.NewMeetingEmailNotification,
                     NewStoryEmailNotification: settings.NewStoryEmailNotification,
                     NewMeetingScheduledNotification: settings.NewMeetingScheduledNotification,
-                    AdminEmails: settings.AdminEmails
+                    AdminEmails: settings.AdminEmails,
+                    NewsletterEmails: settings.NewsletterEmails
                 }
             },
             Options: { upsert: true }
@@ -92,6 +93,20 @@ class UserSettingsRepository{
     public deleteUser(user: UserSettings, callback: (success: boolean) => void): void {
         this.db.remove({ Condition: { _id: user._id }, Options: {} }, (err, count: number) => {
             callback(err == null && count > 0);
+        });
+    }
+
+    public getNewsletterSubscribers(callback: (users: Array<UserSettings>) => void): void {
+        this.db.find({
+            Condition: { $or: [{ NewsletterEmails: true }, { NewsletterEmails: { $exists: false } }] }
+        }, (err, results: Array<UserSettings>) => {
+                if (err == null) {
+                    callback(results);
+                }
+                else {
+                    this.logger.error("Error in UserSettingsRepo.getNewsletterSubscribers " + err);
+                    callback([]);
+                }
         });
     }
 }

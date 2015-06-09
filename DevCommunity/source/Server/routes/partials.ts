@@ -44,6 +44,11 @@ export function win(req: express.Request, res: express.Response) {
     res.redirect('#!/register');
 };
 
+export function staticAssets(req: express.Request, res: express.Response) {
+    res.redirect('/public/assets/images/NewArchives.png');
+};
+
+
 export function register(req: express.Request, res: express.Response) {
     res.render('partials/register');
 };

@@ -14,6 +14,8 @@ if admin
         a(href='#CarouselTab' role="tab" data-toggle="tab") Home Carousel
       li
         a(href='#PrizeTab' role="tab" data-toggle="tab") Prizes
+      li
+        a(href='#NewsletterTab' role="tab" data-toggle="tab") Newsletter
     br
 
     div.tab-content
@@ -239,5 +241,43 @@ if admin
               button.editable(ng-really-click='controller.RemovePastWinner(winner)' ng-really-message="Clear {{winner}} from past winners list?")
                 span.glyphicon.glyphicon-remove
 
+      div.tab-pane(id="NewsletterTab")
+        div(ng-controller="AdminNewsletterController as controller")
+          .form-group
+            label Date
+            input.form-control(type='text' ng-model='date')
+          h2 Meetings
+          div(ng-repeat='meeting in meetings | orderBy: "-vote_count"')
+            input(type="checkbox" ng-model="meeting.checked")
+            span  [{{meeting.vote_count}} votes] {{meeting.description}}
+
+          br
+
+          h2 Stories
+          div(ng-repeat='story in stories')
+            input(type="checkbox" ng-model="story.checked")
+            span  {{story.title}}
+
+          br
+
+          h2 Last Meeting
+          b {{lastMeeting.description}}
+          div(ng-bind-html="lastMeeting.details")
+          .form-group
+            label URL
+            input.form-control(type='text' ng-model='lastMeeting.url')
+          .form-group
+            label Image
+            input.form-control(type='text' ng-model='lastMeeting.image')
+
+          br
+
+          br
+          button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Submit()") Preview
+          br
+          div(id="NewsletterPreview")
+          button.btn.btn-lg.btn-success.settings-btn(ng-click="controller.Send()" ng-if="hasPreview") Send Newsletter
+          span(style="margin-left: 20px; color: red") {{NewsletterErrorMessage}}
+          span(style="margin-left: 20px; color: green") {{NewsletterSuccessMessage}}
 else
   p You must log in with an administrator account to access this page.

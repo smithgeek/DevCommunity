@@ -62,6 +62,14 @@ class DevCommunityEmailer {
         this.sendMailToUsers(users, subject, body);
     }
 
+    public sendNewsletter(newsletter: string, users: Array<UserSettings>) {
+        var subject = "Developer Community: Newsletter";
+        var body = newsletter;
+        body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
+        this.sendMailToUsers(users, subject, body);
+    }
+
+
     public sendAdminEmail(subject: string, body: string, users: Array<UserSettings>) {
         body += "<br/><br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
         this.sendMailToUsers(users, subject, body);

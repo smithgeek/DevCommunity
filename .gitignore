@@ -46,3 +46,6 @@ deployProd.bat
 
 /DevCommunity/site/views/partials/HomeCarousel.jade
 /DevCommunity/Data/PrizeRegistration.json
+
+/DevCommunity/site/public/assets/newsletter/*
+/DevCommunity/site/public/assets/DeveloperCommunity.ics

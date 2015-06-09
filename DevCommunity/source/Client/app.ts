@@ -75,6 +75,13 @@ export class RouteConfig {
         when("/winner", {
             templateUrl: 'partials/Winner'
         }).
+        when("/public/:url*", {
+            redirectTo: function (a, b, c) {
+                var location: any = "/public/" + a.url;
+                window.location = location;
+                return "";
+            }
+        }).
         otherwise({
             redirectTo: '/'
         });
