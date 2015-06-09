@@ -54,9 +54,10 @@ class DevCommunityEmailer {
         var body = "";
         if (specialMessage != "") {
             body = "<b><u>Special Message:</u></b><br/>";
-            body += specialMessage + "<br/><br/>";
+            body += "<span style='color: red'>" + specialMessage + "</span><br/><br/>";
         }
         body += "The voters have spoken and a new topic has been selected for " + meeting.date + ".<br/ >";
+        body += "<a href='" + this.domain + "/#!/meeting/" + meeting._id + "' style='color:#ffffff; border-top:10px solid #27A1E5; border-bottom:10px solid #27A1E5; border-left:18px solid #27A1E5; border-right:18px solid #27A1E5; border-radius:3px; -moz - border-radius:3px; -webkit - border-radius:3px; background:#27A1E5;'>RSVP</a>";
         body += "<a href='" + this.domain + "/#!/meeting/" + meeting._id + "'><h3>" + meeting.description + "</h3></a>" + meeting.details;
         body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
         this.sendMailToUsers(users, subject, body);

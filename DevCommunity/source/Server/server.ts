@@ -243,6 +243,12 @@ app.post('/api/restricted/Vote', function (req: express.Request, res: express.Re
     });
 });
 
+app.post('/api/restricted/Rsvp', function (req: express.Request, res: express.Response) {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.rsvp(req.body.going, visitor, req.body._id, res);
+    });
+});
+
 app.get('/api/GetStories', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getStories(visitor, res);

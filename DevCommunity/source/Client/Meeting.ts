@@ -5,7 +5,7 @@ import UserSvc = require('./UserSvc'); ///ts:import:generated
 
 class Meeting extends MeetingData {
     constructor(private userSvc: UserSvc, private $http: ng.IHttpService, data: MeetingData) {
-        super(data.votes, data._id, data.vote_count, data.email, data.description, data.details, data.date);
+        super(data.votes, data._id, data.vote_count, data.email, data.description, data.details, data.date, data.rsvp);
     }
 
     public SetUser(email: string): void {

@@ -190,6 +190,39 @@ class RestrictedApi {
         });
     }
 
+    public rsvp(going: boolean, visitor: Visitor, meetingId: number, res: express.Response): void {
+        this.meetingIdeasDb.find({ Condition: { _id: meetingId } }, (err, meetings: MeetingData[]) => {
+            if (err == null) {
+                var meeting: MeetingData = meetings[0];
+                if (meeting.rsvp == null) meeting.rsvp = [];
+                var userRsvpIndex = meeting.rsvp.indexOf(visitor.getEmail());
+                var update: boolean = false;
+                if (going && -1 == userRsvpIndex) {
+                    meeting.rsvp.push(visitor.getEmail());
+                    this.logger.log('user ' + visitor.getEmail() + ' is going to ' + meeting.description);
+                    update = true;
+                }
+                else if(!going && -1 != userRsvpIndex)
+                {
+                    meeting.rsvp.splice(userRsvpIndex, 1);
+                    this.logger.log('user ' + visitor.getEmail() + ' is not going to ' + meeting.description);
+                    update = true;
+                }
+                if(update){
+                    this.meetingIdeasDb.update({ Query: { _id: meetingId }, Update: meeting, Options: {} }, function (err, newDoc) {
+                        if (err != null)
+                            res.send(404, "Failure");
+                        else
+                            res.send(200, "Success");
+                    });
+                }
+            }
+            else {
+                res.send(404, "Failure");
+            }
+        });
+    }
+
     public addMeeting(visitor: Visitor, meeting: MeetingData, res: express.Response): void {
         meeting.email = visitor.getEmail();
         if (meeting._id == "") {

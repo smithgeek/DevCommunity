@@ -45,7 +45,7 @@ describe('DevCommunityEmailerTests', function () {
         });
 
         it("SendNewMeetingTopicEmails", () => {
-            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null };
+            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null, rsvp: [] };
             emailer.sendNewMeetingTopicEmails(meeting);
             assert(spy.calledOnce, "Called " + spy.callCount + " times");
             var args: Array<string> = mailer.sendEmail.getCall(0).args;
@@ -98,7 +98,7 @@ describe('DevCommunityEmailerTests', function () {
         });
 
         it("SendNewMeetingTopicEmails", () => {
-            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null };
+            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null, rsvp: [] };
             emailer.sendNewMeetingTopicEmails(meeting);
             assert(spy.notCalled, "Called " + spy.callCount + " times");
         });
@@ -132,7 +132,7 @@ describe('DevCommunityEmailerTests', function () {
         });
 
         it("SendNewMeetingTopicEmails", () => {
-            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null };
+            var meeting = { _id: 'id', description: 'description', details: 'details', votes: [], vote_count: 0, email: '', date: null, rsvp: [] };
             emailer.sendNewMeetingTopicEmails(meeting);
             assert(spy.notCalled, "Called " + spy.callCount + " times");
             assert(logSpy.calledOnce);
