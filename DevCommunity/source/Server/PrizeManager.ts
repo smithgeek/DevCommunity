@@ -135,6 +135,9 @@ class PrizeManager {
     }
 
     private save(): void {
+        if( !fs.existsSync("Data") ) {
+            fs.mkdirSync("Data");
+        }
         fs.writeFileSync(this.getJsonPath(), JSON.stringify(this.Registration));
     }
 
