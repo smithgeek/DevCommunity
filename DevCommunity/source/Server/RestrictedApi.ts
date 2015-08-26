@@ -331,6 +331,7 @@ class RestrictedApi {
         if (visitor.isAdmin()) {
             fs.readFile('site/views/partials/NewsLetter_template.jade', (err, buffer) => {
                 req.server = config.server.domain;
+                req.port = config.server.port;
                 var html = jade.render(buffer, req);
                 fs.writeFile('site/public/assets/newsletter/' + req.file_name + '.html', html);
                 res.send(200, html);
