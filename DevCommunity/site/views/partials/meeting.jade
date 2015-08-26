@@ -11,7 +11,7 @@ div.hidden(ng-controller='MeetingController as controller')
         div(ng-show="loggedIn")
           span I am: 
           input(toggle-checkbox class="form-control schedule" ng-model="going" ng-change='controller.checkChanged()' type="checkbox" data-on="going" data-off="not going" data-onstyle="success" data-offstyle="danger" data-size="small" data-width="90")
-      p {{peopleGoing}}
+      p(title="{{rsvp}}") {{peopleGoing}}
   div
     .media
       .pull-left(ng-show="meeting.date == null")

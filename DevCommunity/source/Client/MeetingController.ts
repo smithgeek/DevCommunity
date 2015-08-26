@@ -14,6 +14,7 @@ class MeetingController {
         $scope.meetingInFuture = false;
         $scope.loggedIn = userSvc.isLoggedIn();
         $scope.peopleGoing = "";
+        $scope.rsvp = "";
 
         $http.get('/api/GetMeetingById/' + $routeParams.id).success((data: MeetingData) => {
             $scope.meeting = meetingSvc.createMeeting(data);
@@ -40,6 +41,7 @@ class MeetingController {
     }
 
     private updatePeopleGoing(): void {
+        this.$scope.rsvp = this.$scope.meeting.rsvp.join(", ");
         if (this.$scope.meeting.rsvp.length == 1)
             this.$scope.peopleGoing = "1 person said they were going.";
         else
