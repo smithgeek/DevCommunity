@@ -137,14 +137,14 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                                   td(valign='middle', style='vertical-align: middle;', width='100')
                                     .contentEditableContainer.contentTextEditable
                                       .contentEditable(style='text-align: left;')
-                                        a.link1(target='_blank', href='#{server}:#{port}/#!/public/assets/newsletter/#{file_name}.html') Open in browser
+                                        a.link1(target='_blank', href='#{server}/#!/public/assets/newsletter/#{file_name}.html') Open in browser
                                 |                       
                                 tr
                                   td(valign='middle', style='vertical-align: middle;')
                                     .contentEditableContainer.contentTextEditable
                                       .contentEditable(style='text-align: left;font-weight: light; color:#555555;font-size:26;line-height: 39px;font-family: Helvetica Neue;')
                                         h1.big
-                                          a(target='_blank', href='#{server}:#{port}', style='color:#444444')
+                                          a(target='_blank', href='#{server}', style='color:#444444')
                                             | PND Developer Community Newsletter
                                             a
                                   |                         
@@ -167,7 +167,7 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                             td(width='150')
                               .contentEditableContainer.contentImageEditable
                                 .contentEditable
-                                  img(src='#{server}:#{port}/public/assets/newsletter/side.png', alt='side image', width='142', height='142', data-default='placeholder', data-max-width='150')
+                                  img(src='#{server}/public/assets/newsletter/side.png', alt='side image', width='142', height='142', data-default='placeholder', data-max-width='150')
                             |                   
                             td(width='20')
                             |                   
@@ -184,12 +184,12 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                                         h4 Vote Leaders
                                         each meeting in meetings
                                           div [#{meeting.vote_count} Votes] 
-                                            a.link4(href='#{server}:#{port}/#!/meeting/#{meeting._id}') #{meeting.description}
+                                            a.link4(href='#{server}/#!/meeting/#{meeting._id}') #{meeting.description}
                                         br
                                         |                               
-                                        a.link2(target='_blank', href='#{server}:#{port}', style='color:#ffffff') Vote Now!
+                                        a.link2(target='_blank', href='#{server}', style='color:#ffffff') Vote Now!
                                         |                               
-                                        a.link2(target='_blank', href='#{server}:#{port}/public/assets/DeveloperCommunity.ics', style='color:#ffffff') Download Outlook Reminder
+                                        a.link2(target='_blank', href='#{server}/public/assets/DeveloperCommunity.ics', style='color:#ffffff') Download Outlook Reminder
                           |                 
                           tr
                             td(height='40', colspan='3')
@@ -217,11 +217,11 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                                         each story in stories
                                           h4= story.title
                                           div !{story.description}
-                                          a.link4(target='_blank', href="#{server}:#{port}/#!/story/#{story._id}") read more
+                                          a.link4(target='_blank', href="#{server}/#!/story/#{story._id}") read more
                                           br
                                           hr
                                         br
-                                        a.link2(target='_blank', href='#{server}:#{port}/#!/stories') See All
+                                        a.link2(target='_blank', href='#{server}/#!/stories') See All
                                         |                               
                                         br
                                 |                       
@@ -246,7 +246,7 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                               .contentEditableContainer.contentImageEditable
                                 .contentEditable(style='text-align: center;')
                                   a(href='#{lastMeeting.url}')
-                                    img(src='#{server}:#{port}/public/assets/newsletter/images/#{lastMeeting.image}', alt='Logo', width='594', height='335', data-default='placeholder', data-max-width='680')
+                                    img(src='#{server}/public/assets/newsletter/images/#{lastMeeting.image}', alt='Logo', width='594', height='335', data-default='placeholder', data-max-width='680')
                       |             
                       .movableContent
                         table(width='680', border='0', cellspacing='0', cellpadding='0', align='center')
@@ -271,7 +271,7 @@ html(xmlns='http://www.w3.org/1999/xhtml')
                                         div !{lastMeeting.details}
                                         br
                                         |                               
-                                        a.link2(target='_blank', href='#{server}:#{port}/#!/meeting/#{lastMeeting._id}', style='color:#ffffff') Leave a Comment
+                                        a.link2(target='_blank', href='#{server}/#!/meeting/#{lastMeeting._id}', style='color:#ffffff') Leave a Comment
                                 |                       
                                 tr
                                   td(height='24')
