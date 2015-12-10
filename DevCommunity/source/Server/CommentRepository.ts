@@ -54,7 +54,7 @@ class CommentRepository{
     public editComment(visitor: Visitor, input: CommentTransports.Post, callback: (success: boolean) => void): void {
         this.findComment(input.GroupId, input.NewComment.id, (success, comment, group) => {
             if (success) {
-                if (visitor.getEmail() == comment.author) {
+                if (visitor.getEmail() == comment.author || visitor.isAdmin()) {
                     var newComment = input.NewComment;
                     comment.data = newComment.data;
                     comment.time = new Date(Date.now());

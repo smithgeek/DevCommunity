@@ -8,8 +8,8 @@
     my-comment-form.hideCommentForm(placeholder="", user="author", button="Post", id="comment-edit-{{comment.id}}" comment="comment", mode="edit")
     div.less-important(ng-show="controller.isLoggedIn()")
       ul.horizontal-list
-        li( ng-show="author === '{{comment.author}}'" )
-          my-comment-edit(comment-id="{{comment.id}}")
+        li( ng-show="author === '{{comment.author}}' || controller.isAdmin()" )
+          my-comment-edit(comment-id="{{comment.id}}" text="Edit")
         li
           my-comment-reply(comment-id="{{comment.id}}" )
     div(style="margin-left: {{comment.hierarchy + 1 * 50}}px")

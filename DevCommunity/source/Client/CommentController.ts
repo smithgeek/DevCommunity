@@ -24,7 +24,7 @@ class CommentController {
             }
         });
     }
-    
+
     public toggleSubscribe(): void {
         this.$scope.isSubscribed = !this.$scope.isSubscribed;
         this.$http.post('/api/restricted/ChangeSubscription', <CommentTransports.Subscription>{
@@ -35,6 +35,10 @@ class CommentController {
 
     public isLoggedIn(): boolean {
         return this.userSvc.isLoggedIn();
+    }
+
+    public isAdmin(): boolean {
+        return this.userSvc.isAdmin();
     }
 
     public postComment(data: CommentData): void {
@@ -90,4 +94,3 @@ class CommentController {
 angular.module(app.getModuleName()).controller('CommentController', ['$scope', '$http', 'userSvc', CommentController]);
 
 export = CommentController;
-
