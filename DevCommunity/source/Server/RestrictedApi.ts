@@ -224,8 +224,8 @@ class RestrictedApi {
     }
 
     public addMeeting(visitor: Visitor, meeting: MeetingData, res: express.Response): void {
-        meeting.email = visitor.getEmail();
         if (meeting._id == "") {
+            meeting.email = visitor.getEmail();
             this.meetingIdeasDb.insert(meeting, (err, newDoc: MeetingData) => {
                 if (err != null)
                     res.send(404, "Failure");
@@ -240,6 +240,7 @@ class RestrictedApi {
         else {
             var condition = { _id: meeting._id };
             if (!visitor.isAdmin()) {
+                meeting.email = visitor.getEmail();
                 condition = { _id: meeting._id, email: visitor.getEmail() };
             }
             this.meetingIdeasDb.update({ Query: condition, Update: { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, Options: {} }, (err, numReplaced) => {
@@ -331,7 +332,6 @@ class RestrictedApi {
         if (visitor.isAdmin()) {
             fs.readFile('site/views/partials/NewsLetter_template.jade', (err, buffer) => {
                 req.server = config.server.domain;
-                req.port = config.server.port;
                 var html = jade.render(buffer, req);
                 fs.writeFile('site/public/assets/newsletter/' + req.file_name + '.html', html);
                 res.send(200, html);
