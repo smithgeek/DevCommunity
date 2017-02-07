@@ -27,7 +27,7 @@ describe('DevCommunityEmailerTests', function () {
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
             mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { }, verbose: function (message: string) { } };
-            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", true, logger);
+            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", {path: "", port: "", host: "", enabled: false}, true, logger);
             spy = sinon.spy(mailer, "sendEmail");
         });
 
@@ -83,7 +83,7 @@ describe('DevCommunityEmailerTests', function () {
             userSettingsDb = <Database>{ find: function (q, callback) { callback(null, fakeSettings); } };
             mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { }, verbose: function (s) { } };
-            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", false, logger);
+            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", {path: "", port: "", host: "", enabled: false}, false, logger);
             sinon.spy(mailer, "sendEmail");
             spy = mailer.sendEmail;
         });
@@ -119,7 +119,7 @@ describe('DevCommunityEmailerTests', function () {
             userSettingsDb = <Database>{ find: function (q, callback) { callback('error', fakeSettings); } };
             mailer = <Mailer>{ sendEmail: function (to: string, bcc: string, subject: string, body: string) { } };
             logger = <Logger>{ log: function (message: string) { } };
-            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", false, logger);
+            emailer = new DevCommunityEmailer(mailer, userSettingsDb, "domain.com", {path: "", port: "", host: "", enabled: false}, false, logger);
             sinon.spy(mailer, "sendEmail");
             spy = mailer.sendEmail;
             sinon.spy(logger, 'log');

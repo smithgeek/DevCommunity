@@ -35,8 +35,9 @@
         button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
         span(style="margin-left: 20px; color: red") {{errorMessage}}
 
-.jumbotron
-  .carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
+.jumbotron(style="padding: 50px 320px")
+  include HomeCarousel.jade
+  //.carousel.slide(id="info-carousel" data-ride='carousel' style="padding-top: 20px")
 
     .carousel-inner
       include HomeCarousel.jade
@@ -46,39 +47,4 @@
     a.right.carousel-control(href="javascript: void();" data-target="#info-carousel" data-slide="next")
       span.glyphicon.glyphicon-chevron-right
       
-div(ng-controller='HomeController as controller')
-  .page-header
-    h1 Meeting Ideas  
-      button.btn.btn-info.add-button(type='button' ng-click='controller.AddTopic()')
-        span.glyphicon.glyphicon-plus
-        span   Add
-
-  div(ng-repeat='meeting in meetings | orderBy: "-vote_count"')
-    .media
-      .pull-left
-        button.btn.btn-success.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.Vote()' ng-hide="meeting.HasUserVoted()")
-          span.glyphicon.glyphicon-arrow-up
-          span  Vote
-        button.btn.btn-danger.vote-button(class='vote-btn-{{meeting._id}}' type='button' ng-click='meeting.RemoveVote()' ng-show="meeting.HasUserVoted()")
-          span.glyphicon.glyphicon-remove-sign
-          span  Remove
-        .vote
-          div.vote-count {{meeting.vote_count}}
-          span.vote-description  votes
-
-      .media-body
-        .panel.panel-primary
-          .panel-heading
-            .pull-right
-              button.editable(ng-click='controller.EditMeeting(meeting)' ng-show="meeting.isUserAuthor()")
-                span.glyphicon.glyphicon-edit
-              if admin
-                button.editable(ng-click='controller.EditMeeting(meeting)' ng-hide="meeting.isUserAuthor()")
-                  span.glyphicon.glyphicon-cog
-            a(href='#!/meeting/{{meeting._id}}')
-              h3.panel-title {{meeting.description}}
-          div.panel-body.panel-body-collapse
-            div(ng-bind-html="meeting.details")
-          div.readmore-panel
-            a.readmore-link.readmore-link-more(href='#' onclick="showMore(this);") More
-            a.readmore-link.readmore-link-less(href='#' onclick="showLess(this);" style="display: none;") Less
+include MeetingIdeas

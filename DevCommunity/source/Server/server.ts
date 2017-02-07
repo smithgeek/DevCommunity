@@ -172,7 +172,7 @@ var commentsDb: Database = new NeDb(path.join(DatabaseDir, 'comments.db.json'));
 
 var logger: Logger = new ConsoleAndFileLogger();
 var smtpConverter: SmtpConverter = new SmtpConverter(config.mail.smtp);
-var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, smtpConverter, logger), userSettingsDb, config.server.domain, config.server.sendEmails, logger);
+var emailer: DevCommunityEmailer = new DevCommunityEmailer(new Mailer(config.mail.from, smtpConverter, logger), userSettingsDb, config.server.domain, config.webHook, config.server.sendEmails, logger);
 var commentRepo: CommentRepository = new CommentRepository(commentsDb, logger, emailer);
 
 var publicApi: PublicApi = new PublicApi(twitter, storyDb, meetingIdeasDb, logger, commentRepo);
@@ -451,6 +451,12 @@ app.get('/api/restricted/GetPrizeEntries', (req: express.Request, res: express.R
 app.get('/api/restricted/GetPastWinners', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
         api.restricted.getPastWinners(visitor, res);
+    });
+});
+
+app.get('/api/restricted/GetOpenGraphData/:url', (req: express.Request, res: express.Response) => {
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.getOpenGraphData(req.params.url, res);
     });
 });
 

@@ -10,9 +10,12 @@ import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 import Story = require('../Common/Story'); ///ts:import:generated
 ///ts:import=UserSettings
 import UserSettings = require('../Common/UserSettings'); ///ts:import:generated
+///ts:import=Site
+import Site = require('../Common/Site'); ///ts:import:generated
+import http = require('http');
 
 class DevCommunityEmailer {
-    constructor(private mailer: Mailer, private userSettingsDb: Database, private domain: string, private allowSendMail: boolean, private logger: Logger) {
+    constructor(private mailer: Mailer, private userSettingsDb: Database, private domain: string, private webHook: Site.WebHook, private allowSendMail: boolean, private logger: Logger) {
     } 
 
     public sendVerificationEmail(verificationCode, emailAddress) {
@@ -38,15 +41,35 @@ class DevCommunityEmailer {
     public sendNewStoryEmails(story: Story) {
         this.userSettingsDb.find({ Condition: { NewStoryEmailNotification: true } }, (err, settings: Array<UserSettings>) => {
             if (err == null) {
+                var communityUrl = this.domain + "/#!/story/" + story._id;
                 var subject = "Developer Community: New Story Posted";
-                var body = "<h3><a href='" + this.domain + "/#!/story/" + story._id + "'>" + story.title + "</a></h3><br/>" + story.description;
+                var body = "<h3><a href='" + communityUrl + "'>" + story.title + "</a></h3><br/>" + story.description;
                 body += "<br/>To unsubscribe from email notifications, update your settings <a href='" + this.domain + "/#!/UserSettings'>here</a>.";
                 this.sendMailToUsers(settings, subject, body);
+                this.sendToWebHook({message: "A new story has been posted. " + story.url, attachments: [{name: "Community Link", value: communityUrl}]});
             }
             else {
                 this.logger.log(err);
             }
         });
+    }
+
+    private sendToWebHook(msg: {message: string; attachments?: Array<{name: string; value: string;}>}){
+        if(this.webHook.enabled){
+            var postData = JSON.stringify(msg);
+            var request = http.request({
+                host: this.webHook.host,
+                port: this.webHook.port,
+                method: 'POST',
+                path: this.webHook.path,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(postData)
+                }
+            });
+            request.write(postData);
+            request.end();
+        }
     }
 
     public sendMeetingScheduledEmail(specialMessage: string, meeting: MeetingData, users: Array<UserSettings>) {

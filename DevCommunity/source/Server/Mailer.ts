@@ -13,7 +13,7 @@ class Mailer {
     public sendEmail(toEmailAddress: string, bccAddresses: string, subject: string, body: string) {
         var smtpTransport: Transport = nodemailer.createTransport("SMTP", this.smtpOptions.getNodemailerSmtpOptions());
 
-        var message: MailComposer = {
+        var message: any = {
             from: this.fromEmail,
             to: toEmailAddress,
             bcc: bccAddresses,

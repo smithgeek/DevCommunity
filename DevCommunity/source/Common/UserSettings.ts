@@ -1,5 +1,5 @@
 ﻿class UserSettings {
-    constructor(email: string = "", NewMeetingEmailNotification: boolean = true, NewStoryEmailNotification: boolean = true, NewMeetingScheduledNotification: boolean = NewMeetingEmailNotification, AdminEmails: boolean = NewMeetingEmailNotification, _id: string = "", NewsletterEmails: boolean = true) {
+    constructor(email: string = "", NewMeetingEmailNotification: boolean = true, NewStoryEmailNotification: boolean = false, NewMeetingScheduledNotification: boolean = NewMeetingEmailNotification, AdminEmails: boolean = NewMeetingEmailNotification, _id: string = "", NewsletterEmails: boolean = true) {
         this.email = email;
         this.NewMeetingEmailNotification = NewMeetingEmailNotification;
         this.NewStoryEmailNotification = NewStoryEmailNotification;

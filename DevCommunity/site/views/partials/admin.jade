@@ -104,6 +104,25 @@ if admin
 
           div.panel.panel-default
             div.panel-heading
+              h3.panel-title Notification Web hook
+            div.panel-body
+              .form-group
+                label Enabled
+                br
+                input(type="checkbox" ng-model="config.webHook.enabled")
+                |  Is the webhook for notifications enabled.
+              .form-group
+                label Host (http://www.something.com)
+                input.form-control(type='text' ng-model='config.webHook.host') 
+              .form-group
+                label Port
+                input.form-control(type='text' ng-model='config.webHook.port')
+              .form-group
+                label Path (/api/something/awesome)
+                input.form-control(type='text' ng-model='config.webHook.path')
+
+          div.panel.panel-default
+            div.panel-heading
               h3.panel-title Disqus Comments
             div.panel-body
               .form-group

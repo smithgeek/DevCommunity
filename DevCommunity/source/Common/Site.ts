@@ -36,6 +36,13 @@ export interface Disqus {
     shortname: string;
 }
 
+export interface WebHook{
+    host: string;
+    port: string;
+    path: string;
+    enabled: boolean;
+}
+
 export class Config {
     constructor() {
         this.contact = { email: "", name: "" };
@@ -47,6 +54,8 @@ export class Config {
         this.server = { admin: "admin@admin.com", domain: "", jwtSecret: "MySuperSecret", port: 3000, restrictedLoginDomain: "", sendEmails: false, isServerConfigured: false }
 
         this.disqus = { enabled: false, shortname: "" };
+
+        this.webHook = {host: "", port: "", path: "", enabled: false};
     }
 
     public contact: Contact;
@@ -54,4 +63,5 @@ export class Config {
     public mail: Mail;
     public server: Server;
     public disqus: Disqus;
+    public webHook: WebHook;
 }

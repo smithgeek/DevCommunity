@@ -50,6 +50,18 @@ class StorySubmitController {
                 this.$scope.errorMessage = data.toString();
             });
     }
+
+    public CheckUrl(): void{
+        if(this.$scope.story.url !== undefined && this.$scope.story.url.length > 0 && (this.$scope.story.title === undefined || this.$scope.story.title.length == 0) && (this.$scope.story.description === undefined || this.$scope.story.description.length == 0)){
+            var encodedUri = encodeURIComponent(this.$scope.story.url);
+            this.$http.get('/api/restricted/GetOpenGraphData/' + encodedUri).success((data: any) => {
+                if(data.success){
+                    this.$scope.story.title = data.data.ogTitle;
+                    this.rtb.setText(data.data.ogDescription);
+                }
+            });
+        }
+    }
 }
 
 angular.module(app.getModuleName()).controller('StorySubmitController', ['$scope', 'storySvc', '$http', 'userSvc', 'richTextService', StorySubmitController]);

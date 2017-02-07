@@ -35,6 +35,7 @@ import express = require('express');
 import util = require('util');
 import fs = require('fs');
 var jade = require('jade');
+var ogs = require('open-graph-scraper');
 
 class RestrictedApi {
 
@@ -190,6 +191,16 @@ class RestrictedApi {
         });
     }
 
+    public getOpenGraphData(url: string, res: express.Response){
+        ogs({url: decodeURIComponent(url)}, function(err, result){
+            console.log(err);console.log(result);
+            if(err)
+                res.send(404, "Failure");
+            else
+                res.send(200, result);
+        });
+    }
+
     public rsvp(going: boolean, visitor: Visitor, meetingId: number, res: express.Response): void {
         this.meetingIdeasDb.find({ Condition: { _id: meetingId } }, (err, meetings: MeetingData[]) => {
             if (err == null) {
@@ -238,7 +249,7 @@ class RestrictedApi {
             });
         }
         else {
-            var condition = { _id: meeting._id };
+            var condition: any = { _id: meeting._id };
             if (!visitor.isAdmin()) {
                 meeting.email = visitor.getEmail();
                 condition = { _id: meeting._id, email: visitor.getEmail() };
