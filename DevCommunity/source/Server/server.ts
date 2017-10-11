@@ -454,9 +454,9 @@ app.get('/api/restricted/GetPastWinners', (req: express.Request, res: express.Re
     });
 });
 
-app.get('/api/restricted/GetOpenGraphData/:url', (req: express.Request, res: express.Response) => {
+app.get('/api/restricted/GetOpenGraphData', (req: express.Request, res: express.Response) => {
     visitorFactory.get(req, (visitor) => {
-        api.restricted.getOpenGraphData(req.params.url, res);
+        api.restricted.getOpenGraphData(req.query.url, res);
     });
 });
 

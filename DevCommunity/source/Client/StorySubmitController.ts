@@ -54,7 +54,7 @@ class StorySubmitController {
     public CheckUrl(): void{
         if(this.$scope.story.url !== undefined && this.$scope.story.url.length > 0 && (this.$scope.story.title === undefined || this.$scope.story.title.length == 0) && (this.$scope.story.description === undefined || this.$scope.story.description.length == 0)){
             var encodedUri = encodeURIComponent(this.$scope.story.url);
-            this.$http.get('/api/restricted/GetOpenGraphData/' + encodedUri).success((data: any) => {
+            this.$http.get('/api/restricted/GetOpenGraphData?url=' + encodedUri).success((data: any) => {
                 if(data.success){
                     this.$scope.story.title = data.data.ogTitle;
                     this.rtb.setText(data.data.ogDescription);

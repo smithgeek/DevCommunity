@@ -28,5 +28,10 @@
     "disqus": {
         "enabled": false,
         "shortname": ""
-    } 
+    }
+    "webHook":{
+        "host": "http://someplace.com",
+        "port": "9876",
+        "path": "/handlePost"
+    }
 }
