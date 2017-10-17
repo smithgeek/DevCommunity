@@ -14,8 +14,8 @@
             h1 Meeting Idea
             .form-group
               label Title
-              input.form-control(type='text' ng-model='meeting.description')
-            .form-group
+              input.form-control(type='text' ng-model='meeting.description' ng-disabled="!canEdit")
+            .form-group(ng-show="canEdit")
               label Details
               textarea.form-control.ckeditor(id="newIdeaDetails" type='text' ng-model='meeting.details')
 
