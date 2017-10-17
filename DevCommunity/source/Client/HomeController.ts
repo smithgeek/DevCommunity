@@ -24,6 +24,9 @@ class HomeController {
         $scope.$on('meetingAdded', function (event, meeting) {
             $scope.meetings.push(meeting);
         });
+        $scope.$on('meetingDeleted', function(event, meeting){
+            $scope.meetings.splice($scope.meetings.findIndex(m => meeting._id == m._id), 1);
+        });
         $scope.$on('tweetUpdated', (event) => {
             setTimeout(() => {
                 this.NormalizeCarouselHeights();

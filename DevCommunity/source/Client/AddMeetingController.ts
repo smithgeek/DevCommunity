@@ -23,18 +23,21 @@ class AddMeetingController {
         $scope.errorMessage = "";
         $scope.sendEmail = false;
         $scope.schedMeetingMessage = "";
+        $scope.deleting = false;
         $scope.$on('editMeeting', (event, meeting: Meeting) => {
             $scope.meeting = meeting;
             this.newIdeaRtb.setText(meeting.details);
             $('#AddTopicModal').modal('show');
             $scope.canEdit = userSvc.isAdmin() || meeting.vote_count == 0;
             $scope.errorMessage = $scope.canEdit ? "" : "Only an admin can edit a meeting once it has received votes.";
+            $scope.deleting = false;
         });
         $scope.$on('addMeeting', (event) => {
             $scope.meeting = meetingSvc.createMeeting();
             $('#AddTopicModal').modal('show');
             $scope.errorMessage = "";
             $scope.canEdit = true;
+            $scope.deleting = false;
         });
     }
 
@@ -54,6 +57,24 @@ class AddMeetingController {
                 $('.add-modal-button').prop('disabled', false);
                 this.$scope.errorMessage = data.toString();
             });
+    }
+
+    public DeleteMeeting(): void{
+        this.$scope.deleting = true;
+    }
+
+    public CancelDelete(): void{
+        this.$scope.deleting = false;
+    }
+
+    public ReallyDeleteMeeting(): void{
+        var mtgData: MeetingData = this.$scope.meeting.GetData();
+        this.$http.post('/api/restricted/DeleteMeeting', { meeting: mtgData }).success((data: any) => {
+            $('#AddTopicModal').modal('hide');
+            this.meetingSvc.notifyMeetingDeleted(mtgData);
+        }).error((data) => {
+            this.$scope.errorMessage = data.toString();
+        });
     }
 }
 
