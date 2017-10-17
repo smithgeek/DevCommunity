@@ -234,6 +234,35 @@ class RestrictedApi {
         });
     }
 
+    public deleteMeeting(visitor: Visitor, meeting: MeetingData, res: express.Response): void{
+        this.meetingIdeasDb.find({ Condition: { _id: meeting._id } }, (err, meetings: MeetingData[]) => {
+            if(err != null || meetings.length !== 1){
+                res.send(400, "Could not find meeting to delete.")
+            }
+            else{
+                if(meetings[0].email === visitor.getEmail() || visitor.isAdmin()){
+                    if(visitor.isAdmin() || meetings[0].vote_count == 0){
+                        this.meetingIdeasDb.remove({Condition: {_id: meeting._id}, Options: {}}, (err, count) => {
+                            if(err === null){
+                                res.send(200, "Meeting deleted.")
+                            }
+                            else{
+                                console.error(err);
+                                res.send(400, "Failure deleting meeting");
+                            }
+                        });
+                    }
+                    else{
+                        res.send(403, "Only an admin can delete a meeting that has votes.");
+                    }
+                }
+                else{
+                    res.send(403, "You can't delete this meeting, stop it!");
+                }
+            }
+        });
+    }
+
     public addMeeting(visitor: Visitor, meeting: MeetingData, res: express.Response): void {
         if (meeting._id == "") {
             meeting.email = visitor.getEmail();

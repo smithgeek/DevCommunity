@@ -17,6 +17,10 @@ class MeetingSvc implements IMeetingSvc {
         this.$rootScope.$broadcast('meetingAdded', this.createMeeting(meeting));
     }
 
+    public notifyMeetingDeleted(meeting: MeetingData): void{
+        this.$rootScope.$broadcast('meetingDeleted', meeting);
+    }
+
     public createMeeting(data?: MeetingData): Meeting {
         return new Meeting(this.userSvc, this.$http, data && data || new MeetingData());
     }

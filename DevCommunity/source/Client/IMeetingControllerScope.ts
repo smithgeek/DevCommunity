@@ -7,6 +7,7 @@ interface IMeetingControllerScope extends ng.IScope {
     sendEmail: boolean;
     schedMeetingMessage: string;
     canEdit: boolean;
+    deleting: boolean;
 }
 
 export = IMeetingControllerScope;

@@ -208,6 +208,12 @@ app.post('/api/restricted/AddMeeting', function (req: express.Request, res: expr
     });
 });
 
+app.post('/api/restricted/DeleteMeeting', function(req: express.Request, res: express.Response){
+    visitorFactory.get(req, (visitor) => {
+        api.restricted.deleteMeeting(visitor, req.body.meeting, res);
+    });
+});
+
 app.get('/api/GetSuggestions', function (req: express.Request, res: express.Response) {
     visitorFactory.get(req, (visitor) => {
         api.public.getMeetingSuggestions(visitor, res);

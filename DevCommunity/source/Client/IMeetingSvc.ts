@@ -6,6 +6,8 @@ import MeetingData = require('../Common/MeetingData'); ///ts:import:generated
 interface IMeetingSvc {
     notifyMeetingAdded(meeting: Meeting): void;
 
+    notifyMeetingDeleted(meeting: MeetingData): void;
+
     createMeeting(data?: MeetingData): Meeting;
 
     notifyEditMeeting(meeting: Meeting): void;

@@ -30,9 +30,12 @@
               .form-group(nt-enabled="sendEmail")
                 label Special message to send in email (Optional)
                 textarea.form-control(ng-model="schedMeetingMessage" type='text')
-        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()') Submit
+        button.btn.btn-lg.btn-success.add-modal-button(type='button' ng-click='controller.AddMeeting()' ng-show='!deleting && canEdit') Submit
+        button.btn.btn-lg.btn-danger.add-modal-button(type='button' ng-click='controller.ReallyDeleteMeeting()' ng-show='deleting') Really Delete
         span  
-        button.btn.btn-lg.btn-danger.add-modal-button(type='button' data-dismiss='modal') Cancel
+        button.btn.btn-lg.btn-default.add-modal-button(type='button' data-dismiss='modal' ng-show='!deleting') Cancel
+        button.btn.btn-lg.btn-default.add-modal-button(type='button' ng-click='controller.CancelDelete()' ng-show='deleting') Cancel
+        button.btn.btn-lg.btn-danger.add-modal-button(style="margin-left: 5px;" type='button' ng-click='controller.DeleteMeeting()' ng-show='!deleting && canEdit && meeting._id !== ""') Delete
         span(style="margin-left: 20px; color: red") {{errorMessage}}
 
 .jumbotron(style="padding: 50px 320px")
