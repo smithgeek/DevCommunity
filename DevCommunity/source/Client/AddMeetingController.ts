@@ -27,12 +27,14 @@ class AddMeetingController {
             $scope.meeting = meeting;
             this.newIdeaRtb.setText(meeting.details);
             $('#AddTopicModal').modal('show');
-            $scope.errorMessage = "";
+            $scope.canEdit = userSvc.isAdmin() || meeting.vote_count == 0;
+            $scope.errorMessage = $scope.canEdit ? "" : "Only an admin can edit a meeting once it has received votes.";
         });
         $scope.$on('addMeeting', (event) => {
             $scope.meeting = meetingSvc.createMeeting();
             $('#AddTopicModal').modal('show');
             $scope.errorMessage = "";
+            $scope.canEdit = true;
         });
     }
 

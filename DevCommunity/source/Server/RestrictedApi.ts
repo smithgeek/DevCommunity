@@ -250,20 +250,39 @@ class RestrictedApi {
         }
         else {
             var condition: any = { _id: meeting._id };
+            var updatedValue: any = { description: meeting.description, details: meeting.details, date: meeting.date };
             if (!visitor.isAdmin()) {
                 meeting.email = visitor.getEmail();
                 condition = { _id: meeting._id, email: visitor.getEmail() };
+                updatedValue = { description: meeting.description, details: meeting.details };
+                this.meetingIdeasDb.find({ Condition: { _id: meeting._id } }, (err, meetings: MeetingData[]) => {
+                    if(err != null || meetings.length !== 1) {
+                        res.send(400, "Could not find meeting");
+                    }
+                    else if(meeting.vote_count > 0){
+                        res.send(403, "Only an admin can edit a meeting once it has received votes.");
+                    }
+                    else{
+                        this.updateMeeting(condition, updatedValue, meeting, res);
+                    }
+                });
             }
-            this.meetingIdeasDb.update({ Query: condition, Update: { $set: { description: meeting.description, details: meeting.details, date: meeting.date } }, Options: {} }, (err, numReplaced) => {
-                if (err != null)
-                    res.send(404, "Could not update");
-                else
-                    if (numReplaced > 0)
-                        res.send(200, { action: "Updated", meeting: meeting });
-                    else
-                        res.send(404, "Could not update");
-            });
+            else{
+                this.updateMeeting(condition, updatedValue, meeting, res);
+            }
         }
+    }
+
+    private updateMeeting(condition: any, updatedValue: any, meeting: MeetingData, res: express.Response){
+        this.meetingIdeasDb.update({ Query: condition, Update: { $set: updatedValue }, Options: {} }, (err, numReplaced) => {
+            if (err != null)
+                res.send(404, "Could not update");
+            else
+                if (numReplaced > 0)
+                    res.send(200, { action: "Updated", meeting: meeting });
+                else
+                    res.send(404, "Could not update");
+        });
     }
 
     public emailUsersMeetingScheduled(visitor: Visitor, message: string, meeting: MeetingData): void {
